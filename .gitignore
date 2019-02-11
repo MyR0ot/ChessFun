@@ -1,0 +1,8 @@
+# Ignore files
+build.xml
+manifest.mf
+
+# Ignore folders
+build/
+dist/
+nbproject/
