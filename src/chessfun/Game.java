@@ -11,8 +11,20 @@ package chessfun;
  */
 public class Game {
     
-    public String getHostory()
+    private ChessBoard chessBoard;
+    
+    
+    public Game() // Конструктор
     {
-        return "empty";
+        // TODO: 
+        // 
+    }
+    
+    
+    public void Start()
+    {
+        // TODO:
+        //
+        return;
     }
 }

@@ -3,19 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package chessfun;
+package figures;
 
 /**
  *
  * @author My
  */
-public class ChessFun {
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        Game game = new Game();
-        game.Start();
-    } 
+public enum ColorFigure {
+    WHITE,
+    BLACK,
+    NONE
 }
