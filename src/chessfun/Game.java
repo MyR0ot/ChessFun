@@ -9,12 +9,10 @@ package chessfun;
  *
  * @author My
  */
-public class ChessFun {
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        Game game = new Game();
-    } 
+public class Game {
+    
+    public String getHostory()
+    {
+        return "empty";
+    }
 }
