@@ -36,4 +36,10 @@ public class Rock extends Shape{
     public Rock(ColorFigure colorFigure) {
         this.colorShape = colorFigure;
     }
+
+    @Override
+    public String GetNameShape() {
+        return "Rock " + this.colorShape.toString();
+    }
+
 }

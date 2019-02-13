@@ -36,4 +36,9 @@ public class Knight extends Shape{
     public Knight(ColorFigure colorFigure) {
         this.colorShape = colorFigure;
     }
+    
+    @Override
+    public String GetNameShape() {
+        return "Knight " + this.colorShape.toString();
+    }
 }

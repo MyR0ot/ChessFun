@@ -35,4 +35,9 @@ public class King extends Shape{
     public King(ColorFigure colorFigure) {
         this.colorShape = colorFigure;
     }
+    
+    @Override
+    public String GetNameShape() {
+        return "King " + this.colorShape.toString();
+    }
 }

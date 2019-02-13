@@ -36,4 +36,9 @@ public class Queen extends Shape{
     public Queen(ColorFigure colorFigure) {
         this.colorShape = colorFigure;
     }
+    
+    @Override
+    public String GetNameShape() {
+        return "Queen " + this.colorShape.toString();
+    }
 }

@@ -13,6 +13,7 @@ import figures.King;
 import figures.Knight;
 import figures.Queen;
 import figures.Rock;
+import figures.Shape;
 
 enum ModeChess {Classic, Fisher}
 
@@ -61,5 +62,17 @@ public class ChessBoard {
         this.board[5][7].shape = new Bishop(ColorFigure.BLACK);
         this.board[6][7].shape = new Knight(ColorFigure.BLACK);
         this.board[7][7].shape = new Rock(ColorFigure.BLACK);
+    }
+    
+    
+    public void GetBoardScrean()
+    {
+        for(int i=0;i<8;i++)
+        {
+            for(int j=0;j<8;j++)
+            {
+                System.out.println(this.board[j][i].GetName() + ": " + ((Shape)(this.board[j][i].shape)).GetNameShape());
+            }
+        }
     }
 }

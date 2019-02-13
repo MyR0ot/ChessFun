@@ -38,4 +38,9 @@ public class Pawn extends Shape{
     public Pawn(ColorFigure colorFigure) {
         this.colorShape = colorFigure;
     }
+    
+    @Override
+    public String GetNameShape() {
+        return "Pawn " + this.colorShape.toString();
+    }
 }

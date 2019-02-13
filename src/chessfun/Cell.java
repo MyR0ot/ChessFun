@@ -6,6 +6,7 @@
 package chessfun;
 
 import figures.EmptyFigure;
+import figures.Shape;
 
 /**
  *
@@ -13,10 +14,10 @@ import figures.EmptyFigure;
  */
 public class Cell {
     
-    private int row; // номер строки
-    private int column; // номер столбцу
-    private String name; // Название поля
-    public Object shape; // Фигура, принадлежащая данному полю
+    private int row;        // номер строки
+    private int column;     // номер столбцу
+    private String name;    // Название поля
+    public Shape shape;     // Фигура, принадлежащая данному полю
     
     
     Cell(int column, int row) {
@@ -33,11 +34,29 @@ public class Cell {
             case 5 : this.name = "f"; break;
             case 6 : this.name = "g"; break;
             case 7 : this.name = "h"; break;
-            default: throw new UnsupportedOperationException("Not supported yet.");
+            default: throw new UnsupportedOperationException("shess board is 8*8");
         }
         this.name = this.name + this.row + 1;
         this.shape = new EmptyFigure();
     }
     
-    //public String GetName
+    public String GetName()
+    {
+        String res = "";
+        switch(this.column)
+        {
+            case 0: res = "a"; break;
+            case 1: res = "b"; break;
+            case 2: res = "c"; break;
+            case 3: res = "d"; break;
+            case 4: res = "e"; break;
+            case 5: res = "f"; break;
+            case 6: res = "g"; break;
+            case 7: res = "h"; break;
+        }
+        
+        res += (this.row + 1);
+        
+        return res;
+    }
 }

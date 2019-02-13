@@ -9,7 +9,7 @@ import chessfun.Cell;
 
 public class Bishop extends Shape{
     
-    private ColorFigure colorShape; // цвет фигуры
+    private final ColorFigure colorShape; // цвет фигуры
     
     @Override
     public ColorFigure GetColorShape()
@@ -35,5 +35,10 @@ public class Bishop extends Shape{
     
     public Bishop(ColorFigure colorFigure) {
         this.colorShape = colorFigure;
+    }
+    
+    @Override
+    public String GetNameShape() {
+        return "Bishop " + this.colorShape.toString();
     }
 }

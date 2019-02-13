@@ -16,8 +16,8 @@ public class Game {
     
     public Game() // Конструктор
     {
-        // TODO: 
-        // 
+        this.chessBoard = new ChessBoard();
+        this.chessBoard.GetBoardScrean();
     }
     
     
