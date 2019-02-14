@@ -5,17 +5,9 @@
  */
 package chessfun;
 
-import figures.Bishop;
-import figures.EmptyFigure;
-import figures.Pawn;
-import figures.ColorFigure;
-import figures.King;
-import figures.Knight;
-import figures.Queen;
-import figures.Rock;
-import figures.Shape;
+import figures.*;
 
-enum ModeChess {Classic, Fisher}
+enum ModeChess {CLASSIC, FISHER, KING_HILL}
 
 public class ChessBoard {
     public static Cell[][] board = new Cell[8][8];
@@ -28,7 +20,7 @@ public class ChessBoard {
                 
     }
     
-    private void StartClassic()
+    private void StartClassic() // Классическая начальная расстоновка фигур
     {
         for(int i=0;i<8;i++)
             for(int j=0;j<8;j++)
@@ -43,6 +35,7 @@ public class ChessBoard {
             this.board[i][1].shape = new Pawn(ColorFigure.WHITE); // Выставляем белые пешки
             this.board[i][6].shape = new Pawn(ColorFigure.BLACK); // Выставляем черные пешки
         }
+        
             /*Классическая расстановка белых фигур*/
         this.board[0][0].shape = new Rock(ColorFigure.WHITE);
         this.board[1][0].shape = new Knight(ColorFigure.WHITE);
@@ -65,14 +58,22 @@ public class ChessBoard {
     }
     
     
-    public void GetBoardScrean()
+    public void GetBoardScrean()// Вывод состояния шахматной доски в консоль
     {
-        for(int i=0;i<8;i++)
-        {
-            for(int j=0;j<8;j++)
-            {
-                System.out.println(this.board[j][i].GetName() + ": " + ((Shape)(this.board[j][i].shape)).GetNameShape());
-            }
-        }
+        System.out.println("-----------------------");
+        for(int i = 0; i < 8; i++)
+            for(int j = 0; j < 8; j++)
+                System.out.println(this.board[j][i].GetName() + ": " + ((Shape)(this.board[j][i].shape)).GetName());
+        System.out.println("-----------------------");
+    }
+    
+    
+    
+    public void Move(Cell from, Cell to)// Перемещение фигуры из from в to
+    {
+        to.shape = from.shape;
+        if(from.GetRow() == 7 && to.shape instanceof Pawn) // превращение в ферзя пещки
+            to.shape = new Queen(to.shape.GetColorShape());
+        from.shape = new EmptyFigure();
     }
 }

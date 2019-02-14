@@ -28,17 +28,13 @@ public class Bishop extends Shape{
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    @Override
-    public boolean CheckTransform(Cell toCell) {
-        return false;
-    }
     
     public Bishop(ColorFigure colorFigure) {
         this.colorShape = colorFigure;
     }
     
     @Override
-    public String GetNameShape() {
+    public String GetName() {
         return "Bishop " + this.colorShape.toString();
     }
 }

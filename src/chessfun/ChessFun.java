@@ -5,10 +5,6 @@
  */
 package chessfun;
 
-/**
- *
- * @author My
- */
 public class ChessFun {
 
     /**

@@ -27,18 +27,13 @@ public class Queen extends Shape{
     public boolean CheckBeat(Cell toCell) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
-    @Override
-    public boolean CheckTransform(Cell toCell) {
-        return false;
-    }
     
     public Queen(ColorFigure colorFigure) {
         this.colorShape = colorFigure;
     }
     
     @Override
-    public String GetNameShape() {
+    public String GetName() {
         return "Queen " + this.colorShape.toString();
     }
 }

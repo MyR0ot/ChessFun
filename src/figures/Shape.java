@@ -12,6 +12,5 @@ public abstract class Shape {
     public abstract ColorFigure GetColorShape();
     public abstract boolean CheckMove(Cell toCell); // Можно ли ходить фигурой в клетку toCell?
     public abstract boolean CheckBeat(Cell toCell);
-    public abstract boolean CheckTransform(Cell toCell);
-    public abstract String GetNameShape();
+    public abstract String GetName();
 }

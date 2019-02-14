@@ -34,7 +34,7 @@ public class Cell {
             case 5 : this.name = "f"; break;
             case 6 : this.name = "g"; break;
             case 7 : this.name = "h"; break;
-            default: throw new UnsupportedOperationException("shess board is 8*8");
+            default: throw new UnsupportedOperationException("chess board is 8*8");
         }
         this.name = this.name + this.row + 1;
         this.shape = new EmptyFigure();
@@ -58,5 +58,25 @@ public class Cell {
         res += (this.row + 1);
         
         return res;
+    }
+    
+    public int GetRow()
+    {
+        return this.row;
+    }
+    
+    public int GetColumn()
+    {
+        return this.column;
+    }
+    
+    public String GetNameShape()
+    {
+        return this.shape.GetName();
+    }
+    
+    public boolean IsEmpty()
+    {
+        return (this.shape instanceof EmptyFigure);
     }
 }

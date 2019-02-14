@@ -26,15 +26,9 @@ public class EmptyFigure extends Shape {
     public boolean CheckBeat(Cell toCell) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
-    @Override
-    public boolean CheckTransform(Cell toCell) {
-        // ???
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
     
     @Override
-    public String GetNameShape() {
+    public String GetName() {
         return "Empty";
     }
 }

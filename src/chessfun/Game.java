@@ -5,10 +5,6 @@
  */
 package chessfun;
 
-/**
- *
- * @author My
- */
 public class Game {
     
     private ChessBoard chessBoard;
@@ -17,14 +13,18 @@ public class Game {
     public Game() // Конструктор
     {
         this.chessBoard = new ChessBoard();
-        this.chessBoard.GetBoardScrean();
     }
     
     
-    public void Start()
+    public void Start() // Можно описывать ходы
     {
-        // TODO:
-        //
+        this.chessBoard.GetBoardScrean(); // Вывод состояния доски в консоль
+        this.chessBoard.Move(ChessBoard.board[1][0], ChessBoard.board[2][2]);
+        this.chessBoard.GetBoardScrean();
+        this.chessBoard.Move(ChessBoard.board[2][2], ChessBoard.board[4][1]);
+        this.chessBoard.GetBoardScrean();
+        this.chessBoard.Move(ChessBoard.board[7][7], ChessBoard.board[4][1]);
+        this.chessBoard.GetBoardScrean();
         return;
     }
 }
