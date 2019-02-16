@@ -67,6 +67,7 @@ public class Cell {
     
     public int GetColumn()
     {
+        //hghg
         return this.column;
     }
     
