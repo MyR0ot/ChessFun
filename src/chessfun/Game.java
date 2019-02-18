@@ -25,6 +25,9 @@ public class Game {
         this.chessBoard.GetBoardScrean();
         this.chessBoard.Move(ChessBoard.board[7][7], ChessBoard.board[4][1]);
         this.chessBoard.GetBoardScrean();
-        return;
+        
+        
+        View view = new View();
+        view.setVisible(true);
     }
 }
