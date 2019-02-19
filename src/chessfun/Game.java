@@ -5,22 +5,13 @@
  */
 package chessfun;
 
-import java.awt.CardLayout;
-import java.awt.Color;
 import java.awt.FlowLayout;
-import java.awt.GridLayout;
 import java.io.IOException;
-import java.net.URL;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
-import org.netbeans.lib.awtextra.AbsoluteLayout;
 
 public class Game {
     
@@ -49,53 +40,55 @@ public class Game {
     
     public void Start()/* throws IOException */// Можно описывать ходы
     {
-        try /* throws IOException */ // Можно описывать ходы
-        {
-            this.chessBoard.GetBoardScrean(); // Вывод состояния доски в консоль
-            this.chessBoard.Move(ChessBoard.board[1][0], ChessBoard.board[2][2]);
-            this.chessBoard.GetBoardScrean();
-            this.chessBoard.Move(ChessBoard.board[2][2], ChessBoard.board[4][1]);
-            this.chessBoard.GetBoardScrean();
-            this.chessBoard.Move(ChessBoard.board[7][7], ChessBoard.board[4][1]);
-            this.chessBoard.GetBoardScrean();
-            
-            
-            // View view = new View(); // Путь слабака...
-            // view.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            // view.setVisible(true);
-            
+        try
+        {                           
             JFrame view = new JFrame(); // Путь джедая!
             view.setTitle("Chess Fun");
-            view.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            view.setSize(1024, 768);
+            view.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Корректное завершение работы, при закрытии окна
+            view.setSize(1024, 768); // Размеры окна
             
-            JPanelWithBackground board = new JPanelWithBackground("src/textures/chessboard_640.jpg");
-            board.setSize(640, 640);
+            JPanelWithBackground board = new JPanelWithBackground("src/textures/chessboard_640.jpg"); // JPanel с перегруженным методом paintComponent()
+            board.setSize(640, 640);// Размеры шахматной доски
+                 
+            /*Отладочный вывод png - фигур*/
             
-            board.setLayout(new FlowLayout()); //  Разобраться с необходимым лейаутом
-                        
-            
+            // TODO:
+            // Привязать все jLabels к соответствующим полям шахматной доски, возможно хранить в другой структуре данных (пример - JLabel[][])
             JLabel a1 = new JLabel();
             JLabel a2 = new JLabel();
             JLabel a3 = new JLabel();
+            JLabel a4 = new JLabel();
+            JLabel a5 = new JLabel();
+            JLabel a6 = new JLabel();
+            JLabel a7 = new JLabel();
+            JLabel a8 = new JLabel();
             
-            
-            a1.setIcon(icons[3]);
+          
+            a1.setIcon(icons[0]);// Привязка изображения к определенному jLabel 
             a2.setIcon(icons[1]);
             a3.setIcon(icons[2]);
+            a4.setIcon(icons[3]);
+            a5.setIcon(icons[4]);
+            a6.setIcon(icons[5]);
+            a7.setIcon(icons[6]);
+            a8.setIcon(icons[7]);            
             
-            
-            board.add(a1);
+            board.add(a1); // Привязка всех 64 jLabels к jPanels(шахматная доска)
             board.add(a2);
             board.add(a3);
+            board.add(a4);
+            board.add(a5);
+            board.add(a6);
+            board.add(a7);
+            board.add(a8);
 
-            view.getContentPane().add(board);
+            view.getContentPane().add(board); // добавление JPanel к JFrame
             
-            view.setVisible(true);
+            view.setVisible(true); // Делаем видимым наш фрейм
             
             
         } catch (IOException ex) {
-            System.out.print("try-catch");
+            System.err.print("Game.Start() It is trap");
             Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
         }
 

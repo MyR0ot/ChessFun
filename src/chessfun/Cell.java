@@ -20,7 +20,8 @@ public class Cell {
     public Shape shape;     // Фигура, принадлежащая данному полю
     
     
-    Cell(int column, int row) {
+    Cell(int column, int row)
+    {
         this.row = row;
         this.column = column;
         
@@ -67,7 +68,6 @@ public class Cell {
     
     public int GetColumn()
     {
-        //hghg
         return this.column;
     }
     

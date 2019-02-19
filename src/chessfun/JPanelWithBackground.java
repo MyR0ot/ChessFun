@@ -27,7 +27,7 @@ public class JPanelWithBackground extends JPanel {
         backgroundImage = ImageIO.read(new File(fileName));
   }  
   
-
+  @Override
   public void paintComponent(Graphics g)
   {
     super.paintComponent(g);

@@ -22,15 +22,15 @@ public class ChessBoard {
     
     private void StartClassic() // Классическая начальная расстоновка фигур
     {
-        for(int i=0;i<8;i++)
-            for(int j=0;j<8;j++)
+        for(int i = 0; i < 8; i++)
+            for(int j = 0; j < 8; j++)
                 this.board[i][j] = new Cell(i, j); // Инициализация клеток
         
-        for(int i=0; i<8; i++)
-            for(int j=2; j<6; j++)
+        for(int i = 0; i < 8; i++)
+            for(int j = 2; j < 6; j++)
                 this.board[i][j].shape = new EmptyFigure(); // пустые клетки в стартовой позиции
         
-        for(int i=0;i<8;i++)
+        for(int i = 0; i < 8; i++)
         {
             this.board[i][1].shape = new Pawn(ColorFigure.WHITE); // Выставляем белые пешки
             this.board[i][6].shape = new Pawn(ColorFigure.BLACK); // Выставляем черные пешки
