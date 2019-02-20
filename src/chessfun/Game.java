@@ -14,20 +14,26 @@ import javax.swing.JFrame;
 import figures.*;
 
 enum ModeChess {CLASSIC, FISHER, KING_HILL}
+enum ModeShape {ALPHA, CHESS24, MERIDA}
 
 public class Game {
     
-    public Cell[][] board;
-    private ImageIcon icons[];
-    private JFrame view;
+    private Cell[][] board;          // шахматная доска
+    private ImageIcon icons[];       // иконки для отображения фигур
+    private JFrame view;             // Основной JFrame для отображения 
     
     
-    public Game() // Конструктор
+    public Game(ModeChess modeChoice, ModeShape modeShape) // Конструктор
     {
         this.board = new Cell[8][8];
         this.icons = new ImageIcon[13];
-        LoadTextures(2);
-        StartClassic();
+        LoadTextures(modeShape);
+        switch (modeChoice)
+        {
+            case CLASSIC: StartClassic(); break;
+            case FISHER: StartClassic(); break;     // не реализовано
+            case KING_HILL: StartClassic(); break;
+        }
         view = new JFrame(); // Путь джедая!
         view.setTitle("Chess Fun");
         view.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Корректное завершение работы, при закрытии окна
@@ -46,7 +52,6 @@ public class Game {
             view.getContentPane().add(chessBoard); // добавление JPanel к JFrame
             view.setVisible(true); // Делаем видимым наш фрейм
             
-            
         }
         catch (IOException ex)
         {
@@ -58,9 +63,7 @@ public class Game {
     
     public void Start()/* throws IOException */// Можно описывать ходы
     {
-        // TODO logic
-        Move(board[0][0], board[2][2]);
-        view.repaint();
+        // TODO logic (Move(...); ...)
 
     }
     
@@ -85,14 +88,14 @@ public class Game {
         }
     }
     
-    private void LoadTextures(int choose)
+    private void LoadTextures(ModeShape modeShape)
     {
         String folder = "../textures/";
-        switch(choose)
+        switch(modeShape)
         {
-            case 1: folder += "alpha"; break;
-            case 2: folder += "chess24"; break;
-            default: folder += "merida"; break;
+            case ALPHA: folder += "alpha"; break;
+            case CHESS24: folder += "chess24"; break;
+            case MERIDA: folder += "merida"; break;
         }
         icons[0] = new ImageIcon(getClass().getResource(folder + "/wP.png"));
         icons[1] = new ImageIcon(getClass().getResource(folder + "/wN.png"));
@@ -121,7 +124,6 @@ public class Game {
                 this.board[i][j].shape = new EmptyFigure(); // пустые клетки в стартовой позиции
                 this.board[i][j].SetIcon(icons[12]);
             }
-                
         
         for(int i = 0; i < 8; i++)
         {
@@ -130,45 +132,44 @@ public class Game {
             this.board[i][6].shape = new Pawn(ColorFigure.WHITE); // Выставляем черные пешки
             this.board[i][6].SetIcon(icons[0]);
         }
-        
-            /*Классическая расстановка белых фигур*/
-        this.board[0][0].shape = new Rock(ColorFigure.BLACK); // a8
+                /*Классическая расстановка 8-ого ряда черных фигур*/
+        this.board[0][0].shape = new Rock(ColorFigure.BLACK);   // a8
         this.board[0][0].SetIcon(icons[9]);
         this.board[1][0].shape = new Knight(ColorFigure.BLACK); // b8
         this.board[1][0].SetIcon(icons[7]);
         this.board[2][0].shape = new Bishop(ColorFigure.BLACK); // c8
         this.board[2][0].SetIcon(icons[8]);
-        this.board[3][0].shape = new Queen(ColorFigure.BLACK);
+        this.board[3][0].shape = new Queen(ColorFigure.BLACK);  // d8
         this.board[3][0].SetIcon(icons[10]);
-        this.board[4][0].shape = new King(ColorFigure.BLACK);
+        this.board[4][0].shape = new King(ColorFigure.BLACK);   // e8
         this.board[4][0].SetIcon(icons[11]);
-        this.board[5][0].shape = new Bishop(ColorFigure.BLACK);
+        this.board[5][0].shape = new Bishop(ColorFigure.BLACK); // f8
         this.board[5][0].SetIcon(icons[8]);
-        this.board[6][0].shape = new Knight(ColorFigure.BLACK);
+        this.board[6][0].shape = new Knight(ColorFigure.BLACK); // g8
         this.board[6][0].SetIcon(icons[7]);
-        this.board[7][0].shape = new Rock(ColorFigure.BLACK);
+        this.board[7][0].shape = new Rock(ColorFigure.BLACK);   // h8
         this.board[7][0].SetIcon(icons[9]);
         
-            /*Классическая расстановка черных фигур*/
-        this.board[0][7].shape = new Rock(ColorFigure.WHITE); // a1
+            /*Классическая расстановка 1-ого ряда белых фигур*/
+        this.board[0][7].shape = new Rock(ColorFigure.WHITE);   // a1
         this.board[0][7].SetIcon(icons[3]);
-        this.board[1][7].shape = new Knight(ColorFigure.WHITE); // a2
+        this.board[1][7].shape = new Knight(ColorFigure.WHITE); // b1
         this.board[1][7].SetIcon(icons[1]);
-        this.board[2][7].shape = new Bishop(ColorFigure.WHITE);
+        this.board[2][7].shape = new Bishop(ColorFigure.WHITE); // c1
         this.board[2][7].SetIcon(icons[2]);
-        this.board[3][7].shape = new Queen(ColorFigure.WHITE);
+        this.board[3][7].shape = new Queen(ColorFigure.WHITE);  // d1
         this.board[3][7].SetIcon(icons[4]);
-        this.board[4][7].shape = new King(ColorFigure.WHITE);
+        this.board[4][7].shape = new King(ColorFigure.WHITE);   // e1
         this.board[4][7].SetIcon(icons[5]);
-        this.board[5][7].shape = new Bishop(ColorFigure.WHITE);
+        this.board[5][7].shape = new Bishop(ColorFigure.WHITE); // f1
         this.board[5][7].SetIcon(icons[2]);
-        this.board[6][7].shape = new Knight(ColorFigure.WHITE);
+        this.board[6][7].shape = new Knight(ColorFigure.WHITE); // g1
         this.board[6][7].SetIcon(icons[1]);
-        this.board[7][7].shape = new Rock(ColorFigure.WHITE);
+        this.board[7][7].shape = new Rock(ColorFigure.WHITE);   // h1
         this.board[7][7].SetIcon(icons[3]);
     }
     
-    public void GetBoardScrean()// Вывод состояния шахматной доски в консоль
+    public void PrintCurrentInfoBoard()// Вывод состояния шахматной доски в консоль (пока не удалять!)
     {
         System.out.println("-----------------------");
         for(int i = 0; i < 8; i++)
