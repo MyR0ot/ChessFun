@@ -12,6 +12,7 @@ import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import figures.*;
+import java.util.Random;
 
 enum ModeChess {CLASSIC, FISHER, KING_HILL}
 enum ModeShape {ALPHA, CHESS24, MERIDA}
@@ -31,7 +32,7 @@ public class Game {
         switch (modeChoice)
         {
             case CLASSIC: StartClassic(); break;
-            case FISHER: StartClassic(); break;     // не реализовано
+            case FISHER: StartFisher(); break;     // не реализовано
             case KING_HILL: StartClassic(); break;
         }
         view = new JFrame(); // Путь джедая!
@@ -168,6 +169,80 @@ public class Game {
         this.board[7][7].shape = new Rock(ColorFigure.WHITE);   // h1
         this.board[7][7].SetIcon(icons[3]);
     }
+    
+    private void StartFisher()
+    {
+        for(int i = 0; i < 8; i++)
+            for(int j = 0; j < 8; j++)
+                this.board[i][j] = new Cell(i, j); // Инициализация клеток
+        
+        for(int i = 0; i < 8; i++)
+            for(int j = 2; j < 6; j++)
+            {
+                this.board[i][j].shape = new EmptyFigure(); // пустые клетки в стартовой позиции
+                this.board[i][j].SetIcon(icons[12]);
+            }
+        
+        for(int i = 0; i < 8; i++)
+        {
+            this.board[i][1].shape = new Pawn(ColorFigure.BLACK); // Выставляем белые пешки
+            this.board[i][1].SetIcon(icons[6]);
+            this.board[i][6].shape = new Pawn(ColorFigure.WHITE); // Выставляем черные пешки
+            this.board[i][6].SetIcon(icons[0]);
+        }
+        int[] arr = {4,3,1,6,7,5,2,0};
+        int index1;
+        int index2;
+        int tmp;
+        Random r = new Random();
+        for(int i = 0; i < 50; i++)
+        {
+            index1 = Math.abs(r.nextInt()%8);
+            index2 = Math.abs(r.nextInt()%8);
+            
+            tmp = arr[index1];
+            arr[index1] = arr[index2];
+            arr[index2] = tmp;
+        }
+        
+            /*Случайная расстановка 8-ого ряда черных фигур*/
+        this.board[arr[0]][0].shape = new Rock(ColorFigure.BLACK);   // a8
+        this.board[arr[0]][0].SetIcon(icons[9]);
+        this.board[arr[1]][0].shape = new Knight(ColorFigure.BLACK); // b8
+        this.board[arr[1]][0].SetIcon(icons[7]);
+        this.board[arr[2]][0].shape = new Bishop(ColorFigure.BLACK); // c8
+        this.board[arr[2]][0].SetIcon(icons[8]);
+        this.board[arr[3]][0].shape = new Queen(ColorFigure.BLACK);  // d8
+        this.board[arr[3]][0].SetIcon(icons[10]);
+        this.board[arr[4]][0].shape = new King(ColorFigure.BLACK);   // e8
+        this.board[arr[4]][0].SetIcon(icons[11]);
+        this.board[arr[5]][0].shape = new Bishop(ColorFigure.BLACK); // f8
+        this.board[arr[5]][0].SetIcon(icons[8]);
+        this.board[arr[6]][0].shape = new Knight(ColorFigure.BLACK); // g8
+        this.board[arr[6]][0].SetIcon(icons[7]);
+        this.board[arr[7]][0].shape = new Rock(ColorFigure.BLACK);   // h8
+        this.board[arr[7]][0].SetIcon(icons[9]);
+        
+            /*Случайная расстановка 1-ого ряда белых фигур*/
+        this.board[arr[0]][7].shape = new Rock(ColorFigure.WHITE);   // a1
+        this.board[arr[0]][7].SetIcon(icons[3]);
+        this.board[arr[1]][7].shape = new Knight(ColorFigure.WHITE); // b1
+        this.board[arr[1]][7].SetIcon(icons[1]);
+        this.board[arr[2]][7].shape = new Bishop(ColorFigure.WHITE); // c1
+        this.board[arr[2]][7].SetIcon(icons[2]);
+        this.board[arr[3]][7].shape = new Queen(ColorFigure.WHITE);  // d1
+        this.board[arr[3]][7].SetIcon(icons[4]);
+        this.board[arr[4]][7].shape = new King(ColorFigure.WHITE);   // e1
+        this.board[arr[4]][7].SetIcon(icons[5]);
+        this.board[arr[5]][7].shape = new Bishop(ColorFigure.WHITE); // f1
+        this.board[arr[5]][7].SetIcon(icons[2]);
+        this.board[arr[6]][7].shape = new Knight(ColorFigure.WHITE); // g1
+        this.board[arr[6]][7].SetIcon(icons[1]);
+        this.board[arr[7]][7].shape = new Rock(ColorFigure.WHITE);   // h1
+        this.board[arr[7]][7].SetIcon(icons[3]);
+        
+    }
+    
     
     public void PrintCurrentInfoBoard()// Вывод состояния шахматной доски в консоль (пока не удалять!)
     {
