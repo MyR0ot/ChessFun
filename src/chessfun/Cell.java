@@ -7,19 +7,16 @@ package chessfun;
 
 import figures.EmptyFigure;
 import figures.Shape;
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
-/**
- *
- * @author My
- */
 public class Cell {
     
-    private int row;        // номер строки
-    private int column;     // номер столбцу
-    private String name;    // Название поля
-    public Shape shape;     // Фигура, принадлежащая данному полю
-    public JLabel label;      // jLabel, привязанный к полю
+    private int row;            // номер строки 0..8
+    private int column;         // номер столбцу 0..8
+    private String name;        // Название поля a1, a2, a3, ... , h7, h8
+    public Shape shape;         // Фигура, принадлежащая данному полю
+    public JLabel label;        // jLabel, привязанный к полю
     
     
     Cell(int column, int row)
@@ -40,29 +37,13 @@ public class Cell {
             case 7 : this.name = "h"; break;
             default: throw new UnsupportedOperationException("chess board is 8*8");
         }
-        this.name = this.name + this.row + 1;
+        this.name += (this.row + 1);
         this.shape = new EmptyFigure();
-        
     }
     
     public String GetName()
     {
-        String res = "";
-        switch(this.column)
-        {
-            case 0: res = "a"; break;
-            case 1: res = "b"; break;
-            case 2: res = "c"; break;
-            case 3: res = "d"; break;
-            case 4: res = "e"; break;
-            case 5: res = "f"; break;
-            case 6: res = "g"; break;
-            case 7: res = "h"; break;
-        }
-        
-        res += (this.row + 1);
-        
-        return res;
+        return this.name;
     }
     
     public int GetRow()
@@ -83,5 +64,10 @@ public class Cell {
     public boolean IsEmpty()
     {
         return (this.shape instanceof EmptyFigure);
+    }
+    
+    public void SetIcon(ImageIcon icon)
+    {
+        this.label.setIcon(icon);
     }
 }
