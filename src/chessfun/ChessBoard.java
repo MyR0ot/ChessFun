@@ -20,6 +20,14 @@ public class ChessBoard {
                 
     }
     
+    public boolean CheckBishop(Cell start, Cell finish)
+    {
+        // TODO:
+        //
+        
+        return true;
+    }
+    
     private void StartClassic() // Классическая начальная расстоновка фигур
     {
         for(int i = 0; i < 8; i++)
@@ -37,9 +45,9 @@ public class ChessBoard {
         }
         
             /*Классическая расстановка белых фигур*/
-        this.board[0][0].shape = new Rock(ColorFigure.WHITE);
-        this.board[1][0].shape = new Knight(ColorFigure.WHITE);
-        this.board[2][0].shape = new Bishop(ColorFigure.WHITE);
+        this.board[0][0].shape = new Rock(ColorFigure.WHITE); // a1
+        this.board[1][0].shape = new Knight(ColorFigure.WHITE); // a2
+        this.board[2][0].shape = new Bishop(ColorFigure.WHITE); // a3
         this.board[3][0].shape = new Queen(ColorFigure.WHITE);
         this.board[4][0].shape = new King(ColorFigure.WHITE);
         this.board[5][0].shape = new Bishop(ColorFigure.WHITE);
@@ -47,8 +55,8 @@ public class ChessBoard {
         this.board[7][0].shape = new Rock(ColorFigure.WHITE);
         
             /*Классическая расстановка черных фигур*/
-        this.board[0][7].shape = new Rock(ColorFigure.BLACK);
-        this.board[1][7].shape = new Knight(ColorFigure.BLACK);
+        this.board[0][7].shape = new Rock(ColorFigure.BLACK); // b8
+        this.board[1][7].shape = new Knight(ColorFigure.BLACK); // b7
         this.board[2][7].shape = new Bishop(ColorFigure.BLACK);
         this.board[3][7].shape = new Queen(ColorFigure.BLACK);
         this.board[4][7].shape = new King(ColorFigure.BLACK);

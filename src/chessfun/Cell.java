@@ -7,6 +7,7 @@ package chessfun;
 
 import figures.EmptyFigure;
 import figures.Shape;
+import javax.swing.JLabel;
 
 /**
  *
@@ -18,13 +19,15 @@ public class Cell {
     private int column;     // номер столбцу
     private String name;    // Название поля
     public Shape shape;     // Фигура, принадлежащая данному полю
+    public JLabel label;      // jLabel, привязанный к полю
     
     
     Cell(int column, int row)
     {
         this.row = row;
         this.column = column;
-        
+        this.label = new JLabel();
+        this.label.setBounds(80*column, 80*row, 80, 80);
         switch(column)
         {
             case 0 : this.name = "a"; break;
@@ -39,6 +42,7 @@ public class Cell {
         }
         this.name = this.name + this.row + 1;
         this.shape = new EmptyFigure();
+        
     }
     
     public String GetName()

@@ -5,13 +5,12 @@
  */
 package chessfun;
 
-import java.awt.FlowLayout;
+import figures.Shape;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 
 public class Game {
     
@@ -22,19 +21,9 @@ public class Game {
     public Game() // Конструктор
     {
         this.chessBoard = new ChessBoard();
-        this.icons = new ImageIcon[12];
-        icons[0] = new ImageIcon(getClass().getResource("../textures/alpha/wP.png"));
-        icons[1] = new ImageIcon(getClass().getResource("../textures/alpha/wN.png"));
-        icons[2] = new ImageIcon(getClass().getResource("../textures/alpha/wB.png"));
-        icons[3] = new ImageIcon(getClass().getResource("../textures/alpha/wR.png"));
-        icons[4] = new ImageIcon(getClass().getResource("../textures/alpha/wQ.png"));
-        icons[5] = new ImageIcon(getClass().getResource("../textures/alpha/wK.png"));
-        icons[6] = new ImageIcon(getClass().getResource("../textures/alpha/bP.png"));
-        icons[7] = new ImageIcon(getClass().getResource("../textures/alpha/bN.png"));
-        icons[8] = new ImageIcon(getClass().getResource("../textures/alpha/bB.png"));
-        icons[9] = new ImageIcon(getClass().getResource("../textures/alpha/bR.png"));
-        icons[10] = new ImageIcon(getClass().getResource("../textures/alpha/bQ.png"));
-        icons[11] = new ImageIcon(getClass().getResource("../textures/alpha/bK.png"));
+        this.icons = new ImageIcon[13];
+        LoadTextures(2);
+        
     }
     
     
@@ -48,39 +37,22 @@ public class Game {
             view.setSize(1024, 768); // Размеры окна
             
             JPanelWithBackground board = new JPanelWithBackground("src/textures/chessboard_640.jpg"); // JPanel с перегруженным методом paintComponent()
+            board.setLayout(null);
             board.setSize(640, 640);// Размеры шахматной доски
+            
                  
             /*Отладочный вывод png - фигур*/
             
             // TODO:
             // Привязать все jLabels к соответствующим полям шахматной доски, возможно хранить в другой структуре данных (пример - JLabel[][])
-            JLabel a1 = new JLabel();
-            JLabel a2 = new JLabel();
-            JLabel a3 = new JLabel();
-            JLabel a4 = new JLabel();
-            JLabel a5 = new JLabel();
-            JLabel a6 = new JLabel();
-            JLabel a7 = new JLabel();
-            JLabel a8 = new JLabel();
-            
           
-            a1.setIcon(icons[0]);// Привязка изображения к определенному jLabel 
-            a2.setIcon(icons[1]);
-            a3.setIcon(icons[2]);
-            a4.setIcon(icons[3]);
-            a5.setIcon(icons[4]);
-            a6.setIcon(icons[5]);
-            a7.setIcon(icons[6]);
-            a8.setIcon(icons[7]);            
             
-            board.add(a1); // Привязка всех 64 jLabels к jPanels(шахматная доска)
-            board.add(a2);
-            board.add(a3);
-            board.add(a4);
-            board.add(a5);
-            board.add(a6);
-            board.add(a7);
-            board.add(a8);
+            for(int i=0;i<8;i++)
+                for(int j=0;j<8;j++)
+                {
+                    ChessBoard.board[i][j].label.setIcon(icons[(i+j)%13]);
+                    board.add(ChessBoard.board[i][j].label);
+                }
 
             view.getContentPane().add(board); // добавление JPanel к JFrame
             
@@ -93,5 +65,53 @@ public class Game {
         }
 
     }
+    
+    private ImageIcon GetIcon(Shape sh)
+    {
+        
+        switch (sh.GetName())
+        {
+            case "Pawn WHITE": return icons[0];
+            case "Knight WHITE": return icons[1];
+            case "Bishop WHITE": return icons[2];
+            case "Rock WHITE": return icons[3];
+            case "Queen WHITE": return icons[4];
+            case "King WHITE": return icons[5];
+            case "Pawn BLACK": return icons[6];
+            case "Knight BLACK": return icons[7];
+            case "Bishop BLACK": return icons[8];
+            case "Rock BLACK": return icons[9];
+            case "Queen BLACK": return icons[10];
+            case "King BLACK": return icons[11];
+            default: return icons[12];
+        }
+    }
+    
+    private void LoadTextures(int choose)
+    {
+        String folder = "";
+        switch(choose)
+        {
+            case 1: folder = "alpha"; break;
+            case 2: folder = "chess24"; break;
+            default: folder = "merida"; break;
+        }
+        
+        icons[0] = new ImageIcon(getClass().getResource("../textures/" + folder + "/wP.png"));
+        icons[1] = new ImageIcon(getClass().getResource("../textures/" + folder + "/wN.png"));
+        icons[2] = new ImageIcon(getClass().getResource("../textures/" + folder + "/wB.png"));
+        icons[3] = new ImageIcon(getClass().getResource("../textures/" + folder + "/wR.png"));
+        icons[4] = new ImageIcon(getClass().getResource("../textures/" + folder + "/wQ.png"));
+        icons[5] = new ImageIcon(getClass().getResource("../textures/" + folder + "/wK.png"));
+        icons[6] = new ImageIcon(getClass().getResource("../textures/" + folder + "/bP.png"));
+        icons[7] = new ImageIcon(getClass().getResource("../textures/" + folder + "/bN.png"));
+        icons[8] = new ImageIcon(getClass().getResource("../textures/" + folder + "/bB.png"));
+        icons[9] = new ImageIcon(getClass().getResource("../textures/" + folder + "/bR.png"));
+        icons[10] = new ImageIcon(getClass().getResource("../textures/" + folder + "/bQ.png"));
+        icons[11] = new ImageIcon(getClass().getResource("../textures/" + folder + "/bK.png"));
+        icons[12] = new ImageIcon(getClass().getResource("../textures/" + folder + "/empty.png"));
+    }
+    
+    
     
 }
