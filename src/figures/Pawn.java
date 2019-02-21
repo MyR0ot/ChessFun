@@ -10,6 +10,10 @@ import chessfun.Cell;
 public class Pawn extends Shape{
     
     private ColorFigure colorShape; // цвет фигуры
+
+    public Pawn() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
     @Override
     public ColorFigure GetColorShape()

@@ -16,7 +16,7 @@ public class Cell {
     private int column;         // номер столбцу 0..8
     private String name;        // Название поля a1, a2, a3, ... , h7, h8
     public Shape shape;         // Фигура, принадлежащая данному полю
-    public JLabel label;        // jLabel, привязанный к полю
+    private JLabel label;        // jLabel, привязанный к полю
     
     
     Cell(int column, int row)
@@ -69,5 +69,9 @@ public class Cell {
     public void SetIcon(ImageIcon icon)
     {
         this.label.setIcon(icon);
+    }
+    public JLabel GetLabel()
+    {
+        return this.label;
     }
 }

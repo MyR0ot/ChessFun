@@ -48,7 +48,7 @@ public class Game {
             
             for(int i=0;i<8;i++)
                 for(int j=0;j<8;j++)
-                    chessBoard.add(board[i][j].label);
+                    chessBoard.add(board[i][j].GetLabel());
 
             view.getContentPane().add(chessBoard); // добавление JPanel к JFrame
             view.setVisible(true); // Делаем видимым наш фрейм
@@ -65,6 +65,9 @@ public class Game {
     public void Start()/* throws IOException */// Можно описывать ходы
     {
         // TODO logic (Move(...); ...)
+        Move(0,0,5,5);
+        PrintCurrentInfoBoard();
+        view.repaint();
 
     }
     
@@ -113,7 +116,7 @@ public class Game {
         icons[12] = new ImageIcon(getClass().getResource(folder + "/empty.png"));
     }
     
-    private void StartClassic() // Классическая начальная расстоновка фигур
+    private void StartClassic() // Классическая начальная расстановка фигур
     {
         for(int i = 0; i < 8; i++)
             for(int j = 0; j < 8; j++)
@@ -170,7 +173,7 @@ public class Game {
         this.board[7][7].SetIcon(icons[3]);
     }
     
-    private void StartFisher()
+    private void StartFisher()  // Расстановка 1-1ого и 8-ого ряда случайным образом
     {
         for(int i = 0; i < 8; i++)
             for(int j = 0; j < 8; j++)
@@ -254,15 +257,24 @@ public class Game {
     }
     
     /// FIX
-    public void Move(Cell from, Cell to)// Перемещение фигуры из from в to
+    public void Move(int x_from, int y_from, int x_to, int y_to)// Перемещение фигуры из from в to
     {
         // Переписать метод
-        to.shape = from.shape;
-        if(from.GetRow() == 7 && to.shape instanceof Pawn) // превращение в ферзя пещки
+        switch(board[x_from][y_from].shape.GetName())
         {
-            to.shape = new Queen(to.shape.GetColorShape());
-            to.label.setIcon(icons[4]);
+            case "Pawn WHITE":  board[x_to][y_to].SetIcon(icons[0]); board[x_to][y_to].shape = new Pawn(ColorFigure.WHITE); break;
+            case "Knight WHITE":board[x_to][y_to].SetIcon(icons[1]); board[x_to][y_to].shape = new Knight(ColorFigure.WHITE); break;
+            case "Bishop WHITE":board[x_to][y_to].SetIcon(icons[2]);board[x_to][y_to].shape = new Bishop(ColorFigure.WHITE); break;
+            case "Rock WHITE": board[x_to][y_to].SetIcon(icons[3]);board[x_to][y_to].shape = new Rock(ColorFigure.WHITE);break;
+            case "Queen WHITE": board[x_to][y_to].SetIcon(icons[4]);board[x_to][y_to].shape = new Queen(ColorFigure.WHITE);break;
+            case "King WHITE": board[x_to][y_to].SetIcon(icons[5]);board[x_to][y_to].shape = new King(ColorFigure.WHITE);break;
+            case "Pawn BLACK": board[x_to][y_to].SetIcon(icons[6]);board[x_to][y_to].shape = new Pawn(ColorFigure.BLACK);break;
+            case "Knight BLACK": board[x_to][y_to].SetIcon(icons[7]);board[x_to][y_to].shape = new Knight(ColorFigure.BLACK);break;
+            case "Bishop BLACK":board[x_to][y_to].SetIcon(icons[8]);board[x_to][y_to].shape = new Bishop(ColorFigure.BLACK); break;
+            case "Rock BLACK": board[x_to][y_to].SetIcon(icons[9]);board[x_to][y_to].shape = new Rock(ColorFigure.BLACK);break;
+            case "Queen BLACK": board[x_to][y_to].SetIcon(icons[10]);board[x_to][y_to].shape = new Queen(ColorFigure.BLACK);break;
+            case "King BLACK": board[x_to][y_to].SetIcon(icons[11]);board[x_to][y_to].shape = new King(ColorFigure.BLACK);break;
         }
-        from.shape = new EmptyFigure();
+        board[x_from][y_from].SetIcon(icons[12]);
     }
 }
