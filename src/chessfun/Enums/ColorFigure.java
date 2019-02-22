@@ -9,4 +9,8 @@ package chessfun.Enums;
  *
  * @author My
  */
-public enum ColorFigure { WHITE, BLACK, NONE }
+public enum ColorFigure {
+    WHITE, // Белый
+    BLACK, // Черный
+    NONE   // Цвета нет
+}

@@ -13,7 +13,7 @@ public class Cell {
     
     private int row;                // номер строки 0..8
     private int column;             // номер столбцу 0..8
-    private String name;            // Название поля a1, a2, a3, ... , h7, h8
+    private String nameField;       // Название поля a1, a2, a3, ... , h7, h8
     private JLabel label;           // jLabel, привязанный к полю
     private ColorFigure colorFigure;
     private NameFigure nameFigure;
@@ -21,8 +21,7 @@ public class Cell {
     
     Cell(int column, int row)
     {
-        this.colorFigure = ColorFigure.NONE;
-        this.nameFigure = NameFigure.EMPTY;
+        SetFigure(NameFigure.EMPTY, ColorFigure.NONE);
         
         this.row = row;
         this.column = column;
@@ -30,22 +29,22 @@ public class Cell {
         this.label.setBounds(80*column, 80*row, 80, 80);
         switch(column)
         {
-            case 0 : this.name = "a"; break;
-            case 1 : this.name = "b"; break;
-            case 2 : this.name = "c"; break;
-            case 3 : this.name = "d"; break;
-            case 4 : this.name = "e"; break;
-            case 5 : this.name = "f"; break;
-            case 6 : this.name = "g"; break;
-            case 7 : this.name = "h"; break;
+            case 0 : this.nameField = "a"; break;
+            case 1 : this.nameField = "b"; break;
+            case 2 : this.nameField = "c"; break;
+            case 3 : this.nameField = "d"; break;
+            case 4 : this.nameField = "e"; break;
+            case 5 : this.nameField = "f"; break;
+            case 6 : this.nameField = "g"; break;
+            case 7 : this.nameField = "h"; break;
             default: throw new UnsupportedOperationException("chess board is 8*8");
         }
-        this.name += (this.row + 1);
+        this.nameField += (8-this.row);
     }
     
     public String GetName()
     {
-        return this.name;
+        return this.nameField;
     }
     
     public int GetRow()
@@ -56,11 +55,6 @@ public class Cell {
     public int GetColumn()
     {
         return this.column;
-    }
-    
-    public NameFigure GetNameShape()
-    {
-        return this.nameFigure;
     }
     
     public boolean IsEmpty()
@@ -87,5 +81,10 @@ public class Cell {
     public String GetNameFigure()
     {
         return this.nameFigure.toString()+" " + this.colorFigure.toString();
+    }
+    
+    public JLabel GetLabel()
+    {
+        return this.label;
     }
 }

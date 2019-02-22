@@ -6,13 +6,13 @@
 package chessfun;
 
 import chessfun.Enums.*;
-//import figures.Shape;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import java.util.Random;
+
 
 
 public class Game {
@@ -62,14 +62,19 @@ public class Game {
     
     public void Start()/* throws IOException */// Можно описывать ходы
     {
-        view.repaint();
+        Random r = new Random();
         // TODO logic (Move(...); ...)
         
-        Move(2,0, 4, 2);
-        view.repaint();
-        Move(3,1,3,4);
+        Move("e2", "e4");
+        Move("e7", "e5");
+        Move("g1", "f3");
+        Move("b8", "c6");
+        Move("f1", "c4");
+        Move("f8", "c5");
+
+        //Move(0, 0, 7, 5);
         PrintCurrentInfoBoard();
-        view.repaint();
+
 
     }
     
@@ -99,23 +104,23 @@ public class Game {
         String folder = "../textures/";
         switch(modeShape)
         {
-            case ALPHA: folder += "alpha"; break;
-            case CHESS24: folder += "chess24"; break;
-            case MERIDA: folder += "merida"; break;
+            case ALPHA: folder += "alpha/"; break;
+            case CHESS24: folder += "chess24/"; break;
+            case MERIDA: folder += "merida/"; break;
         }
-        icons[0] = new ImageIcon(getClass().getResource(folder + "/wP.png"));
-        icons[1] = new ImageIcon(getClass().getResource(folder + "/wN.png"));
-        icons[2] = new ImageIcon(getClass().getResource(folder + "/wB.png"));
-        icons[3] = new ImageIcon(getClass().getResource(folder + "/wR.png"));
-        icons[4] = new ImageIcon(getClass().getResource(folder + "/wQ.png"));
-        icons[5] = new ImageIcon(getClass().getResource(folder + "/wK.png"));
-        icons[6] = new ImageIcon(getClass().getResource(folder + "/bP.png"));
-        icons[7] = new ImageIcon(getClass().getResource(folder + "/bN.png"));
-        icons[8] = new ImageIcon(getClass().getResource(folder + "/bB.png"));
-        icons[9] = new ImageIcon(getClass().getResource(folder + "/bR.png"));
-        icons[10] = new ImageIcon(getClass().getResource(folder + "/bQ.png"));
-        icons[11] = new ImageIcon(getClass().getResource(folder + "/bK.png"));
-        icons[12] = new ImageIcon(getClass().getResource(folder + "/empty.png"));
+        icons[0] = new ImageIcon(getClass().getResource(folder + "wP.png"));
+        icons[1] = new ImageIcon(getClass().getResource(folder + "wN.png"));
+        icons[2] = new ImageIcon(getClass().getResource(folder + "wB.png"));
+        icons[3] = new ImageIcon(getClass().getResource(folder + "wR.png"));
+        icons[4] = new ImageIcon(getClass().getResource(folder + "wQ.png"));
+        icons[5] = new ImageIcon(getClass().getResource(folder + "wK.png"));
+        icons[6] = new ImageIcon(getClass().getResource(folder + "bP.png"));
+        icons[7] = new ImageIcon(getClass().getResource(folder + "bN.png"));
+        icons[8] = new ImageIcon(getClass().getResource(folder + "bB.png"));
+        icons[9] = new ImageIcon(getClass().getResource(folder + "bR.png"));
+        icons[10] = new ImageIcon(getClass().getResource(folder + "bQ.png"));
+        icons[11] = new ImageIcon(getClass().getResource(folder + "bK.png"));
+        icons[12] = new ImageIcon(getClass().getResource(folder + "empty.png"));
     }
     
     private void StartClassic() // Классическая начальная расстановка фигур
@@ -288,6 +293,16 @@ public class Game {
             case "KING BLACK": board[x_to][y_to].SetIcon(icons[11]);    board[x_to][y_to].SetFigure(NameFigure.KING, ColorFigure.BLACK); break;
         }
         board[x_from][y_from].SetIcon(icons[12]);
+        board[x_from][y_from].SetFigure(NameFigure.EMPTY, ColorFigure.NONE);
+    }
+    
+    public void Move(String from, String to)// Перемещение фигуры из from в to, согласно нотации
+    {
+        int x_from = 7  + from.charAt(0) - 'h';
+        int y_from = '8' - from.charAt(1);
+        int x_to = 7  + to.charAt(0) - 'h';
+        int y_to = '8' - to.charAt(1);
+        Move(x_from, y_from, x_to, y_to);
     }
     
     public boolean CheckMove(int x_from, int y_from, int x_to, int y_to)
