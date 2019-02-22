@@ -5,17 +5,15 @@
  */
 package chessfun;
 
-import figures.Shape;
+import chessfun.Enums.*;
+//import figures.Shape;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
-import figures.*;
 import java.util.Random;
 
-enum ModeChess {CLASSIC, FISHER, KING_HILL}
-enum ModeShape {ALPHA, CHESS24, MERIDA}
 
 public class Game {
     
@@ -75,23 +73,23 @@ public class Game {
 
     }
     
-    private ImageIcon GetIcon(Shape sh)
+    private ImageIcon GetIcon(NameFigure figure, ColorFigure color)
     {
         
-        switch (sh.GetName())
+        switch (figure.toString()+" " + color.toString())
         {
-            case "Pawn WHITE": return icons[0];
-            case "Knight WHITE": return icons[1];
-            case "Bishop WHITE": return icons[2];
-            case "Rock WHITE": return icons[3];
-            case "Queen WHITE": return icons[4];
-            case "King WHITE": return icons[5];
-            case "Pawn BLACK": return icons[6];
-            case "Knight BLACK": return icons[7];
-            case "Bishop BLACK": return icons[8];
-            case "Rock BLACK": return icons[9];
-            case "Queen BLACK": return icons[10];
-            case "King BLACK": return icons[11];
+            case "PAWN WHITE": return icons[0];
+            case "KNIGHT WHITE": return icons[1];
+            case "BISHOP WHITE": return icons[2];
+            case "ROCK WHITE": return icons[3];
+            case "QUEEN WHITE": return icons[4];
+            case "KING WHITE": return icons[5];
+            case "PAWN BLACK": return icons[6];
+            case "KNIGHT BLACK": return icons[7];
+            case "BISHOP BLACK": return icons[8];
+            case "ROCK BLACK": return icons[9];
+            case "QUEEN BLACK": return icons[10];
+            case "KING BLACK": return icons[11];
             default: return icons[12];
         }
     }
@@ -129,51 +127,55 @@ public class Game {
         for(int i = 0; i < 8; i++)
             for(int j = 2; j < 6; j++)
             {
-                this.board[i][j].shape = new EmptyFigure(); // пустые клетки в стартовой позиции
+                this.board[i][j].SetFigure(NameFigure.EMPTY, ColorFigure.NONE); // пустые клетки в стартовой позиции
                 this.board[i][j].SetIcon(icons[12]);
             }
         
         for(int i = 0; i < 8; i++)
         {
-            this.board[i][1].shape = new Pawn(ColorFigure.BLACK); // Выставляем белые пешки
+            
+            this.board[i][1].SetFigure(NameFigure.PAWN, ColorFigure.BLACK); // Выставляем белые пешки
             this.board[i][1].SetIcon(icons[6]);
-            this.board[i][6].shape = new Pawn(ColorFigure.WHITE); // Выставляем черные пешки
+            this.board[i][6].SetFigure(NameFigure.PAWN, ColorFigure.WHITE); // Выставляем черные пешки
             this.board[i][6].SetIcon(icons[0]);
         }
                 /*Классическая расстановка 8-ого ряда черных фигур*/
-        this.board[0][0].shape = new Rock(ColorFigure.BLACK);   // a8
-        this.board[0][0].SetIcon(icons[9]);
-        this.board[1][0].shape = new Knight(ColorFigure.BLACK); // b8
-        this.board[1][0].SetIcon(icons[7]);
-        this.board[2][0].shape = new Bishop(ColorFigure.BLACK); // c8
-        this.board[2][0].SetIcon(icons[8]);
-        this.board[3][0].shape = new Queen(ColorFigure.BLACK);  // d8
-        this.board[3][0].SetIcon(icons[10]);
-        this.board[4][0].shape = new King(ColorFigure.BLACK);   // e8
-        this.board[4][0].SetIcon(icons[11]);
-        this.board[5][0].shape = new Bishop(ColorFigure.BLACK); // f8
+                
+        this.board[0][0].SetFigure(NameFigure.ROCK, ColorFigure.BLACK);
+        this.board[1][0].SetFigure(NameFigure.KNIGHT, ColorFigure.BLACK);
+        this.board[2][0].SetFigure(NameFigure.BISHOP, ColorFigure.BLACK);
+        this.board[3][0].SetFigure(NameFigure.QUEEN, ColorFigure.BLACK);
+        this.board[4][0].SetFigure(NameFigure.KING, ColorFigure.BLACK);
+        this.board[5][0].SetFigure(NameFigure.BISHOP, ColorFigure.BLACK);
+        this.board[6][0].SetFigure(NameFigure.KNIGHT, ColorFigure.BLACK);
+        this.board[7][0].SetFigure(NameFigure.ROCK, ColorFigure.BLACK);
+            
+        this.board[0][0].SetIcon(icons[9]);      
+        this.board[1][0].SetIcon(icons[7]);     
+        this.board[2][0].SetIcon(icons[8]); 
+        this.board[3][0].SetIcon(icons[10]);      
+        this.board[4][0].SetIcon(icons[11]);     
         this.board[5][0].SetIcon(icons[8]);
-        this.board[6][0].shape = new Knight(ColorFigure.BLACK); // g8
-        this.board[6][0].SetIcon(icons[7]);
-        this.board[7][0].shape = new Rock(ColorFigure.BLACK);   // h8
+        this.board[6][0].SetIcon(icons[7]);       
         this.board[7][0].SetIcon(icons[9]);
         
             /*Классическая расстановка 1-ого ряда белых фигур*/
-        this.board[0][7].shape = new Rock(ColorFigure.WHITE);   // a1
+        this.board[0][7].SetFigure(NameFigure.ROCK, ColorFigure.WHITE);
+        this.board[1][7].SetFigure(NameFigure.KNIGHT, ColorFigure.WHITE);
+        this.board[2][7].SetFigure(NameFigure.BISHOP, ColorFigure.WHITE);
+        this.board[3][7].SetFigure(NameFigure.QUEEN, ColorFigure.WHITE);
+        this.board[4][7].SetFigure(NameFigure.KING, ColorFigure.WHITE);
+        this.board[5][7].SetFigure(NameFigure.BISHOP, ColorFigure.WHITE);
+        this.board[6][7].SetFigure(NameFigure.KNIGHT, ColorFigure.WHITE);
+        this.board[7][7].SetFigure(NameFigure.ROCK, ColorFigure.WHITE);
+        
         this.board[0][7].SetIcon(icons[3]);
-        this.board[1][7].shape = new Knight(ColorFigure.WHITE); // b1
         this.board[1][7].SetIcon(icons[1]);
-        this.board[2][7].shape = new Bishop(ColorFigure.WHITE); // c1
         this.board[2][7].SetIcon(icons[2]);
-        this.board[3][7].shape = new Queen(ColorFigure.WHITE);  // d1
         this.board[3][7].SetIcon(icons[4]);
-        this.board[4][7].shape = new King(ColorFigure.WHITE);   // e1
         this.board[4][7].SetIcon(icons[5]);
-        this.board[5][7].shape = new Bishop(ColorFigure.WHITE); // f1
         this.board[5][7].SetIcon(icons[2]);
-        this.board[6][7].shape = new Knight(ColorFigure.WHITE); // g1
         this.board[6][7].SetIcon(icons[1]);
-        this.board[7][7].shape = new Rock(ColorFigure.WHITE);   // h1
         this.board[7][7].SetIcon(icons[3]);
     }
     
@@ -186,17 +188,18 @@ public class Game {
         for(int i = 0; i < 8; i++)
             for(int j = 2; j < 6; j++)
             {
-                this.board[i][j].shape = new EmptyFigure(); // пустые клетки в стартовой позиции
+                this.board[i][j].SetFigure(NameFigure.EMPTY, ColorFigure.NONE); // пустые клетки в стартовой позиции
                 this.board[i][j].SetIcon(icons[12]);
             }
         
         for(int i = 0; i < 8; i++)
         {
-            this.board[i][1].shape = new Pawn(ColorFigure.BLACK); // Выставляем белые пешки
+            this.board[i][1].SetFigure(NameFigure.PAWN, ColorFigure.BLACK); // Выставляем белые пешки
             this.board[i][1].SetIcon(icons[6]);
-            this.board[i][6].shape = new Pawn(ColorFigure.WHITE); // Выставляем черные пешки
+            this.board[i][6].SetFigure(NameFigure.PAWN, ColorFigure.WHITE); // Выставляем черные пешки
             this.board[i][6].SetIcon(icons[0]);
         }
+        
         int[] arr = {4,3,1,6,7,5,2,0};
         int index1;
         int index2;
@@ -213,39 +216,41 @@ public class Game {
         }
         
             /*Случайная расстановка 8-ого ряда черных фигур*/
-        this.board[arr[0]][0].shape = new Rock(ColorFigure.BLACK);   // a8
-        this.board[arr[0]][0].SetIcon(icons[9]);
-        this.board[arr[1]][0].shape = new Knight(ColorFigure.BLACK); // b8
-        this.board[arr[1]][0].SetIcon(icons[7]);
-        this.board[arr[2]][0].shape = new Bishop(ColorFigure.BLACK); // c8
-        this.board[arr[2]][0].SetIcon(icons[8]);
-        this.board[arr[3]][0].shape = new Queen(ColorFigure.BLACK);  // d8
-        this.board[arr[3]][0].SetIcon(icons[10]);
-        this.board[arr[4]][0].shape = new King(ColorFigure.BLACK);   // e8
-        this.board[arr[4]][0].SetIcon(icons[11]);
-        this.board[arr[5]][0].shape = new Bishop(ColorFigure.BLACK); // f8
+        this.board[arr[0]][0].SetFigure(NameFigure.ROCK, ColorFigure.BLACK);
+        this.board[arr[1]][0].SetFigure(NameFigure.KNIGHT, ColorFigure.BLACK);
+        this.board[arr[2]][0].SetFigure(NameFigure.BISHOP, ColorFigure.BLACK);
+        this.board[arr[3]][0].SetFigure(NameFigure.QUEEN, ColorFigure.BLACK);
+        this.board[arr[4]][0].SetFigure(NameFigure.KING, ColorFigure.BLACK);
+        this.board[arr[5]][0].SetFigure(NameFigure.BISHOP, ColorFigure.BLACK);
+        this.board[arr[6]][0].SetFigure(NameFigure.KNIGHT, ColorFigure.BLACK);
+        this.board[arr[7]][0].SetFigure(NameFigure.ROCK, ColorFigure.BLACK);
+            
+        this.board[arr[0]][0].SetIcon(icons[9]);      
+        this.board[arr[1]][0].SetIcon(icons[7]);     
+        this.board[arr[2]][0].SetIcon(icons[8]); 
+        this.board[arr[3]][0].SetIcon(icons[10]);      
+        this.board[arr[4]][0].SetIcon(icons[11]);     
         this.board[arr[5]][0].SetIcon(icons[8]);
-        this.board[arr[6]][0].shape = new Knight(ColorFigure.BLACK); // g8
-        this.board[arr[6]][0].SetIcon(icons[7]);
-        this.board[arr[7]][0].shape = new Rock(ColorFigure.BLACK);   // h8
+        this.board[arr[6]][0].SetIcon(icons[7]);       
         this.board[arr[7]][0].SetIcon(icons[9]);
         
             /*Случайная расстановка 1-ого ряда белых фигур*/
-        this.board[arr[0]][7].shape = new Rock(ColorFigure.WHITE);   // a1
+        this.board[arr[0]][7].SetFigure(NameFigure.ROCK, ColorFigure.WHITE);
+        this.board[arr[1]][7].SetFigure(NameFigure.KNIGHT, ColorFigure.WHITE);
+        this.board[arr[2]][7].SetFigure(NameFigure.BISHOP, ColorFigure.WHITE);
+        this.board[arr[3]][7].SetFigure(NameFigure.QUEEN, ColorFigure.WHITE);
+        this.board[arr[4]][7].SetFigure(NameFigure.KING, ColorFigure.WHITE);
+        this.board[arr[5]][7].SetFigure(NameFigure.BISHOP, ColorFigure.WHITE);
+        this.board[arr[6]][7].SetFigure(NameFigure.KNIGHT, ColorFigure.WHITE);
+        this.board[arr[7]][7].SetFigure(NameFigure.ROCK, ColorFigure.WHITE);
+        
         this.board[arr[0]][7].SetIcon(icons[3]);
-        this.board[arr[1]][7].shape = new Knight(ColorFigure.WHITE); // b1
         this.board[arr[1]][7].SetIcon(icons[1]);
-        this.board[arr[2]][7].shape = new Bishop(ColorFigure.WHITE); // c1
         this.board[arr[2]][7].SetIcon(icons[2]);
-        this.board[arr[3]][7].shape = new Queen(ColorFigure.WHITE);  // d1
         this.board[arr[3]][7].SetIcon(icons[4]);
-        this.board[arr[4]][7].shape = new King(ColorFigure.WHITE);   // e1
         this.board[arr[4]][7].SetIcon(icons[5]);
-        this.board[arr[5]][7].shape = new Bishop(ColorFigure.WHITE); // f1
         this.board[arr[5]][7].SetIcon(icons[2]);
-        this.board[arr[6]][7].shape = new Knight(ColorFigure.WHITE); // g1
         this.board[arr[6]][7].SetIcon(icons[1]);
-        this.board[arr[7]][7].shape = new Rock(ColorFigure.WHITE);   // h1
         this.board[arr[7]][7].SetIcon(icons[3]);
         
     }
@@ -256,7 +261,7 @@ public class Game {
         System.out.println("-----------------------");
         for(int i = 0; i < 8; i++)
             for(int j = 0; j < 8; j++)
-                System.out.println(this.board[j][i].GetName() + ": " + ((Shape)(this.board[j][i].shape)).GetName());
+                System.out.println(this.board[j][i].GetName() + ": " + this.board[j][i].GetNameFigure());
         System.out.println("-----------------------");
     }
     
@@ -267,20 +272,20 @@ public class Game {
            return;
             
         // Переписать метод
-        switch(board[x_from][y_from].shape.GetName())
+        switch(board[x_from][y_from].GetNameFigure())
         {
-            case "Pawn WHITE":  board[x_to][y_to].SetIcon(icons[0]); board[x_to][y_to].shape = new Pawn(ColorFigure.WHITE); break;
-            case "Knight WHITE":board[x_to][y_to].SetIcon(icons[1]); board[x_to][y_to].shape = new Knight(ColorFigure.WHITE); break;
-            case "Bishop WHITE":board[x_to][y_to].SetIcon(icons[2]);board[x_to][y_to].shape = new Bishop(ColorFigure.WHITE); break;
-            case "Rock WHITE": board[x_to][y_to].SetIcon(icons[3]);board[x_to][y_to].shape = new Rock(ColorFigure.WHITE);break;
-            case "Queen WHITE": board[x_to][y_to].SetIcon(icons[4]);board[x_to][y_to].shape = new Queen(ColorFigure.WHITE);break;
-            case "King WHITE": board[x_to][y_to].SetIcon(icons[5]);board[x_to][y_to].shape = new King(ColorFigure.WHITE);break;
-            case "Pawn BLACK": board[x_to][y_to].SetIcon(icons[6]);board[x_to][y_to].shape = new Pawn(ColorFigure.BLACK);break;
-            case "Knight BLACK": board[x_to][y_to].SetIcon(icons[7]);board[x_to][y_to].shape = new Knight(ColorFigure.BLACK);break;
-            case "Bishop BLACK":board[x_to][y_to].SetIcon(icons[8]);board[x_to][y_to].shape = new Bishop(ColorFigure.BLACK); break;
-            case "Rock BLACK": board[x_to][y_to].SetIcon(icons[9]);board[x_to][y_to].shape = new Rock(ColorFigure.BLACK);break;
-            case "Queen BLACK": board[x_to][y_to].SetIcon(icons[10]);board[x_to][y_to].shape = new Queen(ColorFigure.BLACK);break;
-            case "King BLACK": board[x_to][y_to].SetIcon(icons[11]);board[x_to][y_to].shape = new King(ColorFigure.BLACK);break;
+            case "PAWN WHITE":  board[x_to][y_to].SetIcon(icons[0]);    board[x_to][y_to].SetFigure(NameFigure.PAWN, ColorFigure.WHITE); break;
+            case "KNIGHT WHITE":board[x_to][y_to].SetIcon(icons[1]);    board[x_to][y_to].SetFigure(NameFigure.KNIGHT, ColorFigure.WHITE); break;
+            case "BISHOP WHITE":board[x_to][y_to].SetIcon(icons[2]);    board[x_to][y_to].SetFigure(NameFigure.BISHOP, ColorFigure.WHITE); break;
+            case "ROCK WHITE": board[x_to][y_to].SetIcon(icons[3]);     board[x_to][y_to].SetFigure(NameFigure.ROCK, ColorFigure.WHITE); break;
+            case "QUEEN WHITE": board[x_to][y_to].SetIcon(icons[4]);    board[x_to][y_to].SetFigure(NameFigure.QUEEN, ColorFigure.WHITE); break;
+            case "KING WHITE": board[x_to][y_to].SetIcon(icons[5]);     board[x_to][y_to].SetFigure(NameFigure.KING, ColorFigure.WHITE); break;
+            case "PAWN BLACK": board[x_to][y_to].SetIcon(icons[6]);     board[x_to][y_to].SetFigure(NameFigure.PAWN, ColorFigure.BLACK); break;
+            case "KNIGHT BLACK": board[x_to][y_to].SetIcon(icons[7]);   board[x_to][y_to].SetFigure(NameFigure.KNIGHT, ColorFigure.BLACK); break;
+            case "BISHOP BLACK":board[x_to][y_to].SetIcon(icons[8]);    board[x_to][y_to].SetFigure(NameFigure.BISHOP, ColorFigure.BLACK); break;
+            case "ROCK BLACK": board[x_to][y_to].SetIcon(icons[9]);     board[x_to][y_to].SetFigure(NameFigure.ROCK, ColorFigure.BLACK); break;
+            case "QUEEN BLACK": board[x_to][y_to].SetIcon(icons[10]);   board[x_to][y_to].SetFigure(NameFigure.QUEEN, ColorFigure.BLACK); break;
+            case "KING BLACK": board[x_to][y_to].SetIcon(icons[11]);    board[x_to][y_to].SetFigure(NameFigure.KING, ColorFigure.BLACK); break;
         }
         board[x_from][y_from].SetIcon(icons[12]);
     }
@@ -288,20 +293,20 @@ public class Game {
     public boolean CheckMove(int x_from, int y_from, int x_to, int y_to)
     {
         
-        switch (board[x_from][y_from].GetName())
+        switch (board[x_from][y_from].GetNameFigure())
         {
-            case "Pawn WHITE": return true;
-            case "Knight WHITE": break;
-            case "Bishop WHITE": return CheckBishop(x_from, y_from, x_to, y_to, ColorFigure.WHITE);
-            case "Rock WHITE": break;
-            case "Queen WHITE": break;
-            case "King WHITE": break;
-            case "Pawn BLACK": return true;
-            case "Knight BLACK": break;
-            case "Bishop BLACK": return CheckBishop(x_from, y_from, x_to, y_to, ColorFigure.BLACK);
-            case "Rock BLACK": break;
-            case "Queen BLACK": break;
-            case "King BLACK": break;
+            case "PAWN WHITE": return true;
+            case "KNIGHT WHITE": break;
+            case "BISHOP WHITE": return CheckBishop(x_from, y_from, x_to, y_to, ColorFigure.WHITE);
+            case "ROCK WHITE": break;
+            case "QUEEN WHITE": break;
+            case "KING WHITE": break;
+            case "PAWN BLACK": return true;
+            case "KNIGHT BLACK": break;
+            case "BISHOP BLACK": return CheckBishop(x_from, y_from, x_to, y_to, ColorFigure.BLACK);
+            case "ROCK BLACK": break;
+            case "QUEEN BLACK": break;
+            case "KING BLACK": break;
             default: return false;
         }
         

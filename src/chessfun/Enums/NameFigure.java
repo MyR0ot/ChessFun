@@ -3,14 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package figures;
+package chessfun.Enums;
 
 /**
  *
  * @author My
  */
-public enum ColorFigure {
-    WHITE,
-    BLACK,
-    NONE
-}
+public enum NameFigure {PAWN, KNIGHT, BISHOP, ROCK, QUEEN, KING, EMPTY}

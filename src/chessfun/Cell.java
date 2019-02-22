@@ -5,23 +5,25 @@
  */
 package chessfun;
 
-import figures.ColorFigure;
-import figures.EmptyFigure;
-import figures.Shape;
+import chessfun.Enums.*;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
 public class Cell {
     
-    private int row;            // номер строки 0..8
-    private int column;         // номер столбцу 0..8
-    private String name;        // Название поля a1, a2, a3, ... , h7, h8
-    public Shape shape;         // Фигура, принадлежащая данному полю
-    private JLabel label;        // jLabel, привязанный к полю
+    private int row;                // номер строки 0..8
+    private int column;             // номер столбцу 0..8
+    private String name;            // Название поля a1, a2, a3, ... , h7, h8
+    private JLabel label;           // jLabel, привязанный к полю
+    private ColorFigure colorFigure;
+    private NameFigure nameFigure;
     
     
     Cell(int column, int row)
     {
+        this.colorFigure = ColorFigure.NONE;
+        this.nameFigure = NameFigure.EMPTY;
+        
         this.row = row;
         this.column = column;
         this.label = new JLabel();
@@ -39,7 +41,6 @@ public class Cell {
             default: throw new UnsupportedOperationException("chess board is 8*8");
         }
         this.name += (this.row + 1);
-        this.shape = new EmptyFigure();
     }
     
     public String GetName()
@@ -57,28 +58,34 @@ public class Cell {
         return this.column;
     }
     
-    public String GetNameShape()
+    public NameFigure GetNameShape()
     {
-        return this.shape.GetName();
+        return this.nameFigure;
     }
     
     public boolean IsEmpty()
     {
-        return (this.shape instanceof EmptyFigure);
+        return (this.nameFigure == NameFigure.EMPTY);
     }
     
     public void SetIcon(ImageIcon icon)
     {
         this.label.setIcon(icon);
     }
-    public JLabel GetLabel()
-    {
-        return this.label;
-    }
-    
     
     public ColorFigure GetColor()
     {
-        return this.shape.GetColorShape();
+        return this.colorFigure;
+    }
+    
+    public void SetFigure(NameFigure name, ColorFigure color)
+    {
+        this.colorFigure = color;
+        this.nameFigure = name;
+    }
+    
+    public String GetNameFigure()
+    {
+        return this.nameFigure.toString()+" " + this.colorFigure.toString();
     }
 }
