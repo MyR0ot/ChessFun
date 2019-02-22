@@ -12,7 +12,7 @@ public class ChessFun {
      */
     public static void main(String[] args)
     {
-        Game game = new Game(ModeChess.FISHER, ModeShape.CHESS24);
+        Game game = new Game(ModeChess.CLASSIC, ModeShape.CHESS24);
         game.Start();
     } 
 }

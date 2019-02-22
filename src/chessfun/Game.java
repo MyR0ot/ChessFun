@@ -64,8 +64,12 @@ public class Game {
     
     public void Start()/* throws IOException */// Можно описывать ходы
     {
+        view.repaint();
         // TODO logic (Move(...); ...)
-        Move(0,0,5,5);
+        
+        Move(2,0, 4, 2);
+        view.repaint();
+        Move(3,1,3,4);
         PrintCurrentInfoBoard();
         view.repaint();
 
@@ -259,6 +263,9 @@ public class Game {
     /// FIX
     public void Move(int x_from, int y_from, int x_to, int y_to)// Перемещение фигуры из from в to
     {
+        if(!CheckMove(x_from, y_from, x_to, y_to))
+           return;
+            
         // Переписать метод
         switch(board[x_from][y_from].shape.GetName())
         {
@@ -276,5 +283,112 @@ public class Game {
             case "King BLACK": board[x_to][y_to].SetIcon(icons[11]);board[x_to][y_to].shape = new King(ColorFigure.BLACK);break;
         }
         board[x_from][y_from].SetIcon(icons[12]);
+    }
+    
+    public boolean CheckMove(int x_from, int y_from, int x_to, int y_to)
+    {
+        
+        switch (board[x_from][y_from].GetName())
+        {
+            case "Pawn WHITE": return true;
+            case "Knight WHITE": break;
+            case "Bishop WHITE": return CheckBishop(x_from, y_from, x_to, y_to, ColorFigure.WHITE);
+            case "Rock WHITE": break;
+            case "Queen WHITE": break;
+            case "King WHITE": break;
+            case "Pawn BLACK": return true;
+            case "Knight BLACK": break;
+            case "Bishop BLACK": return CheckBishop(x_from, y_from, x_to, y_to, ColorFigure.BLACK);
+            case "Rock BLACK": break;
+            case "Queen BLACK": break;
+            case "King BLACK": break;
+            default: return false;
+        }
+        
+        return true;
+    }
+    
+    public boolean CheckBishop(int x_from, int y_from, int x_to, int y_to, ColorFigure color) // Проверить
+    {
+        if(x_to == x_from || y_to == y_from)
+            return false;
+        if(x_to>x_from)
+        {
+            if(y_to > y_from)
+            {
+                while(x_from < x_to && x_from < 8 && y_from < 8)
+                {
+                    y_from++;
+                    x_from++;
+                    if(!board[x_from][y_from].IsEmpty())
+                        return false;     
+                }
+                if(x_from == x_to && y_from == y_to)
+                    return color != board[x_to][y_to].GetColor();
+                return false;
+            }
+            else
+            {
+                while(x_from < x_to && x_from < 8 && y_from >= 0)
+                {
+                    y_from--;
+                    x_from++;
+                    if(!board[x_from][y_from].IsEmpty())
+                        return false;     
+                }
+                if(x_from == x_to && y_from == y_to)
+                    return color != board[x_to][y_to].GetColor();
+                return false;
+            }
+        }
+        else
+        {
+            if(y_to > y_from)
+            {
+                while(x_from > x_to && x_from >= 0 && y_from < 8)
+                {
+                    y_from++;
+                    x_from--;
+                    if(!board[x_from][y_from].IsEmpty())
+                        return false;     
+                }
+                if(x_from == x_to && y_from == y_to)
+                    return color != board[x_to][y_to].GetColor();
+                return false;
+            }
+            else
+            {
+                while(x_from > x_to && x_from >= 0 && y_from >= 0)
+                {
+                    y_from--;
+                    x_from--;
+                    if(!board[x_from][y_from].IsEmpty())
+                        return false;     
+                }
+                if(x_from == x_to && y_from == y_to)
+                    return color != board[x_to][y_to].GetColor();
+                return false;
+            }
+        }      
+    }
+    
+    public String GetFEN()
+    {
+       String res = "";
+       for(int i=0;i<8;i++)
+       {
+           if(IsEmptyRow(board[i]))
+               res+="8/";
+           // TODO:
+           //
+       }
+            
+       return res;
+    }
+    
+    public boolean IsEmptyRow(Cell[] c)
+    {
+        
+        return true;
     }
 }

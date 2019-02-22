@@ -5,6 +5,7 @@
  */
 package chessfun;
 
+import figures.ColorFigure;
 import figures.EmptyFigure;
 import figures.Shape;
 import javax.swing.ImageIcon;
@@ -73,5 +74,11 @@ public class Cell {
     public JLabel GetLabel()
     {
         return this.label;
+    }
+    
+    
+    public ColorFigure GetColor()
+    {
+        return this.shape.GetColorShape();
     }
 }
