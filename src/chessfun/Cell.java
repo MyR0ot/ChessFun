@@ -80,7 +80,7 @@ public class Cell {
     
     public String GetNameFigure()
     {
-        return this.nameFigure.toString()+" " + this.colorFigure.toString();
+        return this.nameFigure.toString()+ " " + this.colorFigure.toString();
     }
     
     public JLabel GetLabel()
