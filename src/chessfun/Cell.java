@@ -6,6 +6,8 @@
 package chessfun;
 
 import chessfun.Enums.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
@@ -87,5 +89,41 @@ public class Cell {
     public JLabel GetLabel()
     {
         return this.label;
+    }
+    
+    class MyMouseListener implements MouseListener {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            System.out.println(nameField);
+            //label.setText("i clicked");
+ 
+        }
+ 
+        @Override
+        public void mousePressed(MouseEvent e) {
+            // System.out.println("i pressed");
+            //.setText("i pressed");
+ 
+        }
+ 
+        @Override
+        public void mouseReleased(MouseEvent e) {
+            // System.out.println("i released");
+            //label.setText("i released");
+ 
+        }
+ 
+        @Override
+        public void mouseEntered(MouseEvent e) {
+            // TODO Auto-generated method stub
+ 
+        }
+ 
+        @Override
+        public void mouseExited(MouseEvent e) {
+            // TODO Auto-generated method stub
+ 
+        }
+ 
     }
 }
