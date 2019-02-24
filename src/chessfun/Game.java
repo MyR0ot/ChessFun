@@ -77,7 +77,8 @@ public class Game {
         Move("b8", "c6");
         Move("f1", "c4");
         Move("f8", "c5");
-
+        Move("b1", "c3");
+        Move("g8", "f6");
         //Move(0, 0, 7, 5);
         PrintCurrentInfoBoard();
 
