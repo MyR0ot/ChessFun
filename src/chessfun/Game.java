@@ -13,8 +13,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import java.util.Random;
 
-import java.awt.event.*;
-import javax.swing.*;
 
 public class Game {
     
@@ -26,8 +24,12 @@ public class Game {
     public Game(ModeChess modeChoice, ModeShape modeShape) // Конструктор
     {
         this.board = new Cell[8][8];
-        this.icons = new ImageIcon[13];
+        this.icons = new ImageIcon[14];
         LoadTextures(modeShape);
+        Globals.iconEmpty = icons[12];
+        Globals.iconSelected = icons[13];
+        Globals.isSelectedFigure = false;
+        
         switch (modeChoice)
         {
             case CLASSIC: StartClassic(); break;
@@ -49,13 +51,9 @@ public class Game {
                 for(int j=0;j<8;j++)
                 {
                     chessBoard.add(board[i][j].GetLabel());
-                    
-                    
-                         
-                    
+                    chessBoard.add(board[i][j].GetLabelSelect());    
                 }
                     
-
             view.getContentPane().add(chessBoard); // добавление JPanel к JFrame
             view.setVisible(true); // Делаем видимым наш фрейм
             
@@ -86,6 +84,7 @@ public class Game {
 
     }
     
+    
     private ImageIcon GetIcon(NameFigure figure, ColorFigure color)
     {
         
@@ -106,6 +105,7 @@ public class Game {
             default: return icons[12];
         }
     }
+    
     
     private void LoadTextures(ModeShape modeShape)
     {
@@ -128,8 +128,10 @@ public class Game {
         icons[9] = new ImageIcon(getClass().getResource(folder + "bR.png"));
         icons[10] = new ImageIcon(getClass().getResource(folder + "bQ.png"));
         icons[11] = new ImageIcon(getClass().getResource(folder + "bK.png"));
-        icons[12] = new ImageIcon(getClass().getResource(folder + "empty.png"));
+        icons[12] = new ImageIcon(getClass().getResource("../textures/empty.png"));
+        icons[13] = new ImageIcon(getClass().getResource("../textures/is.png"));
     }
+    
     
     private void StartClassic() // Классическая начальная расстановка фигур
     {
@@ -287,18 +289,18 @@ public class Game {
         // Переписать метод
         switch(board[x_from][y_from].GetNameFigure())
         {
-            case "PAWN WHITE":  board[x_to][y_to].SetIcon(icons[0]);    board[x_to][y_to].SetFigure(NameFigure.PAWN, ColorFigure.WHITE); break;
-            case "KNIGHT WHITE":board[x_to][y_to].SetIcon(icons[1]);    board[x_to][y_to].SetFigure(NameFigure.KNIGHT, ColorFigure.WHITE); break;
-            case "BISHOP WHITE":board[x_to][y_to].SetIcon(icons[2]);    board[x_to][y_to].SetFigure(NameFigure.BISHOP, ColorFigure.WHITE); break;
-            case "ROCK WHITE": board[x_to][y_to].SetIcon(icons[3]);     board[x_to][y_to].SetFigure(NameFigure.ROCK, ColorFigure.WHITE); break;
-            case "QUEEN WHITE": board[x_to][y_to].SetIcon(icons[4]);    board[x_to][y_to].SetFigure(NameFigure.QUEEN, ColorFigure.WHITE); break;
-            case "KING WHITE": board[x_to][y_to].SetIcon(icons[5]);     board[x_to][y_to].SetFigure(NameFigure.KING, ColorFigure.WHITE); break;
-            case "PAWN BLACK": board[x_to][y_to].SetIcon(icons[6]);     board[x_to][y_to].SetFigure(NameFigure.PAWN, ColorFigure.BLACK); break;
-            case "KNIGHT BLACK": board[x_to][y_to].SetIcon(icons[7]);   board[x_to][y_to].SetFigure(NameFigure.KNIGHT, ColorFigure.BLACK); break;
-            case "BISHOP BLACK":board[x_to][y_to].SetIcon(icons[8]);    board[x_to][y_to].SetFigure(NameFigure.BISHOP, ColorFigure.BLACK); break;
-            case "ROCK BLACK": board[x_to][y_to].SetIcon(icons[9]);     board[x_to][y_to].SetFigure(NameFigure.ROCK, ColorFigure.BLACK); break;
-            case "QUEEN BLACK": board[x_to][y_to].SetIcon(icons[10]);   board[x_to][y_to].SetFigure(NameFigure.QUEEN, ColorFigure.BLACK); break;
-            case "KING BLACK": board[x_to][y_to].SetIcon(icons[11]);    board[x_to][y_to].SetFigure(NameFigure.KING, ColorFigure.BLACK); break;
+            case "PAWN WHITE":   board[x_to][y_to].SetIcon(icons[0]);    board[x_to][y_to].SetFigure(NameFigure.PAWN, ColorFigure.WHITE); break;
+            case "KNIGHT WHITE": board[x_to][y_to].SetIcon(icons[1]);    board[x_to][y_to].SetFigure(NameFigure.KNIGHT, ColorFigure.WHITE); break;
+            case "BISHOP WHITE": board[x_to][y_to].SetIcon(icons[2]);    board[x_to][y_to].SetFigure(NameFigure.BISHOP, ColorFigure.WHITE); break;
+            case "ROCK WHITE":   board[x_to][y_to].SetIcon(icons[3]);    board[x_to][y_to].SetFigure(NameFigure.ROCK, ColorFigure.WHITE); break;
+            case "QUEEN WHITE":  board[x_to][y_to].SetIcon(icons[4]);    board[x_to][y_to].SetFigure(NameFigure.QUEEN, ColorFigure.WHITE); break;
+            case "KING WHITE":   board[x_to][y_to].SetIcon(icons[5]);    board[x_to][y_to].SetFigure(NameFigure.KING, ColorFigure.WHITE); break;
+            case "PAWN BLACK":   board[x_to][y_to].SetIcon(icons[6]);    board[x_to][y_to].SetFigure(NameFigure.PAWN, ColorFigure.BLACK); break;
+            case "KNIGHT BLACK": board[x_to][y_to].SetIcon(icons[7]);    board[x_to][y_to].SetFigure(NameFigure.KNIGHT, ColorFigure.BLACK); break;
+            case "BISHOP BLACK": board[x_to][y_to].SetIcon(icons[8]);    board[x_to][y_to].SetFigure(NameFigure.BISHOP, ColorFigure.BLACK); break;
+            case "ROCK BLACK":   board[x_to][y_to].SetIcon(icons[9]);    board[x_to][y_to].SetFigure(NameFigure.ROCK, ColorFigure.BLACK); break;
+            case "QUEEN BLACK":  board[x_to][y_to].SetIcon(icons[10]);   board[x_to][y_to].SetFigure(NameFigure.QUEEN, ColorFigure.BLACK); break;
+            case "KING BLACK":   board[x_to][y_to].SetIcon(icons[11]);   board[x_to][y_to].SetFigure(NameFigure.KING, ColorFigure.BLACK); break;
         }
         board[x_from][y_from].SetIcon(icons[12]);
         board[x_from][y_from].SetFigure(NameFigure.EMPTY, ColorFigure.NONE);
