@@ -13,7 +13,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import java.util.Random;
 
-
+import java.awt.event.*;
+import javax.swing.*;
 
 public class Game {
     
@@ -46,7 +47,14 @@ public class Game {
             
             for(int i=0;i<8;i++)
                 for(int j=0;j<8;j++)
+                {
                     chessBoard.add(board[i][j].GetLabel());
+                    
+                    
+                         
+                    
+                }
+                    
 
             view.getContentPane().add(chessBoard); // добавление JPanel к JFrame
             view.setVisible(true); // Делаем видимым наш фрейм

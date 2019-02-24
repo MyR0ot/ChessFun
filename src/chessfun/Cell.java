@@ -14,7 +14,7 @@ public class Cell {
     private int row;                // номер строки 0..8
     private int column;             // номер столбцу 0..8
     private String nameField;       // Название поля a1, a2, a3, ... , h7, h8
-    private JLabel label;           // jLabel, привязанный к полю
+    private JLabel label;       // jLabel, привязанный к полю
     private ColorFigure colorFigure;
     private NameFigure nameFigure;
     
@@ -27,6 +27,7 @@ public class Cell {
         this.column = column;
         this.label = new JLabel();
         this.label.setBounds(80*column, 80*row, 80, 80);
+        this.label.addMouseListener(new MyMouseListener());
         switch(column)
         {
             case 0 : this.nameField = "a"; break;
