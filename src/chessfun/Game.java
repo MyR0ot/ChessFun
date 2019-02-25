@@ -72,7 +72,6 @@ public class Game implements TryMoveListener {
         Random r = new Random();
         // TODO logic (Move(...); ...)
         
-<<<<<<< HEAD
 //        Move("e2", "e4");
 //        Move("e7", "e5");
 //        Move("g1", "f3");
@@ -84,7 +83,7 @@ public class Game implements TryMoveListener {
         PrintCurrentInfoBoard();
         String str = GetFEN();
         System.out.println(str);
-=======
+
         Move("e2", "e4");
         Move("e7", "e5");
         Move("g1", "f3");
@@ -94,7 +93,6 @@ public class Game implements TryMoveListener {
         Move("b1", "c3");
         Move("g8", "f6");
         PrintCurrentInfoBoard();
->>>>>>> 0e1c81a06e6d596c7a722de709b4b931c5921250
     }
     
     
@@ -437,7 +435,6 @@ public class Game implements TryMoveListener {
                 return false;
         return true;
     }
-<<<<<<< HEAD
     public String RowFigure(Cell[][] c, int k)
     {
         String r = "";
@@ -463,7 +460,6 @@ public class Game implements TryMoveListener {
         }
         return r;
     }
-=======
 
 
     @Override
@@ -471,5 +467,4 @@ public class Game implements TryMoveListener {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
->>>>>>> 0e1c81a06e6d596c7a722de709b4b931c5921250
 }
