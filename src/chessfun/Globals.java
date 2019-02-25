@@ -15,4 +15,6 @@ public class Globals {
     public static ImageIcon iconSelected;
     public static ImageIcon iconEmpty;
     public static boolean isSelectedFigure;
+    public static int rowSelected;
+    public static int columnSelected;
 }

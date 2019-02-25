@@ -6,6 +6,8 @@
 package chessfun;
 
 import chessfun.Enums.*;
+import chessfun.events.TryMoveEvent;
+import chessfun.interfaces.TryMoveListener;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -14,12 +16,11 @@ import javax.swing.JFrame;
 import java.util.Random;
 
 
-public class Game {
+public class Game implements TryMoveListener {
     
     private Cell[][] board;          // шахматная доска
     private ImageIcon icons[];       // иконки для отображения фигур
     private JFrame view;             // Основной JFrame для отображения 
-    
     
     public Game(ModeChess modeChoice, ModeShape modeShape) // Конструктор
     {
@@ -71,6 +72,7 @@ public class Game {
         Random r = new Random();
         // TODO logic (Move(...); ...)
         
+<<<<<<< HEAD
 //        Move("e2", "e4");
 //        Move("e7", "e5");
 //        Move("g1", "f3");
@@ -82,6 +84,17 @@ public class Game {
         PrintCurrentInfoBoard();
         String str = GetFEN();
         System.out.println(str);
+=======
+        Move("e2", "e4");
+        Move("e7", "e5");
+        Move("g1", "f3");
+        Move("b8", "c6");
+        Move("f1", "c4");
+        Move("f8", "c5");
+        Move("b1", "c3");
+        Move("g8", "f6");
+        PrintCurrentInfoBoard();
+>>>>>>> 0e1c81a06e6d596c7a722de709b4b931c5921250
     }
     
     
@@ -147,8 +160,7 @@ public class Game {
             }
         
         for(int i = 0; i < 8; i++)
-        {
-            
+        { 
             this.board[i][1].SetFigure(NameFigure.PAWN, ColorFigure.BLACK); // Выставляем белые пешки
             this.board[i][1].SetIcon(icons[6]);
             this.board[i][6].SetFigure(NameFigure.PAWN, ColorFigure.WHITE); // Выставляем черные пешки
@@ -193,6 +205,7 @@ public class Game {
         this.board[6][7].SetIcon(icons[1]);
         this.board[7][7].SetIcon(icons[3]);
     }
+    
     
     private void StartFisher()  // Расстановка 1-1ого и 8-ого ряда случайным образом
     {
@@ -270,7 +283,7 @@ public class Game {
         
     }
     
-    
+    @Deprecated
     public void PrintCurrentInfoBoard()// Вывод состояния шахматной доски в консоль (пока не удалять!)
     {
         System.out.println("-----------------------");
@@ -280,13 +293,12 @@ public class Game {
         System.out.println("-----------------------");
     }
     
-    /// FIX
+    
     public void Move(int x_from, int y_from, int x_to, int y_to)// Перемещение фигуры из from в to
     {
         if(!CheckMove(x_from, y_from, x_to, y_to))
            return;
             
-        // Переписать метод
         switch(board[x_from][y_from].GetNameFigure())
         {
             case "PAWN WHITE":   board[x_to][y_to].SetIcon(icons[0]);    board[x_to][y_to].SetFigure(NameFigure.PAWN, ColorFigure.WHITE); break;
@@ -320,15 +332,15 @@ public class Game {
         
         switch (board[x_from][y_from].GetNameFigure())
         {
-            case "PAWN WHITE": return true;
-            case "KNIGHT WHITE": break;
-            case "BISHOP WHITE": return CheckBishop(x_from, y_from, x_to, y_to, ColorFigure.WHITE);
+            case "PAWN WHITE": break;
+            case "KNIGHT WHITE": return true;
+            case "BISHOP WHITE": return true;
             case "ROCK WHITE": break;
             case "QUEEN WHITE": break;
             case "KING WHITE": break;
-            case "PAWN BLACK": return true;
+            case "PAWN BLACK": break;
             case "KNIGHT BLACK": break;
-            case "BISHOP BLACK": return CheckBishop(x_from, y_from, x_to, y_to, ColorFigure.BLACK);
+            case "BISHOP BLACK": break;
             case "ROCK BLACK": break;
             case "QUEEN BLACK": break;
             case "KING BLACK": break;
@@ -425,6 +437,7 @@ public class Game {
                 return false;
         return true;
     }
+<<<<<<< HEAD
     public String RowFigure(Cell[][] c, int k)
     {
         String r = "";
@@ -450,4 +463,13 @@ public class Game {
         }
         return r;
     }
+=======
+
+
+    @Override
+    public void TryMove(TryMoveEvent e) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+>>>>>>> 0e1c81a06e6d596c7a722de709b4b931c5921250
 }
