@@ -81,8 +81,16 @@ public class Game implements TryMoveListener {
 //        Move("f1", "c4");
 //        Move("f8", "c5");
 
-        String str = GetFEN();
-        System.out.println(str);
+        //Move(0, 0, 7, 5);
+        PrintCurrentInfoBoard();
+//        Move("e2", "e4");
+//        Move("e7", "e5");
+//        Move("g1", "f3");
+//        Move("b8", "c6");
+//        Move("f1", "c4");
+//        Move("f8", "c5");
+//        Move("b1", "c3");
+//        Move("g8", "f6");
         PrintCurrentInfoBoard();
     }
     
@@ -431,18 +439,18 @@ public class Game implements TryMoveListener {
         {
             switch(c[j][k].GetNameFigure())
             {   
-                case "PAWN WHITE": r += "p";break;
-                case "KNIGHT WHITE": r += "k";break;
-                case "BISHOP WHITE": r += "b";break;
-                case "ROCK WHITE": r += "r";break;
-                case "QUEEN WHITE": r += "q";break;
-                case "KING WHITE": r += "k";break;
-                case "PAWN BLACK": r += "P";break;
-                case "KNIGHT BLACK": r += "K";break;
-                case "BISHOP BLACK": r += "B";break;
-                case "ROCK BLACK": r += "R";break;
-                case "QUEEN BLACK": r += "Q";break;
-                case "KING BLACK": r += "K";break;
+                case "PAWN WHITE": r += "P";break;
+                case "KNIGHT WHITE": r += "K";break;
+                case "BISHOP WHITE": r += "B";break;
+                case "ROCK WHITE": r += "R";break;
+                case "QUEEN WHITE": r += "Q";break;
+                case "KING WHITE": r += "K";break;
+                case "PAWN BLACK": r += "p";break;
+                case "KNIGHT BLACK": r += "k";break;
+                case "BISHOP BLACK": r += "b";break;
+                case "ROCK BLACK": r += "r";break;
+                case "QUEEN BLACK": r += "q";break;
+                case "KING BLACK": r += "k";break;
             }
             if(j == 7 && k != 7)
                 r += "/";

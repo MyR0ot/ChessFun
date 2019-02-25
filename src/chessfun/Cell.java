@@ -114,19 +114,6 @@ public class Cell {
         
         @Override
         public void mouseClicked(MouseEvent e) {
-            /*if (Globals.isSelectedFigure && selected) {
-                    labelSelected.setIcon(Globals.iconEmpty);
-                    selected = false;
-                    Globals.isSelectedFigure = false;
-                    
-            } else if(!Globals.isSelectedFigure){
-                    labelSelected.setIcon(Globals.iconSelected);
-                    selected = true;
-                    Globals.isSelectedFigure = true;
-                    Globals.rowSelected = GetRow();
-                    Globals.columnSelected = GetColumn();
-            }*/
-            
             if(Globals.isSelectedFigure)
             {
                 fireEvent(Globals.from, nameField);
