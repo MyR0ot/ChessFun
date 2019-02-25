@@ -115,7 +115,7 @@ public class Cell {
         @Override
         public void mouseClicked(MouseEvent e) {
             if(Globals.isSelectedFigure)
-            {
+            {   
                 fireEvent(Globals.from, nameField);
                 //labelSelected.setIcon(Globals.iconEmpty);
                 Globals.isSelectedFigure = false;
@@ -123,8 +123,8 @@ public class Cell {
             else
             {
                 labelSelected.setIcon(Globals.iconSelected);
-                Globals.rowSelected = GetRow();
-                Globals.columnSelected = GetColumn();
+                Globals.rowSelected = row;
+                Globals.columnSelected = column;
                 Globals.from = nameField;
                 Globals.isSelectedFigure = true;
             }

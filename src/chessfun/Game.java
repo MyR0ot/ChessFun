@@ -74,24 +74,8 @@ public class Game implements TryMoveListener {
     
     public void Start()/* throws IOException */// Можно описывать ходы
     {    
-//        Move("e2", "e4");
-//        Move("e7", "e5");
-//        Move("g1", "f3");
-//        Move("b8", "c6");
-//        Move("f1", "c4");
-//        Move("f8", "c5");
-
-        //Move(0, 0, 7, 5);
         PrintCurrentInfoBoard();
-//        Move("e2", "e4");
-//        Move("e7", "e5");
-//        Move("g1", "f3");
-//        Move("b8", "c6");
-//        Move("f1", "c4");
-//        Move("f8", "c5");
-//        Move("b1", "c3");
-//        Move("g8", "f6");
-        PrintCurrentInfoBoard();
+        System.out.println(GetFEN());
     }
     
     
@@ -327,12 +311,14 @@ public class Game implements TryMoveListener {
     
     public boolean CheckMove(int x_from, int y_from, int x_to, int y_to)
     {
+        if(x_from == x_to && y_from == y_to)
+            return false;
         
         switch (board[x_from][y_from].GetNameFigure())
         {
             case "PAWN WHITE": break;
-            case "KNIGHT WHITE": return true;
-            case "BISHOP WHITE": return true;
+            case "KNIGHT WHITE": break;
+            case "BISHOP WHITE": break;
             case "ROCK WHITE": break;
             case "QUEEN WHITE": break;
             case "KING WHITE": break;
@@ -432,6 +418,7 @@ public class Game implements TryMoveListener {
                 return false;
         return true;
     }
+    
     public String RowFigure(Cell[][] c, int k)
     {
         String r = "";
@@ -440,13 +427,13 @@ public class Game implements TryMoveListener {
             switch(c[j][k].GetNameFigure())
             {   
                 case "PAWN WHITE": r += "P";break;
-                case "KNIGHT WHITE": r += "K";break;
+                case "KNIGHT WHITE": r += "N";break;
                 case "BISHOP WHITE": r += "B";break;
                 case "ROCK WHITE": r += "R";break;
                 case "QUEEN WHITE": r += "Q";break;
                 case "KING WHITE": r += "K";break;
                 case "PAWN BLACK": r += "p";break;
-                case "KNIGHT BLACK": r += "k";break;
+                case "KNIGHT BLACK": r += "n";break;
                 case "BISHOP BLACK": r += "b";break;
                 case "ROCK BLACK": r += "r";break;
                 case "QUEEN BLACK": r += "q";break;
