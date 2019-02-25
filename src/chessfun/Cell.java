@@ -6,9 +6,11 @@
 package chessfun;
 
 import chessfun.Enums.*;
+import chessfun.events.TryMoveEvent;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
@@ -25,7 +27,6 @@ public class Cell {
 
     Cell(int column, int row) {
         SetFigure(NameFigure.EMPTY, ColorFigure.NONE);
-
         this.row = row;
         this.column = column;
         this.selected = false;
@@ -108,8 +109,11 @@ public class Cell {
 
     class MyMouseListener implements MouseListener {
 
+        private ArrayList<Game> listeners = new ArrayList<Game>();
+        
         @Override
         public void mouseClicked(MouseEvent e) {
+            // Найти способо передать информацию классу Game о необходимости сделать ход. (1-ый вариант аналогичные события, 2-ой выброс исключения)
             System.out.println(nameField);
             if (Globals.isSelectedFigure && selected) {
                     labelSelected.setIcon(Globals.iconEmpty);
@@ -120,6 +124,8 @@ public class Cell {
                     labelSelected.setIcon(Globals.iconSelected);
                     selected = true;
                     Globals.isSelectedFigure = true;
+                    Globals.rowSelected = GetRow();
+                    Globals.columnSelected = GetColumn();
             }
 
         }
@@ -149,6 +155,21 @@ public class Cell {
             // TODO Auto-generated method stub
 
         }
-
+        
+        public void addListener(Game listener){
+ 	              listeners.add(listener);
+              }
+         public Game[] getListeners(){
+ 	                return listeners.toArray(new Game[listeners.size()]);
+               }
+         public void removeListener(Game listener){
+ 	                 listeners.remove(listener);
+               }
+         protected void fireEvent(String message){
+ 	               TryMoveEvent ev = new TryMoveEvent(this, message);
+ 	               for (Game listener : listeners){
+ 	                 listener.TryMove(ev);
+ 	               }
+               }
     }
 }
