@@ -13,27 +13,20 @@ import java.util.EventObject;
  */
 public class TryMoveEvent  extends EventObject {
     
-    private String message;
+    private String from;
+    private String to;
 
-    public TryMoveEvent(Object source, String message) {
+    public TryMoveEvent(Object source, String from, String to) {
  	   super(source);
- 	   this.message = message;
+ 	   this.from = from;
+           this.to = to;
    }
-
-   public TryMoveEvent(Object source){
- 	   this(source, "");
-   }
-
-   public TryMoveEvent(String s){
- 	   this(null, s);
-   }
-
-   public String getMessage(){
- 	  return message;
-   }
-   
-   @Override
-   public String toString(){
- 	  return getClass().getName() + "[source = " + getSource() + ", message = " + message + "]";
-   }
+    
+    public String GetFrom(){
+        return this.from;
+    }
+    
+    public String GetTo(){
+        return this.to;
+    }
 }

@@ -17,4 +17,7 @@ public class Globals {
     public static boolean isSelectedFigure;
     public static int rowSelected;
     public static int columnSelected;
+    public static Game game;
+    public static String from;
+    public static String to;
 }

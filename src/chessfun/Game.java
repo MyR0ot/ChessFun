@@ -9,11 +9,11 @@ import chessfun.Enums.*;
 import chessfun.events.TryMoveEvent;
 import chessfun.interfaces.TryMoveListener;
 import java.io.IOException;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
-import java.util.Random;
 
 
 public class Game implements TryMoveListener {
@@ -24,12 +24,17 @@ public class Game implements TryMoveListener {
     
     public Game(ModeChess modeChoice, ModeShape modeShape) // Конструктор
     {
+        
         this.board = new Cell[8][8];
         this.icons = new ImageIcon[14];
         LoadTextures(modeShape);
         Globals.iconEmpty = icons[12];
         Globals.iconSelected = icons[13];
         Globals.isSelectedFigure = false;
+        
+        for(int i=0;i<8; i++)
+            for(int j=0; j<8;j++)
+                
         
         switch (modeChoice)
         {
@@ -68,10 +73,7 @@ public class Game implements TryMoveListener {
     
     
     public void Start()/* throws IOException */// Можно описывать ходы
-    {
-        Random r = new Random();
-        // TODO logic (Move(...); ...)
-        
+    {    
 //        Move("e2", "e4");
 //        Move("e7", "e5");
 //        Move("g1", "f3");
@@ -79,19 +81,8 @@ public class Game implements TryMoveListener {
 //        Move("f1", "c4");
 //        Move("f8", "c5");
 
-        //Move(0, 0, 7, 5);
-        PrintCurrentInfoBoard();
         String str = GetFEN();
         System.out.println(str);
-
-        Move("e2", "e4");
-        Move("e7", "e5");
-        Move("g1", "f3");
-        Move("b8", "c6");
-        Move("f1", "c4");
-        Move("f8", "c5");
-        Move("b1", "c3");
-        Move("g8", "f6");
         PrintCurrentInfoBoard();
     }
     
@@ -294,6 +285,7 @@ public class Game implements TryMoveListener {
     
     public void Move(int x_from, int y_from, int x_to, int y_to)// Перемещение фигуры из from в to
     {
+        board[Globals.columnSelected][Globals.rowSelected].SetLabelSelect(Globals.iconEmpty);
         if(!CheckMove(x_from, y_from, x_to, y_to))
            return;
             
@@ -420,11 +412,8 @@ public class Game implements TryMoveListener {
             if(IsEmptyRow(board, i))
                 res+="8/";
             else
-            {
                 res += RowFigure((board), i);
-            }
-        }
-            
+        }     
        return res;
     }
     
@@ -464,7 +453,7 @@ public class Game implements TryMoveListener {
 
     @Override
     public void TryMove(TryMoveEvent e) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Move(e.GetFrom(), e.GetTo());
     }
 
 }

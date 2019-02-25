@@ -13,9 +13,9 @@ public class ChessFun {
      * @param args the command line arguments
      */
     public static void main(String[] args)
-    {
+    {  
         Game game = new Game(ModeChess.CLASSIC, ModeShape.CHESS24);
+        Globals.game = game;
         game.Start();
-        // фикус 228
-    } 
+    }
 }

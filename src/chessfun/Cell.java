@@ -10,7 +10,6 @@ import chessfun.events.TryMoveEvent;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.ArrayList;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
@@ -106,16 +105,16 @@ public class Cell {
     public JLabel GetLabelSelect() {
         return this.labelSelected;
     }
+    
+    public void SetLabelSelect(ImageIcon icon) {
+        this.labelSelected.setIcon(icon);
+    }
 
-    class MyMouseListener implements MouseListener {
-
-        private ArrayList<Game> listeners = new ArrayList<Game>();
+    public class MyMouseListener implements MouseListener {
         
         @Override
         public void mouseClicked(MouseEvent e) {
-            // Найти способо передать информацию классу Game о необходимости сделать ход. (1-ый вариант аналогичные события, 2-ой выброс исключения)
-            System.out.println(nameField);
-            if (Globals.isSelectedFigure && selected) {
+            /*if (Globals.isSelectedFigure && selected) {
                     labelSelected.setIcon(Globals.iconEmpty);
                     selected = false;
                     Globals.isSelectedFigure = false;
@@ -126,8 +125,22 @@ public class Cell {
                     Globals.isSelectedFigure = true;
                     Globals.rowSelected = GetRow();
                     Globals.columnSelected = GetColumn();
+            }*/
+            
+            if(Globals.isSelectedFigure)
+            {
+                fireEvent(Globals.from, nameField);
+                //labelSelected.setIcon(Globals.iconEmpty);
+                Globals.isSelectedFigure = false;
             }
-
+            else
+            {
+                labelSelected.setIcon(Globals.iconSelected);
+                Globals.rowSelected = GetRow();
+                Globals.columnSelected = GetColumn();
+                Globals.from = nameField;
+                Globals.isSelectedFigure = true;
+            }
         }
 
         @Override
@@ -156,20 +169,9 @@ public class Cell {
 
         }
         
-        public void addListener(Game listener){
- 	              listeners.add(listener);
-              }
-         public Game[] getListeners(){
- 	                return listeners.toArray(new Game[listeners.size()]);
-               }
-         public void removeListener(Game listener){
- 	                 listeners.remove(listener);
-               }
-         protected void fireEvent(String message){
- 	               TryMoveEvent ev = new TryMoveEvent(this, message);
- 	               for (Game listener : listeners){
- 	                 listener.TryMove(ev);
- 	               }
-               }
+        
+        protected void fireEvent(String from, String to){
+ 	    Globals.game.TryMove(new TryMoveEvent(this, from, to));
+ 	}
     }
 }
