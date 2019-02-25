@@ -16,5 +16,6 @@ public class ChessFun {
     {
         Game game = new Game(ModeChess.CLASSIC, ModeShape.CHESS24);
         game.Start();
+        // фикус 228
     } 
 }
