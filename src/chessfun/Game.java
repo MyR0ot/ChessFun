@@ -81,17 +81,16 @@ public class Game implements TryMoveListener {
 
         //Move(0, 0, 7, 5);
         PrintCurrentInfoBoard();
+//        Move("e2", "e4");
+//        Move("e7", "e5");
+//        Move("g1", "f3");
+//        Move("b8", "c6");
+//        Move("f1", "c4");
+//        Move("f8", "c5");
+//        Move("b1", "c3");
+//        Move("g8", "f6");
         String str = GetFEN();
         System.out.println(str);
-
-        Move("e2", "e4");
-        Move("e7", "e5");
-        Move("g1", "f3");
-        Move("b8", "c6");
-        Move("f1", "c4");
-        Move("f8", "c5");
-        Move("b1", "c3");
-        Move("g8", "f6");
         PrintCurrentInfoBoard();
     }
     
