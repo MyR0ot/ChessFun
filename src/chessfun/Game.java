@@ -72,6 +72,19 @@ public class Game implements TryMoveListener {
         Random r = new Random();
         // TODO logic (Move(...); ...)
         
+<<<<<<< HEAD
+//        Move("e2", "e4");
+//        Move("e7", "e5");
+//        Move("g1", "f3");
+//        Move("b8", "c6");
+//        Move("f1", "c4");
+//        Move("f8", "c5");
+
+        //Move(0, 0, 7, 5);
+        PrintCurrentInfoBoard();
+        String str = GetFEN();
+        System.out.println(str);
+=======
         Move("e2", "e4");
         Move("e7", "e5");
         Move("g1", "f3");
@@ -81,6 +94,7 @@ public class Game implements TryMoveListener {
         Move("b1", "c3");
         Move("g8", "f6");
         PrintCurrentInfoBoard();
+>>>>>>> 0e1c81a06e6d596c7a722de709b4b931c5921250
     }
     
     
@@ -402,23 +416,54 @@ public class Game implements TryMoveListener {
     
     public String GetFEN()
     {
-       String res = "";
-       for(int i=0;i<8;i++)
-       {
-           if(IsEmptyRow(board[i]))
-               res+="8/";
-           // TODO:
-           //
-       }
+        String res = "";
+        for(int i = 0; i < 8; i++)
+        {
+            if(IsEmptyRow(board, i))
+                res+="8/";
+            else
+            {
+                res += RowFigure((board), i);
+            }
+        }
             
        return res;
     }
     
-    public boolean IsEmptyRow(Cell[] c)
+    public boolean IsEmptyRow(Cell[][] c, int k/*номер строки*/)
     {
-        
+        for(int j = 0; j < 8; j++)
+            if(!c[j][k].IsEmpty())
+                return false;
         return true;
     }
+<<<<<<< HEAD
+    public String RowFigure(Cell[][] c, int k)
+    {
+        String r = "";
+        for(int j = 0; j < 8; j++)
+        {
+            switch(c[j][k].GetNameFigure())
+            {   
+                case "PAWN WHITE": r += "p";break;
+                case "KNIGHT WHITE": r += "k";break;
+                case "BISHOP WHITE": r += "b";break;
+                case "ROCK WHITE": r += "r";break;
+                case "QUEEN WHITE": r += "q";break;
+                case "KING WHITE": r += "k";break;
+                case "PAWN BLACK": r += "P";break;
+                case "KNIGHT BLACK": r += "K";break;
+                case "BISHOP BLACK": r += "B";break;
+                case "ROCK BLACK": r += "R";break;
+                case "QUEEN BLACK": r += "Q";break;
+                case "KING BLACK": r += "K";break;
+            }
+            if(j == 7 && k != 7)
+                r += "/";
+        }
+        return r;
+    }
+=======
 
 
     @Override
@@ -426,4 +471,5 @@ public class Game implements TryMoveListener {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+>>>>>>> 0e1c81a06e6d596c7a722de709b4b931c5921250
 }
