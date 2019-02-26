@@ -9,9 +9,10 @@ package chessfun.Enums;
  *
  * @author My
  */
-public enum Castle {
+public enum TypeMove {
+    DEFAULT, // обычный ход
     OO,     // короткая рокировка
     OOO,    // длинная рокировка
-    NONE    // это не рокировка
-    
+    BIG_STEP_PAWN, // Пешка идет на 2 клетки вперед 
+    TAKE_ON_PASS;  // Взятие на проходе
 }

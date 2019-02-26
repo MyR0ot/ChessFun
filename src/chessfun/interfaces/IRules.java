@@ -6,6 +6,7 @@
 package chessfun.interfaces;
 
 import chessfun.Cell;
+import chessfun.Globals;
 
 /**
  *
@@ -122,6 +123,11 @@ public interface IRules {
     {
         return (x_from == 4 && y_from == 0 && (x_to == 2 && y_to == 0 || x_to == 6 && y_to == 0)) ||
                 (x_from == 4 && y_from == 7 && (x_to == 2 && y_to == 7 || x_to == 6 && y_to == 7));           
+    }
+    
+    default boolean isTakeOnPass(int x_from, int y_from, int x_to, int y_to)
+    {
+        return Globals.bigStepPawn[1][x_to] && y_to == 2 && y_from == 3 || Globals.bigStepPawn[0][x_to] && y_to == 5 && y_from == 4;    
     }
     
 }

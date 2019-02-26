@@ -59,13 +59,13 @@ public class ClassicRules implements IRules {
                 return y_to == y_from + 1;
             }
         }
-        if(Math.abs(x_from - x_to) != 1)
+        if(Math.abs(x_from - x_to) != 1 || Math.abs(y_from - y_to)!= 1)
             return false;
         
         if(Globals.stepQueue == ColorFigure.WHITE)
-            return y_to == y_from - 1 && board[x_to][y_to].getColor() == ColorFigure.BLACK;
+            return y_to == y_from - 1 && board[x_to][y_to].getColor() == ColorFigure.BLACK || Globals.bigStepPawn[1][x_to] && y_to == 2;
        
-        return y_to == y_from + 1 && board[x_to][y_to].getColor() == ColorFigure.WHITE;
+        return y_to == y_from + 1 && board[x_to][y_to].getColor() == ColorFigure.WHITE || Globals.bigStepPawn[0][x_to] && y_to == 5;
     }
     
     @Override

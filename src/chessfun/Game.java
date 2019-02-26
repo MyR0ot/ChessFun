@@ -54,6 +54,10 @@ public class Game implements ITryMoveListener {
         Globals.stepQueue = ColorFigure.WHITE;
         Globals.allowCastleBlack = true;
         Globals.allowCastleBlack = true;
+        
+        Globals.bigStepPawn = new boolean[2][8];
+        Globals.clearBigStepPawnArray();
+              
     }
     
     
@@ -142,7 +146,7 @@ public class Game implements ITryMoveListener {
     }
     
     
-    private void startClassic() // Классическая начальная расстановка фигур
+                            private void startClassic() // Классическая начальная расстановка фигур
     {
         for(int i = 0; i < 8; i++)
             for(int j = 0; j < 8; j++)
@@ -203,7 +207,7 @@ public class Game implements ITryMoveListener {
     }
     
     
-    private void startFisher()  // Расстановка 1-ого и 8-ого ряда случайным образом
+                                private void startFisher()  // Расстановка 1-ого и 8-ого ряда случайным образом
     {
         for(int i = 0; i < 8; i++)
             for(int j = 0; j < 8; j++)
@@ -286,20 +290,28 @@ public class Game implements ITryMoveListener {
         if(!rules.checkMove(this.board, x_from, y_from, x_to, y_to)) // Если не прошли проверку на валидность хода
            return;
         
-        Castle typeMove = swapFigure(x_from, y_from, x_to, y_to);
+        TypeMove typeMove = swapFigure(x_from, y_from, x_to, y_to);
         
-        Globals.stepQueue = Globals.stepQueue == ColorFigure.WHITE ? ColorFigure.BLACK : ColorFigure.WHITE; // Переход хода
         
+        Globals.clearBigStepPawnArray();
         switch(typeMove)
         {
             case OO: history.addNote("0-0"); break;
             case OOO: history.addNote("0-0-0"); break;
+            case BIG_STEP_PAWN:
+                if(Globals.stepQueue == ColorFigure.WHITE)
+                    Globals.bigStepPawn[0][x_to] = true;
+                else
+                    Globals.bigStepPawn[1][x_to] = true;
+   
             default: history.addNote(board[x_from][y_from].getName(), board[x_to][y_to].getName()); break;
         }
         
         if(history.getCountNotes()>10)
             history.showHistory();
-                    
+        
+        
+        Globals.stepQueue = Globals.stepQueue == ColorFigure.WHITE ? ColorFigure.BLACK : ColorFigure.WHITE; // Переход хода            
     }
     
     private void move(String from, String to)// Перемещение фигуры из from в to, согласно нотации
@@ -312,12 +324,26 @@ public class Game implements ITryMoveListener {
     }
     
     
-    private Castle swapFigure(int x_from, int y_from, int x_to, int y_to)
+    private TypeMove swapFigure(int x_from, int y_from, int x_to, int y_to)
     {
-        Castle res = Castle.NONE;
+        TypeMove res = TypeMove.DEFAULT;
         switch(board[x_from][y_from].getNameFigure()) // передвижение фигуры
         {
-            case "PAWN WHITE":   board[x_to][y_to].setIcon(icons[0]);    board[x_to][y_to].setFigure(NameFigure.PAWN, ColorFigure.WHITE); break;
+            case "PAWN WHITE":
+                if(rules.isTakeOnPass(x_from, y_from, x_to, y_to))
+                {
+                    board[x_to][y_to + 1].setIcon(Globals.iconEmpty);
+                    board[x_to][y_to + 1].setFigure(NameFigure.EMPTY, ColorFigure.NONE);
+                    res = TypeMove.TAKE_ON_PASS;
+                }
+                board[x_to][y_to].setIcon(icons[0]);
+                board[x_to][y_to].setFigure(NameFigure.PAWN, ColorFigure.WHITE);
+            if(y_to == y_from - 2)
+            {
+                Globals.bigStepPawn[0][x_to] = true;
+                 res = TypeMove.BIG_STEP_PAWN;
+            }
+            break;
             case "KNIGHT WHITE": board[x_to][y_to].setIcon(icons[1]);    board[x_to][y_to].setFigure(NameFigure.KNIGHT, ColorFigure.WHITE); break;
             case "BISHOP WHITE": board[x_to][y_to].setIcon(icons[2]);    board[x_to][y_to].setFigure(NameFigure.BISHOP, ColorFigure.WHITE); break;
             case "ROCK WHITE":   board[x_to][y_to].setIcon(icons[3]);    board[x_to][y_to].setFigure(NameFigure.ROCK, ColorFigure.WHITE); break;
@@ -331,7 +357,7 @@ public class Game implements ITryMoveListener {
                         board[x_to-1][y_to].setFigure(NameFigure.ROCK, ColorFigure.WHITE);
                         board[7][y_to].setIcon(Globals.iconEmpty);
                         board[7][y_to].setFigure(NameFigure.EMPTY, ColorFigure.NONE);
-                        res = Castle.OO;
+                        res = TypeMove.OO;
                     }
                     else // x_to == 2
                     {
@@ -339,13 +365,25 @@ public class Game implements ITryMoveListener {
                         board[x_to+1][y_to].setFigure(NameFigure.ROCK, ColorFigure.WHITE);
                         board[0][y_to].setIcon(Globals.iconEmpty);
                         board[0][y_to].setFigure(NameFigure.EMPTY, ColorFigure.NONE);
-                        res = Castle.OOO;
+                        res = TypeMove.OOO;
                     }
                 }
                 board[x_to][y_to].setIcon(icons[5]);
                 board[x_to][y_to].setFigure(NameFigure.KING, ColorFigure.WHITE);
                 break;
-            case "PAWN BLACK":   board[x_to][y_to].setIcon(icons[6]);    board[x_to][y_to].setFigure(NameFigure.PAWN, ColorFigure.BLACK); break;
+            case "PAWN BLACK":
+                if(rules.isTakeOnPass(x_from, y_from, x_to, y_to))
+                {
+                    board[x_to][y_to - 1].setIcon(Globals.iconEmpty);
+                    board[x_to][y_to - 1].setFigure(NameFigure.EMPTY, ColorFigure.NONE);
+                    res = TypeMove.TAKE_ON_PASS;
+                }
+                board[x_to][y_to].setIcon(icons[6]);
+                board[x_to][y_to].setFigure(NameFigure.PAWN, ColorFigure.BLACK);
+            if(y_to == y_from + 2){
+                Globals.bigStepPawn[1][x_to] = true;
+                res = TypeMove.BIG_STEP_PAWN;
+            } break;
             case "KNIGHT BLACK": board[x_to][y_to].setIcon(icons[7]);    board[x_to][y_to].setFigure(NameFigure.KNIGHT, ColorFigure.BLACK); break;
             case "BISHOP BLACK": board[x_to][y_to].setIcon(icons[8]);    board[x_to][y_to].setFigure(NameFigure.BISHOP, ColorFigure.BLACK); break;
             case "ROCK BLACK":   board[x_to][y_to].setIcon(icons[9]);    board[x_to][y_to].setFigure(NameFigure.ROCK, ColorFigure.BLACK); break;
@@ -359,7 +397,7 @@ public class Game implements ITryMoveListener {
                         board[x_to-1][y_to].setFigure(NameFigure.ROCK, ColorFigure.BLACK);
                         board[7][y_to].setIcon(Globals.iconEmpty);
                         board[7][y_to].setFigure(NameFigure.EMPTY, ColorFigure.NONE);
-                        res = Castle.OO;
+                        res = TypeMove.OO;
                     }
                     else // x_to == 2
                     {
@@ -367,7 +405,7 @@ public class Game implements ITryMoveListener {
                         board[x_to+1][y_to].setFigure(NameFigure.ROCK, ColorFigure.BLACK);
                         board[0][y_to].setIcon(Globals.iconEmpty);
                         board[0][y_to].setFigure(NameFigure.EMPTY, ColorFigure.NONE);
-                        res = Castle.OOO;
+                        res = TypeMove.OOO;
                     }
                 }
                 

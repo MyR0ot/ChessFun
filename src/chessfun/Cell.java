@@ -24,6 +24,7 @@ public class Cell {
     private JLabel labelSelected;   // Лабел, отвечающий за выделение фигуры
     private ColorFigure colorFigure;// Цвет фигуры, находящейся на данном поле
     private NameFigure nameFigure;  // иконки для отображения фигур
+    
 
     Cell(int column, int row) {
         setFigure(NameFigure.EMPTY, ColorFigure.NONE);
