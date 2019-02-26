@@ -18,7 +18,7 @@ import javax.swing.JPanel;
  */
 public class JPanelWithBackground extends JPanel {
 
-  private Image backgroundImage;
+  private final Image backgroundImage;
 
   // Some code to initialize the background image.
   // Here, we use the constructor to load the image. This

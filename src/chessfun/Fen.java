@@ -17,7 +17,7 @@ public class Fen {
         for(int i = 0; i < 8; i++)
         {
             if(isEmptyRow(board, i))
-                res+="8/";
+                res += "8/";
             else
                 res += getRowFromFigures(board, i);
         }     
@@ -34,28 +34,29 @@ public class Fen {
     
     public static String getRowFromFigures(Cell[][] board, int row)
     {
-        String r = "";
+        String res = "";
         for(int j = 0; j < 8; j++)
         {
             switch(board[j][row].getNameFigure())
             {   
-                case "PAWN WHITE": r += "P";break;
-                case "KNIGHT WHITE": r += "N";break;
-                case "BISHOP WHITE": r += "B";break;
-                case "ROCK WHITE": r += "R";break;
-                case "QUEEN WHITE": r += "Q";break;
-                case "KING WHITE": r += "K";break;
-                case "PAWN BLACK": r += "p";break;
-                case "KNIGHT BLACK": r += "n";break;
-                case "BISHOP BLACK": r += "b";break;
-                case "ROCK BLACK": r += "r";break;
-                case "QUEEN BLACK": r += "q";break;
-                case "KING BLACK": r += "k";break;
+                case "PAWN WHITE": res += "P";break;
+                case "KNIGHT WHITE": res += "N";break;
+                case "BISHOP WHITE": res += "B";break;
+                case "ROCK WHITE": res += "R";break;
+                case "QUEEN WHITE": res += "Q";break;
+                case "KING WHITE": res += "K";break;
+                case "PAWN BLACK": res += "p";break;
+                case "KNIGHT BLACK": res += "n";break;
+                case "BISHOP BLACK": res += "b";break;
+                case "ROCK BLACK": res += "r";break;
+                case "QUEEN BLACK": res += "q";break;
+                case "KING BLACK": res += "k";break;
+                default: /* пустая строка */ break;
             }
             if(j == 7 && row != 7)
-                r += "/";
+                res += "/";
         }
-        return r;
+        return res;
     }
     
 }

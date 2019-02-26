@@ -24,6 +24,7 @@ public class Game implements ITryMoveListener {
     private ImageIcon icons[];       // иконки для отображения фигур
     private JFrame view;             // Основной JFrame для отображения
     private IRules rules;            // Модуль правил
+    private History history;         // История игры
     
     
     public Game(ModeChess modeChoice, ModeShape modeShape) // Конструктор
@@ -40,6 +41,7 @@ public class Game implements ITryMoveListener {
             case FISHER:    startFisher();  this.rules = new ClassicRules(); break;
             case KING_HILL: startClassic(); this.rules = new ClassicRules(); break;
         }
+        this.history = new History(board);
         
         loadView();
     }
@@ -283,27 +285,22 @@ public class Game implements ITryMoveListener {
         board[Globals.columnSelected][Globals.rowSelected].setLabelSelect(Globals.iconEmpty); // Снятие выделения в любом случае
         if(!rules.checkMove(this.board, x_from, y_from, x_to, y_to)) // Если не прошли проверку на валидность хода
            return;
-            
-        switch(board[x_from][y_from].getNameFigure()) // передвижение фигуры
-        {
-            case "PAWN WHITE":   board[x_to][y_to].setIcon(icons[0]);    board[x_to][y_to].setFigure(NameFigure.PAWN, ColorFigure.WHITE); break;
-            case "KNIGHT WHITE": board[x_to][y_to].setIcon(icons[1]);    board[x_to][y_to].setFigure(NameFigure.KNIGHT, ColorFigure.WHITE); break;
-            case "BISHOP WHITE": board[x_to][y_to].setIcon(icons[2]);    board[x_to][y_to].setFigure(NameFigure.BISHOP, ColorFigure.WHITE); break;
-            case "ROCK WHITE":   board[x_to][y_to].setIcon(icons[3]);    board[x_to][y_to].setFigure(NameFigure.ROCK, ColorFigure.WHITE); break;
-            case "QUEEN WHITE":  board[x_to][y_to].setIcon(icons[4]);    board[x_to][y_to].setFigure(NameFigure.QUEEN, ColorFigure.WHITE); break;
-            case "KING WHITE":   board[x_to][y_to].setIcon(icons[5]);    board[x_to][y_to].setFigure(NameFigure.KING, ColorFigure.WHITE); break;
-            case "PAWN BLACK":   board[x_to][y_to].setIcon(icons[6]);    board[x_to][y_to].setFigure(NameFigure.PAWN, ColorFigure.BLACK); break;
-            case "KNIGHT BLACK": board[x_to][y_to].setIcon(icons[7]);    board[x_to][y_to].setFigure(NameFigure.KNIGHT, ColorFigure.BLACK); break;
-            case "BISHOP BLACK": board[x_to][y_to].setIcon(icons[8]);    board[x_to][y_to].setFigure(NameFigure.BISHOP, ColorFigure.BLACK); break;
-            case "ROCK BLACK":   board[x_to][y_to].setIcon(icons[9]);    board[x_to][y_to].setFigure(NameFigure.ROCK, ColorFigure.BLACK); break;
-            case "QUEEN BLACK":  board[x_to][y_to].setIcon(icons[10]);   board[x_to][y_to].setFigure(NameFigure.QUEEN, ColorFigure.BLACK); break;
-            case "KING BLACK":   board[x_to][y_to].setIcon(icons[11]);   board[x_to][y_to].setFigure(NameFigure.KING, ColorFigure.BLACK); break;
-        }
-        board[x_from][y_from].setIcon(icons[12]); // задаем пустой отображение (откуда был сделан ход)
-        board[x_from][y_from].setFigure(NameFigure.EMPTY, ColorFigure.NONE); // установка "пустой фигуры"
+        
+        Castle typeMove = swapFigure(x_from, y_from, x_to, y_to);
+        
         Globals.stepQueue = Globals.stepQueue == ColorFigure.WHITE ? ColorFigure.BLACK : ColorFigure.WHITE; // Переход хода
+        
+        switch(typeMove)
+        {
+            case OO: history.addNote("0-0"); break;
+            case OOO: history.addNote("0-0-0"); break;
+            default: history.addNote(board[x_from][y_from].getName(), board[x_to][y_to].getName()); break;
+        }
+        
+        if(history.getCountNotes()>10)
+            history.showHistory();
+                    
     }
-    
     
     private void move(String from, String to)// Перемещение фигуры из from в to, согласно нотации
     {
@@ -312,6 +309,75 @@ public class Game implements ITryMoveListener {
         int x_to = 7  + to.charAt(0) - 'h';
         int y_to = '8' - to.charAt(1);
         move(x_from, y_from, x_to, y_to);
+    }
+    
+    
+    private Castle swapFigure(int x_from, int y_from, int x_to, int y_to)
+    {
+        Castle res = Castle.NONE;
+        switch(board[x_from][y_from].getNameFigure()) // передвижение фигуры
+        {
+            case "PAWN WHITE":   board[x_to][y_to].setIcon(icons[0]);    board[x_to][y_to].setFigure(NameFigure.PAWN, ColorFigure.WHITE); break;
+            case "KNIGHT WHITE": board[x_to][y_to].setIcon(icons[1]);    board[x_to][y_to].setFigure(NameFigure.KNIGHT, ColorFigure.WHITE); break;
+            case "BISHOP WHITE": board[x_to][y_to].setIcon(icons[2]);    board[x_to][y_to].setFigure(NameFigure.BISHOP, ColorFigure.WHITE); break;
+            case "ROCK WHITE":   board[x_to][y_to].setIcon(icons[3]);    board[x_to][y_to].setFigure(NameFigure.ROCK, ColorFigure.WHITE); break;
+            case "QUEEN WHITE":  board[x_to][y_to].setIcon(icons[4]);    board[x_to][y_to].setFigure(NameFigure.QUEEN, ColorFigure.WHITE); break;
+            case "KING WHITE":
+                if(rules.isCastle(x_from, y_from, x_to, y_to))
+                {
+                    if(x_to == 6)
+                    {
+                        board[x_to-1][y_to].setIcon(icons[3]);
+                        board[x_to-1][y_to].setFigure(NameFigure.ROCK, ColorFigure.WHITE);
+                        board[7][y_to].setIcon(Globals.iconEmpty);
+                        board[7][y_to].setFigure(NameFigure.EMPTY, ColorFigure.NONE);
+                        res = Castle.OO;
+                    }
+                    else // x_to == 2
+                    {
+                        board[x_to+1][y_to].setIcon(icons[3]);
+                        board[x_to+1][y_to].setFigure(NameFigure.ROCK, ColorFigure.WHITE);
+                        board[0][y_to].setIcon(Globals.iconEmpty);
+                        board[0][y_to].setFigure(NameFigure.EMPTY, ColorFigure.NONE);
+                        res = Castle.OOO;
+                    }
+                }
+                board[x_to][y_to].setIcon(icons[5]);
+                board[x_to][y_to].setFigure(NameFigure.KING, ColorFigure.WHITE);
+                break;
+            case "PAWN BLACK":   board[x_to][y_to].setIcon(icons[6]);    board[x_to][y_to].setFigure(NameFigure.PAWN, ColorFigure.BLACK); break;
+            case "KNIGHT BLACK": board[x_to][y_to].setIcon(icons[7]);    board[x_to][y_to].setFigure(NameFigure.KNIGHT, ColorFigure.BLACK); break;
+            case "BISHOP BLACK": board[x_to][y_to].setIcon(icons[8]);    board[x_to][y_to].setFigure(NameFigure.BISHOP, ColorFigure.BLACK); break;
+            case "ROCK BLACK":   board[x_to][y_to].setIcon(icons[9]);    board[x_to][y_to].setFigure(NameFigure.ROCK, ColorFigure.BLACK); break;
+            case "QUEEN BLACK":  board[x_to][y_to].setIcon(icons[10]);   board[x_to][y_to].setFigure(NameFigure.QUEEN, ColorFigure.BLACK); break;
+            case "KING BLACK":
+                if(rules.isCastle(x_from, y_from, x_to, y_to))
+                {
+                    if(x_to == 6)
+                    {
+                        board[x_to-1][y_to].setIcon(icons[9]);
+                        board[x_to-1][y_to].setFigure(NameFigure.ROCK, ColorFigure.BLACK);
+                        board[7][y_to].setIcon(Globals.iconEmpty);
+                        board[7][y_to].setFigure(NameFigure.EMPTY, ColorFigure.NONE);
+                        res = Castle.OO;
+                    }
+                    else // x_to == 2
+                    {
+                        board[x_to+1][y_to].setIcon(icons[9]);
+                        board[x_to+1][y_to].setFigure(NameFigure.ROCK, ColorFigure.BLACK);
+                        board[0][y_to].setIcon(Globals.iconEmpty);
+                        board[0][y_to].setFigure(NameFigure.EMPTY, ColorFigure.NONE);
+                        res = Castle.OOO;
+                    }
+                }
+                
+                board[x_to][y_to].setIcon(icons[11]);
+                board[x_to][y_to].setFigure(NameFigure.KING, ColorFigure.BLACK);
+                break;
+        }
+        board[x_from][y_from].setIcon(Globals.iconEmpty); // задаем пустой отображение (откуда был сделан ход)
+        board[x_from][y_from].setFigure(NameFigure.EMPTY, ColorFigure.NONE); // установка "пустой фигуры"
+        return res;
     }
     
     

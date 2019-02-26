@@ -24,13 +24,11 @@ public class Cell {
     private JLabel labelSelected;   // Лабел, отвечающий за выделение фигуры
     private ColorFigure colorFigure;// Цвет фигуры, находящейся на данном поле
     private NameFigure nameFigure;  // иконки для отображения фигур
-    private boolean selected;        // выбрана фигура или нет
 
     Cell(int column, int row) {
         setFigure(NameFigure.EMPTY, ColorFigure.NONE);
         this.row = row;
         this.column = column;
-        this.selected = false;
         this.label = new JLabel();
         this.labelSelected = new JLabel();
         this.label.setBounds(80 * column, 80 * row, 80, 80);

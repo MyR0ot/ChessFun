@@ -118,4 +118,10 @@ public interface IRules {
         }
     }
     
+    default boolean isCastle(int x_from, int y_from, int x_to, int y_to)
+    {
+        return (x_from == 4 && y_from == 0 && (x_to == 2 && y_to == 0 || x_to == 6 && y_to == 0)) ||
+                (x_from == 4 && y_from == 7 && (x_to == 2 && y_to == 7 || x_to == 6 && y_to == 7));           
+    }
+    
 }

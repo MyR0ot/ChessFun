@@ -96,12 +96,20 @@ public class ClassicRules implements IRules {
     public boolean checkKing(Cell[][] board, int x_from, int y_from, int x_to, int y_to) // добавить рокировку
     {
         // + проверка на присутствие шаха или битого поля [x_to][y_to]
-        // + добавить возможность рокировки
+        if(isCastle(x_from, y_from, x_to, y_to))
+            return checkCastle(board, x_from, y_from, x_to, y_to);
+        
         return Math.abs(x_to - x_from) == 1 || Math.abs(y_to - y_from) == 1 ;
     }
     
     public static boolean isBeatField(Cell[][] board, int x, int y)
     {
         return false;
+    }
+    
+    public static boolean checkCastle(Cell[][] board, int x_from, int y_from, int x_to, int y_to)
+    {
+        // + проверка на присутствие шаха или битого поля [x_to][y_to]
+        return true;
     }
 }
