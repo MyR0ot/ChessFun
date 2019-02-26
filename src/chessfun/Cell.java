@@ -19,10 +19,10 @@ public class Cell {
     private int column;             // номер столбцу 0..8
     private String nameField;       // Название поля a1, a2, a3, ... , h7, h8
     private JLabel label;           // jLabel, привязанный к полю
-    private JLabel labelSelected;     // Лабел, отвечающий за выделение фигуры
+    private JLabel labelSelected;   // Лабел, отвечающий за выделение фигуры
     private ColorFigure colorFigure;// Цвет фигуры, находящейся на данном поле
     private NameFigure nameFigure;  // иконки для отображения фигур
-    public boolean selected;          // выбрана фигура или нет
+    private boolean selected;        // выбрана фигура или нет
 
     Cell(int column, int row) {
         setFigure(NameFigure.EMPTY, ColorFigure.NONE);
@@ -35,32 +35,15 @@ public class Cell {
         this.labelSelected.setBounds(80 * column, 80 * row, 80, 80);
         this.label.addMouseListener(new MyMouseListener());
         switch (column) {
-            case 0:
-                this.nameField = "a";
-                break;
-            case 1:
-                this.nameField = "b";
-                break;
-            case 2:
-                this.nameField = "c";
-                break;
-            case 3:
-                this.nameField = "d";
-                break;
-            case 4:
-                this.nameField = "e";
-                break;
-            case 5:
-                this.nameField = "f";
-                break;
-            case 6:
-                this.nameField = "g";
-                break;
-            case 7:
-                this.nameField = "h";
-                break;
-            default:
-                throw new UnsupportedOperationException("chess board is 8*8");
+            case 0: this.nameField = "a"; break;
+            case 1: this.nameField = "b"; break;
+            case 2: this.nameField = "c"; break;
+            case 3: this.nameField = "d"; break;
+            case 4: this.nameField = "e"; break;
+            case 5: this.nameField = "f"; break;
+            case 6: this.nameField = "g"; break;
+            case 7: this.nameField = "h"; break;
+            default: throw new UnsupportedOperationException("chess board is 8*8");
         }
         this.nameField += (8 - this.row);
     }
@@ -114,6 +97,10 @@ public class Cell {
         
         @Override
         public void mouseClicked(MouseEvent e) {
+        }
+
+        @Override
+        public void mousePressed(MouseEvent e) {
             if(Globals.isSelectedFigure)
             {   
                 fireEvent(Globals.from, nameField);
@@ -121,7 +108,7 @@ public class Cell {
             }
             else
             {
-                if(nameFigure == NameFigure.EMPTY)
+                if(nameFigure == NameFigure.EMPTY || colorFigure != Globals.stepQueue)
                     return;
                 labelSelected.setIcon(Globals.iconSelected);
                 Globals.rowSelected = row;
@@ -129,13 +116,6 @@ public class Cell {
                 Globals.from = nameField;
                 Globals.isSelectedFigure = true;
             }
-        }
-
-        @Override
-        public void mousePressed(MouseEvent e) {
-            // System.out.println("i pressed");
-            //.setText("i pressed");
-
         }
 
         @Override
@@ -159,7 +139,7 @@ public class Cell {
         
         
         protected void fireEvent(String from, String to){
- 	    Globals.game.TryMove(new TryMoveEvent(this, from, to));
+ 	    Globals.game.tryMove(new TryMoveEvent(this, from, to));
  	}
     }
 }

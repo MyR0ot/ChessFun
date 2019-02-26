@@ -20,28 +20,38 @@ public class Game implements TryMoveListener {
     
     private Cell[][] board;          // шахматная доска
     private ImageIcon icons[];       // иконки для отображения фигур
-    private JFrame view;             // Основной JFrame для отображения 
+    private JFrame view;             // Основной JFrame для отображения
+    
     
     public Game(ModeChess modeChoice, ModeShape modeShape) // Конструктор
     {
-        
         this.board = new Cell[8][8];
         this.icons = new ImageIcon[14];
-        LoadTextures(modeShape);
-        Globals.iconEmpty = icons[12];
-        Globals.iconSelected = icons[13];
-        Globals.isSelectedFigure = false;
         
-        for(int i=0;i<8; i++)
-            for(int j=0; j<8;j++)
-                
+        loadTextures(modeShape);
+        setGlobals();
         
         switch (modeChoice)
         {
-            case CLASSIC: StartClassic(); break;
-            case FISHER: StartFisher(); break;     // не реализовано
-            case KING_HILL: StartClassic(); break;
+            case CLASSIC:   startClassic(); break;
+            case FISHER:    startFisher();  break;
+            case KING_HILL: startClassic(); break;
         }
+        
+        loadView();
+    }
+    
+    private void setGlobals()
+    {
+        Globals.iconEmpty = icons[12];
+        Globals.iconSelected = icons[13];
+        Globals.isSelectedFigure = false;
+        Globals.stepQueue = ColorFigure.WHITE;
+    }
+    
+    
+    private void loadView()
+    {
         view = new JFrame(); // Путь джедая!
         view.setTitle("Chess Fun");
         view.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Корректное завершение работы, при закрытии окна
@@ -52,7 +62,6 @@ public class Game implements TryMoveListener {
             chessBoard.setLayout(null);
             chessBoard.setSize(640, 640);// Размеры шахматной доски
                       
-            
             for(int i=0;i<8;i++)
                 for(int j=0;j<8;j++)
                 {
@@ -61,8 +70,7 @@ public class Game implements TryMoveListener {
                 }
                     
             view.getContentPane().add(chessBoard); // добавление JPanel к JFrame
-            view.setVisible(true); // Делаем видимым наш фрейм
-            
+            view.setVisible(true); // Делаем видимым наш фрейм  
         }
         catch (IOException ex)
         {
@@ -70,11 +78,11 @@ public class Game implements TryMoveListener {
             Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     
     public void Start()
     {    
-        PrintCurrentInfoBoard();
+        printCurrentInfoBoard();
         System.out.println(Fen.getFEN(board));
     }
     
@@ -101,7 +109,7 @@ public class Game implements TryMoveListener {
     }
     
     
-    private void LoadTextures(ModeShape modeShape)
+    private void loadTextures(ModeShape modeShape)
     {
         String folder = "../textures/";
         switch(modeShape)
@@ -127,7 +135,7 @@ public class Game implements TryMoveListener {
     }
     
     
-    private void StartClassic() // Классическая начальная расстановка фигур
+    private void startClassic() // Классическая начальная расстановка фигур
     {
         for(int i = 0; i < 8; i++)
             for(int j = 0; j < 8; j++)
@@ -188,7 +196,7 @@ public class Game implements TryMoveListener {
     }
     
     
-    private void StartFisher()  // Расстановка 1-ого и 8-ого ряда случайным образом
+    private void startFisher()  // Расстановка 1-ого и 8-ого ряда случайным образом
     {
         for(int i = 0; i < 8; i++)
             for(int j = 0; j < 8; j++)
@@ -264,18 +272,8 @@ public class Game implements TryMoveListener {
         
     }
     
-    @Deprecated
-    public void PrintCurrentInfoBoard()// Вывод состояния шахматной доски в консоль (пока не удалять!)
-    {
-        System.out.println("-----------------------");
-        for(int i = 0; i < 8; i++)
-            for(int j = 0; j < 8; j++)
-                System.out.println(this.board[j][i].getName() + ": " + this.board[j][i].getNameFigure());
-        System.out.println("-----------------------");
-    }
     
-    
-    private void Move(int x_from, int y_from, int x_to, int y_to)// Перемещение фигуры из from в to
+    private void move(int x_from, int y_from, int x_to, int y_to)// Перемещение фигуры из from в to
     {
         board[Globals.columnSelected][Globals.rowSelected].setLabelSelect(Globals.iconEmpty); // Снятие выделения в любом случае
         if(!Rules.checkMove(this.board, x_from, y_from, x_to, y_to)) // Если не прошли проверку на валидность хода
@@ -298,21 +296,34 @@ public class Game implements TryMoveListener {
         }
         board[x_from][y_from].setIcon(icons[12]); // задаем пустой отображение (откуда был сделан ход)
         board[x_from][y_from].setFigure(NameFigure.EMPTY, ColorFigure.NONE); // установка "пустой фигуры"
+        Globals.stepQueue = Globals.stepQueue == ColorFigure.WHITE ? ColorFigure.BLACK : ColorFigure.WHITE; // Переход хода
     }
     
-    private void Move(String from, String to)// Перемещение фигуры из from в to, согласно нотации
+    
+    private void move(String from, String to)// Перемещение фигуры из from в to, согласно нотации
     {
         int x_from = 7  + from.charAt(0) - 'h';
         int y_from = '8' - from.charAt(1);
         int x_to = 7  + to.charAt(0) - 'h';
         int y_to = '8' - to.charAt(1);
-        Move(x_from, y_from, x_to, y_to);
+        move(x_from, y_from, x_to, y_to);
     }
     
     
     @Override
-    public void TryMove(TryMoveEvent e) {
-        Move(e.GetFrom(), e.GetTo());
+    public void tryMove(TryMoveEvent e) {
+        move(e.getFrom(), e.getTo());
+    }
+    
+    
+    @Deprecated
+    public void printCurrentInfoBoard()// Вывод состояния шахматной доски в консоль (пока не удалять!)
+    {
+        System.out.println("-----------------------");
+        for(int i = 0; i < 8; i++)
+            for(int j = 0; j < 8; j++)
+                System.out.println(this.board[j][i].getName() + ": " + this.board[j][i].getNameFigure());
+        System.out.println("-----------------------");
     }
 
 }

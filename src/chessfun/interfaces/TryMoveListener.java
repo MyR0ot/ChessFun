@@ -12,5 +12,5 @@ import chessfun.events.TryMoveEvent;
  * @author My
  */
 public interface TryMoveListener {
-    public void TryMove(TryMoveEvent e);
+    public void tryMove(TryMoveEvent e);
 }

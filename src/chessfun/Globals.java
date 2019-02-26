@@ -5,6 +5,7 @@
  */
 package chessfun;
 
+import chessfun.Enums.ColorFigure;
 import javax.swing.ImageIcon;
 
 /**
@@ -20,4 +21,5 @@ public class Globals {
     public static Game game;
     public static String from;
     public static String to;
+    public static ColorFigure stepQueue;     // Чей ход?
 }

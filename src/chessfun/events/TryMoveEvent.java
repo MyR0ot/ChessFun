@@ -22,11 +22,11 @@ public class TryMoveEvent  extends EventObject {
            this.to = to;
    }
     
-    public String GetFrom(){
+    public String getFrom(){
         return this.from;
     }
     
-    public String GetTo(){
+    public String getTo(){
         return this.to;
     }
 }
