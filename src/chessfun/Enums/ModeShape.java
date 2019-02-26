@@ -13,5 +13,9 @@ package chessfun.Enums;
 public enum ModeShape {
     ALPHA,
     CHESS24,
-    MERIDA
+    MERIDA,
+    SYMBOL,
+    WIKIPEDIA,
+    CHEQ,
+    METRO
 }

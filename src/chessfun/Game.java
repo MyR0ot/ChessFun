@@ -128,6 +128,10 @@ public class Game implements ITryMoveListener {
             case ALPHA: folder += "alpha/"; break;
             case CHESS24: folder += "chess24/"; break;
             case MERIDA: folder += "merida/"; break;
+            case SYMBOL: folder += "symbol/"; break;
+            case WIKIPEDIA: folder += "wikipedia/"; break;
+            case CHEQ: folder += "cheq/"; break;
+            case METRO: folder += "metro/"; break;
         }
         icons[0] = new ImageIcon(getClass().getResource(folder + "wP.png"));
         icons[1] = new ImageIcon(getClass().getResource(folder + "wN.png"));
@@ -146,7 +150,7 @@ public class Game implements ITryMoveListener {
     }
     
     
-                            private void startClassic() // Классическая начальная расстановка фигур
+    private void startClassic() // Классическая начальная расстановка фигур
     {
         for(int i = 0; i < 8; i++)
             for(int j = 0; j < 8; j++)
@@ -290,7 +294,7 @@ public class Game implements ITryMoveListener {
         if(!rules.checkMove(this.board, x_from, y_from, x_to, y_to)) // Если не прошли проверку на валидность хода
            return;
         
-        TypeMove typeMove = swapFigure(x_from, y_from, x_to, y_to);
+        TypeMove typeMove = swapFigure(x_from, y_from, x_to, y_to); // Получение типа хода + действия с логической моделью и view
         
         
         Globals.clearBigStepPawnArray();
@@ -305,13 +309,8 @@ public class Game implements ITryMoveListener {
                     Globals.bigStepPawn[1][x_to] = true;
    
             default: history.addNote(board[x_from][y_from].getName(), board[x_to][y_to].getName()); break;
-        }
-        
-        if(history.getCountNotes()>10)
-            history.showHistory();
-        
-        
-        Globals.stepQueue = Globals.stepQueue == ColorFigure.WHITE ? ColorFigure.BLACK : ColorFigure.WHITE; // Переход хода            
+        }        
+        Globals.stepQueue = Globals.stepQueue == ColorFigure.WHITE ? ColorFigure.BLACK : ColorFigure.WHITE; // Передача хода            
     }
     
     private void move(String from, String to)// Перемещение фигуры из from в to, согласно нотации
@@ -324,7 +323,7 @@ public class Game implements ITryMoveListener {
     }
     
     
-    private TypeMove swapFigure(int x_from, int y_from, int x_to, int y_to)
+    private TypeMove swapFigure(int x_from, int y_from, int x_to, int y_to) // Упростить!
     {
         TypeMove res = TypeMove.DEFAULT;
         switch(board[x_from][y_from].getNameFigure()) // передвижение фигуры
