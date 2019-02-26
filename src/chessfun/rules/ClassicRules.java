@@ -6,6 +6,8 @@
 package chessfun.rules;
 
 import chessfun.Cell;
+import chessfun.Enums.ColorFigure;
+import chessfun.Globals;
 import chessfun.interfaces.IRules;
 
 /**
@@ -34,14 +36,36 @@ public class ClassicRules implements IRules {
     }
     
     @Override
-    public boolean checkPawn(Cell[][] board, int x_from, int y_from, int x_to, int y_to)
+    public boolean checkPawn(Cell[][] board, int x_from, int y_from, int x_to, int y_to) // добавить взятие на проходе, превращение в ферзя ...
     {
-        //TODO:
-        //
-        // добавить взятие на проходе, превращение в ферзя ...
-        // добавить превращение в ферзя
+        if(x_from == x_to)
+        {
+            if(!board[x_to][y_to].isEmpty())
+                return false;
+            if(Globals.stepQueue == ColorFigure.WHITE)
+            {
+                if(y_from == 6)
+                {
+                    return y_to == 5 || y_to == 4;
+                }
+                return y_to == y_from-1;
+            }
+            else
+            {
+                if(y_from == 1)
+                {
+                    return y_to == 2 || y_to == 3;
+                }
+                return y_to == y_from + 1;
+            }
+        }
+        if(Math.abs(x_from - x_to) != 1)
+            return false;
         
-        return true;
+        if(Globals.stepQueue == ColorFigure.WHITE)
+            return y_to == y_from - 1 && board[x_to][y_to].getColor() == ColorFigure.BLACK;
+       
+        return y_to == y_from + 1 && board[x_to][y_to].getColor() == ColorFigure.WHITE;
     }
     
     @Override

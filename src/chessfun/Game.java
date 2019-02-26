@@ -23,7 +23,7 @@ public class Game implements ITryMoveListener {
     private Cell[][] board;          // шахматная доска
     private ImageIcon icons[];       // иконки для отображения фигур
     private JFrame view;             // Основной JFrame для отображения
-    private IRules rules;
+    private IRules rules;            // Модуль правил
     
     
     public Game(ModeChess modeChoice, ModeShape modeShape) // Конструктор
