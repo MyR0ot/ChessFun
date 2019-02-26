@@ -5,22 +5,25 @@
  */
 package chessfun;
 
+import chessfun.rules.ClassicRules;
 import chessfun.Enums.*;
 import chessfun.events.TryMoveEvent;
-import chessfun.interfaces.TryMoveListener;
+import chessfun.interfaces.IRules;
 import java.io.IOException;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import chessfun.interfaces.ITryMoveListener;
 
 
-public class Game implements TryMoveListener {
+public class Game implements ITryMoveListener {
     
     private Cell[][] board;          // шахматная доска
     private ImageIcon icons[];       // иконки для отображения фигур
     private JFrame view;             // Основной JFrame для отображения
+    private IRules rules;
     
     
     public Game(ModeChess modeChoice, ModeShape modeShape) // Конструктор
@@ -33,9 +36,9 @@ public class Game implements TryMoveListener {
         
         switch (modeChoice)
         {
-            case CLASSIC:   startClassic(); break;
-            case FISHER:    startFisher();  break;
-            case KING_HILL: startClassic(); break;
+            case CLASSIC:   startClassic(); this.rules = new ClassicRules(); break;
+            case FISHER:    startFisher();  this.rules = new ClassicRules(); break;
+            case KING_HILL: startClassic(); this.rules = new ClassicRules(); break;
         }
         
         loadView();
@@ -276,7 +279,7 @@ public class Game implements TryMoveListener {
     private void move(int x_from, int y_from, int x_to, int y_to)// Перемещение фигуры из from в to
     {
         board[Globals.columnSelected][Globals.rowSelected].setLabelSelect(Globals.iconEmpty); // Снятие выделения в любом случае
-        if(!Rules.checkMove(this.board, x_from, y_from, x_to, y_to)) // Если не прошли проверку на валидность хода
+        if(!rules.checkMove(this.board, x_from, y_from, x_to, y_to)) // Если не прошли проверку на валидность хода
            return;
             
         switch(board[x_from][y_from].getNameFigure()) // передвижение фигуры
