@@ -121,9 +121,47 @@ public class Rules {
         if(Math.abs(x_from-x_to)!=Math.abs(y_from-y_to))
             return false;
         
-        
-        
-        
-        return true;
+        if(x_to > x_from)
+        {
+            if(y_to > y_from)
+            {
+                for(int i = 1; i + x_from < x_to; i++)
+                {
+                    if(!board[x_from + i][y_from + i].isEmpty())
+                        return false;
+                }
+                return true;
+            }
+            else
+            {
+                for(int i = 1; i + x_from < x_to; i++)
+                {
+                    if(!board[x_from + i][y_from - i].isEmpty())
+                        return false;
+                }
+                return true;
+            }
+        }
+        else
+        {
+            if(y_to > y_from)
+            {
+                for(int i = 1; i + y_from < y_to; i++)
+                {
+                    if(!board[x_from - i][y_from + i].isEmpty())
+                        return false;
+                }
+                return true;
+            }
+            else
+            {
+                for(int i = 1; y_to < y_from - i; i++)
+                {
+                    if(!board[x_from - i][y_from - i].isEmpty())
+                        return false;
+                }
+                return true;
+            }
+        }
     }
 }
