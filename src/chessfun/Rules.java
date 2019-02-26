@@ -5,24 +5,67 @@
  */
 package chessfun;
 
+import chessfun.Enums.NameFigure;
+
 /**
  *
  * @author My
  */
 public class Rules {
-    public static boolean checkBishop(Cell[][] board, int x_from, int y_from, int x_to, int y_to)
+    
+    public static boolean checkPawn(Cell[][] board, int x_from, int y_from, int x_to, int y_to)
     {
         return true;
     }
     
     public static boolean checkKnight(Cell[][] board, int x_from, int y_from, int x_to, int y_to)
     {
+        return Math.abs(x_from-x_to) == 2 && Math.abs(y_from-y_to) == 1 || Math.abs(x_from-x_to) == 1 && Math.abs(y_from-y_to) == 2;
+    }
+    
+    public static boolean checkBishop(Cell[][] board, int x_from, int y_from, int x_to, int y_to)
+    {
         return true;
     }
     
-    public static boolean checkPawn(Cell[][] board, int x_from, int y_from, int x_to, int y_to)
+    public static boolean checkRock(Cell[][] board, int x_from, int y_from, int x_to, int y_to)
     {
-        return true;
+        if(y_from == y_to)
+        {
+            System.err.println("y_from == y_to");
+            if(x_from > x_to)
+            {
+                for(int i = x_from - 1; i > x_to; i--)
+                    if(!board[i][y_from].isEmpty())
+                        return false;
+                return true;
+            }
+            else
+            {
+                for(int i = x_from + 1; i < x_to; i++)
+                    if(!board[i][y_from].isEmpty())
+                        return false;
+                return true;
+            }
+        }
+        else if(x_from == x_to)
+        {
+            if(y_from > y_to)
+            {
+                for(int j = y_from - 1; j > y_to; j--)
+                    if(!board[x_from][j].isEmpty())
+                        return false;
+                return true;
+            }
+            else
+            {
+                for(int j = y_from + 1; j < y_to; j++)
+                    if(!board[x_from][j].isEmpty())
+                        return false;
+                return true;
+            }
+        }
+        return false;
     }
     
     public static boolean checkQueen(Cell[][] board, int x_from, int y_from, int x_to, int y_to)
@@ -37,26 +80,30 @@ public class Rules {
     
     public static boolean checkMove(Cell[][] board, int x_from, int y_from, int x_to, int y_to)
     {
-        if(x_from == x_to && y_from == y_to || board[x_from][y_from].getColor() == board[x_to][y_to].getColor())
+        if(isSameField(x_from, y_from, x_to, y_to) || isSameColor(board, x_from, y_from,  x_to, y_to))
             return false;
         
-        switch (board[x_from][y_from].getNameFigure())
+        switch (board[x_from][y_from].getNameFigure().split(" ")[0])
         {
-            case "PAWN WHITE": break;
-            case "KNIGHT WHITE": break;
-            case "BISHOP WHITE": break;
-            case "ROCK WHITE": break;
-            case "QUEEN WHITE": break;
-            case "KING WHITE": break;
-            case "PAWN BLACK": break;
-            case "KNIGHT BLACK": break;
-            case "BISHOP BLACK": break;
-            case "ROCK BLACK": break;
-            case "QUEEN BLACK": break;
-            case "KING BLACK": break;
-            default: return false;
+            case "PAWN":    return checkPawn(board, x_from, y_from, x_to, y_to);
+            case "KNIGHT":  return checkKnight(board, x_from, y_from, x_to, y_to);       
+            case "BISHOP":  return checkBishop(board, x_from, y_from, x_to, y_to);        
+            case "ROCK":    return checkRock(board, x_from, y_from, x_to, y_to);       
+            case "QUEEN":   return checkQueen(board, x_from, y_from, x_to, y_to);
+            case "KING":    return checkKing(board, x_from, y_from, x_to, y_to);
+            
+            default: System.err.println("Неопознанная фигура"); return false;
         }
-        
-        return true;
+    }
+    
+    
+    private static boolean isSameColor(Cell[][] board, int x_from, int y_from, int x_to, int y_to)
+    {
+        return board[x_from][y_from].getColor() == board[x_to][y_to].getColor();
+    }
+    
+    private static boolean isSameField(int x_from, int y_from, int x_to, int y_to)
+    {
+        return x_from == x_to && y_from == y_to;
     }
 }

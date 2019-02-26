@@ -117,11 +117,12 @@ public class Cell {
             if(Globals.isSelectedFigure)
             {   
                 fireEvent(Globals.from, nameField);
-                //labelSelected.setIcon(Globals.iconEmpty);
                 Globals.isSelectedFigure = false;
             }
             else
             {
+                if(nameFigure == NameFigure.EMPTY)
+                    return;
                 labelSelected.setIcon(Globals.iconSelected);
                 Globals.rowSelected = row;
                 Globals.columnSelected = column;
