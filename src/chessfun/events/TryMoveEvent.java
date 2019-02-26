@@ -17,7 +17,7 @@ public class TryMoveEvent  extends EventObject {
     private String to;
 
     public TryMoveEvent(Object source, String from, String to) {
- 	   super(source);
+ 	   super(source); // вызов конструктора родителя
  	   this.from = from;
            this.to = to;
    }

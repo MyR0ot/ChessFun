@@ -25,7 +25,7 @@ public class Cell {
     public boolean selected;          // выбрана фигура или нет
 
     Cell(int column, int row) {
-        SetFigure(NameFigure.EMPTY, ColorFigure.NONE);
+        setFigure(NameFigure.EMPTY, ColorFigure.NONE);
         this.row = row;
         this.column = column;
         this.selected = false;
@@ -65,48 +65,48 @@ public class Cell {
         this.nameField += (8 - this.row);
     }
 
-    public String GetName() {
+    public String getName() {
         return this.nameField;
     }
 
-    public int GetRow() {
+    public int getRow() {
         return this.row;
     }
 
-    public int GetColumn() {
+    public int getColumn() {
         return this.column;
     }
 
-    public boolean IsEmpty() {
+    public boolean isEmpty() {
         return (this.nameFigure == NameFigure.EMPTY);
     }
 
-    public void SetIcon(ImageIcon icon) {
+    public void setIcon(ImageIcon icon) {
         this.label.setIcon(icon);
     }
 
-    public ColorFigure GetColor() {
+    public ColorFigure getColor() {
         return this.colorFigure;
     }
 
-    public void SetFigure(NameFigure name, ColorFigure color) {
+    public void setFigure(NameFigure name, ColorFigure color) {
         this.colorFigure = color;
         this.nameFigure = name;
     }
 
-    public String GetNameFigure() {
+    public String getNameFigure() {
         return this.nameFigure.toString() + " " + this.colorFigure.toString();
     }
 
-    public JLabel GetLabel() {
+    public JLabel getLabel() {
         return this.label;
     }
 
-    public JLabel GetLabelSelect() {
+    public JLabel getLabelSelect() {
         return this.labelSelected;
     }
     
-    public void SetLabelSelect(ImageIcon icon) {
+    public void setLabelSelect(ImageIcon icon) {
         this.labelSelected.setIcon(icon);
     }
 

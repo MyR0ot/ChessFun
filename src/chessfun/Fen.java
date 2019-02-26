@@ -11,33 +11,33 @@ package chessfun;
  */
 public class Fen {
     
-    public static String GetFEN(Cell[][] board) // FIX
+    public static String getFEN(Cell[][] board) // FIX
     {
         String res = "";
         for(int i = 0; i < 8; i++)
         {
-            if(IsEmptyRow(board, i))
+            if(isEmptyRow(board, i))
                 res+="8/";
             else
-                res += RowFigure((board), i);
+                res += getRowFromFigures((board), i);
         }     
        return res;
     }
     
-    private static boolean IsEmptyRow(Cell[][] board, int k/*номер строки*/)
+    private static boolean isEmptyRow(Cell[][] board, int k/*номер строки*/)
     {
         for(int j = 0; j < 8; j++)
-            if(!board[j][k].IsEmpty())
+            if(!board[j][k].isEmpty())
                 return false;
         return true;
     }
     
-    public static String RowFigure(Cell[][] board, int k)
+    public static String getRowFromFigures(Cell[][] board, int k)
     {
         String r = "";
         for(int j = 0; j < 8; j++)
         {
-            switch(board[j][k].GetNameFigure())
+            switch(board[j][k].getNameFigure())
             {   
                 case "PAWN WHITE": r += "P";break;
                 case "KNIGHT WHITE": r += "N";break;

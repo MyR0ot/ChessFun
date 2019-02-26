@@ -9,4 +9,12 @@ package chessfun.Enums;
  *
  * @author My
  */
-public enum NameFigure {PAWN, KNIGHT, BISHOP, ROCK, QUEEN, KING, EMPTY}
+public enum NameFigure {
+    PAWN,   // пешка
+    KNIGHT, // конь
+    BISHOP, // слон
+    ROCK,   // ладья
+    QUEEN,  // ферзь
+    KING,   // король
+    EMPTY   // пустая фигура
+}

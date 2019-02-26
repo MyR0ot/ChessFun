@@ -35,12 +35,12 @@ public class Rules {
         return true;
     }
     
-    public static boolean CheckMove(Cell[][] board, int x_from, int y_from, int x_to, int y_to)
+    public static boolean checkMove(Cell[][] board, int x_from, int y_from, int x_to, int y_to)
     {
-        if(x_from == x_to && y_from == y_to || board[x_from][y_from].GetColor() == board[x_to][y_to].GetColor())
+        if(x_from == x_to && y_from == y_to || board[x_from][y_from].getColor() == board[x_to][y_to].getColor())
             return false;
         
-        switch (board[x_from][y_from].GetNameFigure())
+        switch (board[x_from][y_from].getNameFigure())
         {
             case "PAWN WHITE": break;
             case "KNIGHT WHITE": break;
