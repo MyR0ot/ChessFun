@@ -75,7 +75,7 @@ public class Game implements TryMoveListener {
     public void Start()/* throws IOException */// Можно описывать ходы
     {    
         PrintCurrentInfoBoard();
-        System.out.println(GetFEN());
+        System.out.println(Fen.GetFEN(board));
     }
     
     
@@ -278,7 +278,7 @@ public class Game implements TryMoveListener {
     public void Move(int x_from, int y_from, int x_to, int y_to)// Перемещение фигуры из from в to
     {
         board[Globals.columnSelected][Globals.rowSelected].SetLabelSelect(Globals.iconEmpty);
-        if(!CheckMove(x_from, y_from, x_to, y_to))
+        if(!Rules.CheckMove(this.board, x_from, y_from, x_to, y_to))
            return;
             
         switch(board[x_from][y_from].GetNameFigure())
@@ -309,143 +309,7 @@ public class Game implements TryMoveListener {
         Move(x_from, y_from, x_to, y_to);
     }
     
-    public boolean CheckMove(int x_from, int y_from, int x_to, int y_to)
-    {
-        if(x_from == x_to && y_from == y_to)
-            return false;
-        
-        switch (board[x_from][y_from].GetNameFigure())
-        {
-            case "PAWN WHITE": break;
-            case "KNIGHT WHITE": break;
-            case "BISHOP WHITE": break;
-            case "ROCK WHITE": break;
-            case "QUEEN WHITE": break;
-            case "KING WHITE": break;
-            case "PAWN BLACK": break;
-            case "KNIGHT BLACK": break;
-            case "BISHOP BLACK": break;
-            case "ROCK BLACK": break;
-            case "QUEEN BLACK": break;
-            case "KING BLACK": break;
-            default: return false;
-        }
-        
-        return true;
-    }
     
-    public boolean CheckBishop(int x_from, int y_from, int x_to, int y_to, ColorFigure color) // Проверить
-    {
-        if(x_to == x_from || y_to == y_from)
-            return false;
-        if(x_to>x_from)
-        {
-            if(y_to > y_from)
-            {
-                while(x_from < x_to && x_from < 8 && y_from < 8)
-                {
-                    y_from++;
-                    x_from++;
-                    if(!board[x_from][y_from].IsEmpty())
-                        return false;     
-                }
-                if(x_from == x_to && y_from == y_to)
-                    return color != board[x_to][y_to].GetColor();
-                return false;
-            }
-            else
-            {
-                while(x_from < x_to && x_from < 8 && y_from >= 0)
-                {
-                    y_from--;
-                    x_from++;
-                    if(!board[x_from][y_from].IsEmpty())
-                        return false;     
-                }
-                if(x_from == x_to && y_from == y_to)
-                    return color != board[x_to][y_to].GetColor();
-                return false;
-            }
-        }
-        else
-        {
-            if(y_to > y_from)
-            {
-                while(x_from > x_to && x_from >= 0 && y_from < 8)
-                {
-                    y_from++;
-                    x_from--;
-                    if(!board[x_from][y_from].IsEmpty())
-                        return false;     
-                }
-                if(x_from == x_to && y_from == y_to)
-                    return color != board[x_to][y_to].GetColor();
-                return false;
-            }
-            else
-            {
-                while(x_from > x_to && x_from >= 0 && y_from >= 0)
-                {
-                    y_from--;
-                    x_from--;
-                    if(!board[x_from][y_from].IsEmpty())
-                        return false;     
-                }
-                if(x_from == x_to && y_from == y_to)
-                    return color != board[x_to][y_to].GetColor();
-                return false;
-            }
-        }      
-    }
-    
-    public String GetFEN()
-    {
-        String res = "";
-        for(int i = 0; i < 8; i++)
-        {
-            if(IsEmptyRow(board, i))
-                res+="8/";
-            else
-                res += RowFigure((board), i);
-        }     
-       return res;
-    }
-    
-    public boolean IsEmptyRow(Cell[][] c, int k/*номер строки*/)
-    {
-        for(int j = 0; j < 8; j++)
-            if(!c[j][k].IsEmpty())
-                return false;
-        return true;
-    }
-    
-    public String RowFigure(Cell[][] c, int k)
-    {
-        String r = "";
-        for(int j = 0; j < 8; j++)
-        {
-            switch(c[j][k].GetNameFigure())
-            {   
-                case "PAWN WHITE": r += "P";break;
-                case "KNIGHT WHITE": r += "N";break;
-                case "BISHOP WHITE": r += "B";break;
-                case "ROCK WHITE": r += "R";break;
-                case "QUEEN WHITE": r += "Q";break;
-                case "KING WHITE": r += "K";break;
-                case "PAWN BLACK": r += "p";break;
-                case "KNIGHT BLACK": r += "n";break;
-                case "BISHOP BLACK": r += "b";break;
-                case "ROCK BLACK": r += "r";break;
-                case "QUEEN BLACK": r += "q";break;
-                case "KING BLACK": r += "k";break;
-            }
-            if(j == 7 && k != 7)
-                r += "/";
-        }
-        return r;
-    }
-
-
     @Override
     public void TryMove(TryMoveEvent e) {
         Move(e.GetFrom(), e.GetTo());
