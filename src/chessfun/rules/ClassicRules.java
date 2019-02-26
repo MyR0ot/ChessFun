@@ -93,11 +93,15 @@ public class ClassicRules implements IRules {
     }
     
     @Override
-    public boolean checkKing(Cell[][] board, int x_from, int y_from, int x_to, int y_to)
+    public boolean checkKing(Cell[][] board, int x_from, int y_from, int x_to, int y_to) // добавить рокировку
     {
         // + проверка на присутствие шаха или битого поля [x_to][y_to]
         // + добавить возможность рокировки
         return Math.abs(x_to - x_from) == 1 || Math.abs(y_to - y_from) == 1 ;
     }
     
+    public static boolean isBeatField(Cell[][] board, int x, int y)
+    {
+        return false;
+    }
 }

@@ -50,6 +50,8 @@ public class Game implements ITryMoveListener {
         Globals.iconSelected = icons[13];
         Globals.isSelectedFigure = false;
         Globals.stepQueue = ColorFigure.WHITE;
+        Globals.allowCastleBlack = true;
+        Globals.allowCastleBlack = true;
     }
     
     

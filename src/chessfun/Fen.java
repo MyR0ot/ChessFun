@@ -19,25 +19,25 @@ public class Fen {
             if(isEmptyRow(board, i))
                 res+="8/";
             else
-                res += getRowFromFigures((board), i);
+                res += getRowFromFigures(board, i);
         }     
        return res;
     }
     
-    private static boolean isEmptyRow(Cell[][] board, int k/*номер строки*/)
+    private static boolean isEmptyRow(Cell[][] board, int row)
     {
         for(int j = 0; j < 8; j++)
-            if(!board[j][k].isEmpty())
+            if(!board[j][row].isEmpty())
                 return false;
         return true;
     }
     
-    public static String getRowFromFigures(Cell[][] board, int k)
+    public static String getRowFromFigures(Cell[][] board, int row)
     {
         String r = "";
         for(int j = 0; j < 8; j++)
         {
-            switch(board[j][k].getNameFigure())
+            switch(board[j][row].getNameFigure())
             {   
                 case "PAWN WHITE": r += "P";break;
                 case "KNIGHT WHITE": r += "N";break;
@@ -52,7 +52,7 @@ public class Fen {
                 case "QUEEN BLACK": r += "q";break;
                 case "KING BLACK": r += "k";break;
             }
-            if(j == 7 && k != 7)
+            if(j == 7 && row != 7)
                 r += "/";
         }
         return r;

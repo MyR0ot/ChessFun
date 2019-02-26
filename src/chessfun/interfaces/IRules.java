@@ -12,7 +12,7 @@ import chessfun.Cell;
  * @author My
  */
 public interface IRules {
-     public boolean checkMove(Cell[][] board, int x_from, int y_from, int x_to, int y_to);
+    public boolean checkMove(Cell[][] board, int x_from, int y_from, int x_to, int y_to);
     public boolean checkPawn(Cell[][] board, int x_from, int y_from, int x_to, int y_to);
     public boolean checkKnight(Cell[][] board, int x_from, int y_from, int x_to, int y_to);
     public boolean checkBishop(Cell[][] board, int x_from, int y_from, int x_to, int y_to);
@@ -117,4 +117,5 @@ public interface IRules {
             }
         }
     }
+    
 }
