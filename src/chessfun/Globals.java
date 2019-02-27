@@ -26,7 +26,7 @@ public class Globals {
     public static boolean[][] bigStepPawn;   // Ходили пешке на 2 клетки вперед на последнем ходу
     
     public static int delta_x = 50; // Координаты позиционирования доски относительно фрейма
-    public static int delta_y = 50; // Координаты позиционирования доски относительно фрейма
+    public static int delta_y = 20; // Координаты позиционирования доски относительно фрейма
     
     public static void clearBigStepPawnArray() // очистка массива
     {

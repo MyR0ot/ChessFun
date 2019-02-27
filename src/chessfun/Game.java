@@ -16,7 +16,10 @@ import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import chessfun.interfaces.ITryMoveListener;
+import java.awt.Color;
 import java.awt.Rectangle;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 
 public class Game implements ITryMoveListener {
@@ -62,18 +65,31 @@ public class Game implements ITryMoveListener {
     }
     
     
-    private void loadView()
+    private void loadView() // FIX
     {
         view = new JFrame(); // Путь джедая!
         view.setTitle("Chess Fun");
         view.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Корректное завершение работы, при закрытии окна
-        view.setSize(1024, 768); // Размеры окна
+        view.setSize(1400, 768); // Размеры окна
         //view.setSize(1500, 900); // Размеры окна
         try
         {                           
             JPanelWithBackground chessBoard = new JPanelWithBackground("src/textures/chessboard_640.jpg"); // JPanel с перегруженным методом paintComponent()
+            
+            JLabel timerWhite = new JLabel();
+            JLabel timerBlack = new JLabel();
+            timerWhite.setOpaque(true); // Делаем прозрачным
+            timerBlack.setOpaque(true);
+            timerWhite.setBounds(Globals.delta_x + 660, Globals.delta_y, 150, 80);
+            timerBlack.setBounds(Globals.delta_x + 660, Globals.delta_y + 560, 150, 80);
+            timerWhite.setBackground(new Color(0, 0, 0));
+            timerBlack.setBackground(new Color(255, 255, 255));
+
+            
             chessBoard.setLayout(null);
-            chessBoard.setSize(640, 640);// Размеры шахматной доски
+            
+            //chessBoard.setSize(640 + Globals.delta_x, 640 + Globals.delta_y);// Размеры шахматной доски
+            
             
                       
             for(int i=0;i<8;i++)
@@ -82,7 +98,13 @@ public class Game implements ITryMoveListener {
                     chessBoard.add(board[i][j].getLabel());
                     chessBoard.add(board[i][j].getLabelSelect());    
                 }
-                    
+            
+           
+            
+            chessBoard.add(timerWhite);
+            chessBoard.add(timerBlack);
+ 
+            //view.getContentPane().add(timerWhite); // добавление JPanel к JFrame
             view.getContentPane().add(chessBoard); // добавление JPanel к JFrame
             view.setVisible(true); // Делаем видимым наш фрейм  
         }
@@ -299,8 +321,8 @@ public class Game implements ITryMoveListener {
         
         TypeMove typeMove = swapFigure(x_from, y_from, x_to, y_to); // Получение типа хода + действия с логической моделью и view
         
-        
         Globals.clearBigStepPawnArray();
+        
         switch(typeMove)
         {
             case OO: history.addNote("0-0"); break;
@@ -313,7 +335,10 @@ public class Game implements ITryMoveListener {
    
             default: history.addNote(board[x_from][y_from].getName(), board[x_to][y_to].getName()); break;
         }        
-        Globals.stepQueue = Globals.stepQueue == ColorFigure.WHITE ? ColorFigure.BLACK : ColorFigure.WHITE; // Передача хода            
+        Globals.stepQueue = Globals.stepQueue == ColorFigure.WHITE ? ColorFigure.BLACK : ColorFigure.WHITE; // Передача хода   
+        
+        if(history.getCountNotes()> 12)
+            history.showHistory();
     }
     
     private void move(String from, String to)// Перемещение фигуры из from в to, согласно нотации

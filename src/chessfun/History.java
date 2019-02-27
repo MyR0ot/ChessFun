@@ -19,13 +19,13 @@ public class History {
     public History(Cell[][] board)
     {
         startFen = Fen.getFEN(board);
-        history = new ArrayList<String>();
+        history = new ArrayList<>();
     }
     
     public History()
     {
         startFen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"; // смотреть https://ru.wikipedia.org/wiki/Нотация_Форсайта_—_Эдвардса
-        history = new ArrayList<String>();
+        history = new ArrayList<>();
     }
     
     public int getCountNotes()

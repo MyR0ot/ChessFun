@@ -149,9 +149,10 @@ public class Cell {
 
         }
         
-        
         protected void fireEvent(String from, String to){
  	    Globals.game.tryMove(new TryMoveEvent(this, from, to));
  	}
+        
+        
     }
 }
