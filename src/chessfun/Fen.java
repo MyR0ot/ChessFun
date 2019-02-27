@@ -32,11 +32,46 @@ public class Fen {
         return true;
     }
     
+//    public static boolean isEmptyBoard(Cell[][] board)
+//    {
+//        for(int i = 0; i < 8; i++)
+//        {
+//            for(int j = 0; j < 8; j++)
+//            {
+//                if(!board[j][i].isEmpty())
+//                    return false;
+//                return false;
+//            }
+//        }
+//    }
+    
     public static String getRowFromFigures(Cell[][] board, int row)
     {
+        int count = 0;
+        String str = "";
         String res = "";
         for(int j = 0; j < 8; j++)
         {
+            if(board[j][row].getNameFigure().equals("EMPTY NONE"))
+            {
+                count++;
+            }
+            
+            if(!board[j][row].getNameFigure().equals("EMPTY NONE") && count !=0)
+            {
+                str += count;
+                res += str;
+                str = "";
+                count = 0;
+            }
+            
+            if(board[j][row].getNameFigure().equals("EMPTY NONE") && j == 7)
+            {
+                str += count;
+                res += str;
+                count = 0;
+            }
+            
             switch(board[j][row].getNameFigure())
             {   
                 case "PAWN WHITE": res += "P";break;
@@ -51,8 +86,10 @@ public class Fen {
                 case "ROCK BLACK": res += "r";break;
                 case "QUEEN BLACK": res += "q";break;
                 case "KING BLACK": res += "k";break;
+                case "EMPTY NONE": break;                
                 default: /* пустая строка */ break;
             }
+                           
             if(j == 7 && row != 7)
                 res += "/";
         }

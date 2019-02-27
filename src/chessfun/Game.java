@@ -117,7 +117,11 @@ public class Game implements ITryMoveListener {
 
     
     public void Start()
-    {    
+    {   
+        move("a2", "a4");
+        move("c7", "c5");
+        move("c2", "c3");
+        move("e7", "e5");
         printCurrentInfoBoard();
         System.out.println(Fen.getFEN(board));
     }
