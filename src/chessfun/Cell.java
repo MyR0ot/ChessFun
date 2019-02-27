@@ -32,8 +32,8 @@ public class Cell {
         this.column = column;
         this.label = new JLabel();
         this.labelSelected = new JLabel();
-        this.label.setBounds(80 * column, 80 * row, 80, 80);
-        this.labelSelected.setBounds(80 * column, 80 * row, 80, 80);
+        this.label.setBounds(Globals.delta_x + 80 * column,Globals.delta_y+ 80 * row, 80, 80);
+        this.labelSelected.setBounds(Globals.delta_x+ 80 * column,Globals.delta_y+ 80 * row, 80, 80);
         this.label.addMouseListener(new MyMouseListener());
         switch (column) {
             case 0: this.nameField = "a"; break;

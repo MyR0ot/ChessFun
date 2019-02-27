@@ -32,6 +32,6 @@ public class JPanelWithBackground extends JPanel {
   {
     super.paintComponent(g);
     // Draw the background image.
-    g.drawImage(backgroundImage, 0, 0, this.backgroundImage.getWidth(this), this.backgroundImage.getHeight(this), this);
+    g.drawImage(backgroundImage, Globals.delta_x, Globals.delta_y, this.backgroundImage.getWidth(this), this.backgroundImage.getHeight(this), this);
   }
 }

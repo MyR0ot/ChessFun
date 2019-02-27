@@ -16,15 +16,16 @@ import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import chessfun.interfaces.ITryMoveListener;
+import java.awt.Rectangle;
 
 
 public class Game implements ITryMoveListener {
     
-    private Cell[][] board;          // шахматная доска
-    private ImageIcon icons[];       // иконки для отображения фигур
-    private JFrame view;             // Основной JFrame для отображения
-    private IRules rules;            // Модуль правил
-    private History history;         // История игры
+    private Cell[][] board;                 // шахматная доска
+    private ImageIcon icons[];              // иконки для отображения фигур
+    private JFrame view;                    // Основной JFrame для отображения
+    private IRules rules;                   // Модуль правил
+    private final History history;          // История игры
     
     
     public Game(ModeChess modeChoice, ModeShape modeShape) // Конструктор
@@ -67,11 +68,13 @@ public class Game implements ITryMoveListener {
         view.setTitle("Chess Fun");
         view.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Корректное завершение работы, при закрытии окна
         view.setSize(1024, 768); // Размеры окна
+        //view.setSize(1500, 900); // Размеры окна
         try
         {                           
             JPanelWithBackground chessBoard = new JPanelWithBackground("src/textures/chessboard_640.jpg"); // JPanel с перегруженным методом paintComponent()
             chessBoard.setLayout(null);
             chessBoard.setSize(640, 640);// Размеры шахматной доски
+            
                       
             for(int i=0;i<8;i++)
                 for(int j=0;j<8;j++)
@@ -211,7 +214,7 @@ public class Game implements ITryMoveListener {
     }
     
     
-                                private void startFisher()  // Расстановка 1-ого и 8-ого ряда случайным образом
+    private void startFisher()  // Расстановка 1-ого и 8-ого ряда случайным образом
     {
         for(int i = 0; i < 8; i++)
             for(int j = 0; j < 8; j++)
