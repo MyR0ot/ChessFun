@@ -35,18 +35,30 @@ public class Cell {
         this.label.setBounds(Globals.delta_x + 80 * column,Globals.delta_y+ 80 * row, 80, 80);
         this.labelSelected.setBounds(Globals.delta_x+ 80 * column,Globals.delta_y+ 80 * row, 80, 80);
         this.label.addMouseListener(new MyMouseListener());
-        switch (column) {
-            case 0: this.nameField = "a"; break;
-            case 1: this.nameField = "b"; break;
-            case 2: this.nameField = "c"; break;
-            case 3: this.nameField = "d"; break;
-            case 4: this.nameField = "e"; break;
-            case 5: this.nameField = "f"; break;
-            case 6: this.nameField = "g"; break;
-            case 7: this.nameField = "h"; break;
+        this.nameField = generateNameField(column, row);
+    }
+    
+    public static String generateNameField(int row, int column)
+    {
+        String res = "";
+        switch (row) {
+            case 0: res = "a"; break;
+            case 1: res = "b"; break;
+            case 2: res = "c"; break;
+            case 3: res = "d"; break;
+            case 4: res = "e"; break;
+            case 5: res = "f"; break;
+            case 6: res = "g"; break;
+            case 7: res = "h"; break;
             default: throw new UnsupportedOperationException("chess board is 8*8");
         }
-        this.nameField += (8 - this.row);
+        res += (8 - column);
+        return res;
+    }
+    
+    public static boolean isValidField(int row, int column)
+    {
+        return row < 8 && row >= 0 && column < 8 && column >= 0;
     }
 
     public String getName() {
@@ -104,6 +116,7 @@ public class Cell {
         
         return res;
     }
+
 
     public class MyMouseListener implements MouseListener {
         

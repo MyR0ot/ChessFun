@@ -17,9 +17,9 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import chessfun.interfaces.ITryMoveListener;
 import java.awt.Color;
-import java.awt.Rectangle;
+import java.util.HashSet;
+import java.util.Set;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 
 
 public class Game implements ITryMoveListener {
@@ -29,6 +29,9 @@ public class Game implements ITryMoveListener {
     private JFrame view;                    // Основной JFrame для отображения
     private IRules rules;                   // Модуль правил
     private final History history;          // История игры
+    
+    
+    
     
     
     public Game(ModeChess modeChoice, ModeShape modeShape) // Конструктор
@@ -60,18 +63,16 @@ public class Game implements ITryMoveListener {
         Globals.allowCastleBlack = true;
         
         Globals.bigStepPawn = new boolean[2][8];
-        Globals.clearBigStepPawnArray();
-              
+        Globals.clearBigStepPawnArray();       
     }
     
     
-    private void loadView() // FIX
+    private void loadView()
     {
         view = new JFrame(); // Путь джедая!
         view.setTitle("Chess Fun");
         view.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Корректное завершение работы, при закрытии окна
         view.setSize(1400, 768); // Размеры окна
-        //view.setSize(1500, 900); // Размеры окна
         try
         {                           
             JPanelWithBackground chessBoard = new JPanelWithBackground("src/textures/chessboard_640.jpg"); // JPanel с перегруженным методом paintComponent()
@@ -80,7 +81,7 @@ public class Game implements ITryMoveListener {
             JLabel timerBlack = new JLabel();
             timerWhite.setOpaque(true); // Делаем прозрачным
             timerBlack.setOpaque(true);
-            timerWhite.setBounds(Globals.delta_x + 660, Globals.delta_y, 150, 80);
+            timerWhite.setBounds(Globals.delta_x + 660, Globals.delta_y, 150, 80); // Выразить через Globals.params полностью
             timerBlack.setBounds(Globals.delta_x + 660, Globals.delta_y + 560, 150, 80);
             timerWhite.setBackground(new Color(0, 0, 0));
             timerBlack.setBackground(new Color(255, 255, 255));
@@ -88,7 +89,7 @@ public class Game implements ITryMoveListener {
             
             chessBoard.setLayout(null);
             
-            //chessBoard.setSize(640 + Globals.delta_x, 640 + Globals.delta_y);// Размеры шахматной доски
+            chessBoard.setSize(640 + Globals.delta_x, 640 + Globals.delta_y);// Размеры шахматной доски
             
             
                       
@@ -104,7 +105,6 @@ public class Game implements ITryMoveListener {
             chessBoard.add(timerWhite);
             chessBoard.add(timerBlack);
  
-            //view.getContentPane().add(timerWhite); // добавление JPanel к JFrame
             view.getContentPane().add(chessBoard); // добавление JPanel к JFrame
             view.setVisible(true); // Делаем видимым наш фрейм  
         }
@@ -117,13 +117,13 @@ public class Game implements ITryMoveListener {
 
     
     public void Start()
-    {   
-        move("a2", "a4");
-        move("c7", "c5");
-        move("c2", "c3");
+    {
+        move("h2", "h4");
+        move("g8", "f6");
+        move("h1", "h3");
         move("e7", "e5");
-        printCurrentInfoBoard();
-        System.out.println(Fen.getFEN(board));
+        move("c2", "c3");
+        showBeatFieldsByThisShape(5, 2);
     }
     
     
@@ -449,6 +449,259 @@ public class Game implements ITryMoveListener {
         return res;
     }
     
+    public Set<String> getBeatFiels(int x, int y)
+    {
+        Set<String> res = new HashSet<>();
+        switch(board[x][y].getNameFigure())
+        {
+            // <editor-fold desc="Pawns">
+            case "PAWN WHITE":
+                if(Cell.isValidField(x + 1, y - 1))
+                    res.add(Cell.generateNameField(x + 1, y - 1));
+                if(Cell.isValidField(x - 1, y - 1))
+                    res.add(Cell.generateNameField(x - 1, y - 1));
+                break;
+            case "PAWN BLACK":
+                if(Cell.isValidField(x + 1, y + 1))
+                    res.add(Cell.generateNameField(x + 1, y + 1));
+                if(Cell.isValidField(x - 1, y + 1))
+                    res.add(Cell.generateNameField(x - 1, y + 1));
+                break;
+            // </editor-fold>
+            // <editor-fold desc="Knights">
+              case "KNIGHT WHITE":
+            case "KNIGHT BLACK":
+                if(Cell.isValidField(x + 1, y + 2))
+                    res.add(Cell.generateNameField(x + 1, y + 2));
+                if(Cell.isValidField(x + 1, y - 2))
+                    res.add(Cell.generateNameField(x + 1, y - 2));
+                if(Cell.isValidField(x - 1, y + 2))
+                    res.add(Cell.generateNameField(x - 1, y + 2));
+                if(Cell.isValidField(x - 1, y - 2))
+                    res.add(Cell.generateNameField(x - 1, y - 2));
+                if(Cell.isValidField(x + 2, y + 1))
+                    res.add(Cell.generateNameField(x + 2, y + 1));
+                if(Cell.isValidField(x + 2, y - 1))
+                    res.add(Cell.generateNameField(x + 2, y - 1));
+                if(Cell.isValidField(x - 2, y + 1))
+                    res.add(Cell.generateNameField(x - 2, y + 1));
+                if(Cell.isValidField(x - 2, y - 1))
+                    res.add(Cell.generateNameField(x - 2, y - 1));
+                break;
+            // </editor-fold>
+            // <editor-fold desc="Bishops">   
+            case "BISHOP WHITE":
+            case "BISHOP BLACK":
+                for(int i = 1; i < 8; i++)
+                {
+                    if(Cell.isValidField(x + i, y + i))
+                    {
+                        res.add(Cell.generateNameField(x + i, y + i));
+                        if(board[x + i][y + i].getColor() != ColorFigure.NONE)
+                            break;
+                    }
+                    else
+                        break;
+                }
+                for(int i = 1; i < 8; i++)
+                {
+                    if(Cell.isValidField(x - i, y - i))
+                    {
+                        res.add(Cell.generateNameField(x - i, y - i));
+                        if(board[x - i][y - i].getColor() != ColorFigure.NONE)
+                            break;
+                    }
+                    else
+                        break;
+                }
+                for(int i = 1; i < 8; i++)
+                {
+                    if(Cell.isValidField(x - i, y + i))
+                    {
+                        res.add(Cell.generateNameField(x - i, y + i));
+                        if(board[x - i][y + i].getColor() != ColorFigure.NONE)
+                            break;
+                    }
+                    else
+                        break;
+                }
+                for(int i = 1; i < 8; i++)
+                {
+                    if(Cell.isValidField(x + i, y - i))
+                    {
+                        res.add(Cell.generateNameField(x + i, y - i));
+                        if(board[x + i][y - i].getColor() != ColorFigure.NONE)
+                            break;
+                    }
+                    else
+                        break;
+                }
+                break;
+            // </editor-fold>
+            // <editor-fold desc="Rocks">
+            case "ROCK WHITE":
+            case "ROCK BLACK":
+                for(int i=x+1; i<8; i++)
+                {
+                    if(Cell.isValidField(i, y))
+                    {
+                        res.add(Cell.generateNameField(i, y));
+                        if(board[i][y].getColor() != ColorFigure.NONE)
+                            break;
+                    }
+                    else
+                        break;
+                }
+                for(int i=x-1; i>=0; i--)
+                {
+                    if(Cell.isValidField(i, y))
+                    {
+                        res.add(Cell.generateNameField(i, y));
+                        if(board[i][y].getColor() != ColorFigure.NONE)
+                            break;
+                    }
+                    else
+                        break;
+                }
+                for(int j=y+1; j < 8; j++)
+                {
+                    if(Cell.isValidField(x, j))
+                    {
+                        res.add(Cell.generateNameField(x, j));
+                        if(board[x][j].getColor() != ColorFigure.NONE)
+                            break;
+                    }
+                    else break;
+                }
+                for(int j=y-1; j>=0; j--)
+                {
+                    if(Cell.isValidField(x, j))
+                    {
+                        res.add(Cell.generateNameField(x, j));
+                        if(board[x][j].getColor() != ColorFigure.NONE)
+                            break;
+                    }
+                    else break;
+                }
+                break;
+            // </editor-fold>
+            // <editor-fold desc="Queens">     
+            case "QUEEN WHITE":
+            case "QUEEN BLACK":
+                for(int i = 1; i < 8; i++)
+                {
+                    if(Cell.isValidField(x + i, y + i))
+                    {
+                        res.add(Cell.generateNameField(x + i, y + i));
+                        if(board[x + i][y + i].getColor() != ColorFigure.NONE)
+                            break;
+                    }
+                    else
+                        break;
+                }
+                for(int i = 1; i < 8; i++)
+                {
+                    if(Cell.isValidField(x - i, y - i))
+                    {
+                        res.add(Cell.generateNameField(x - i, y - i));
+                        if(board[x - i][y - i].getColor() != ColorFigure.NONE)
+                            break;
+                    }
+                    else
+                        break;
+                }
+                for(int i = 1; i < 8; i++)
+                {
+                    if(Cell.isValidField(x - i, y + i))
+                    {
+                        res.add(Cell.generateNameField(x - i, y + i));
+                        if(board[x - i][y + i].getColor() != ColorFigure.NONE)
+                            break;
+                    }
+                    else
+                        break;
+                }
+                for(int i = 1; i < 8; i++)
+                {
+                    if(Cell.isValidField(x + i, y - i))
+                    {
+                        res.add(Cell.generateNameField(x + i, y - i));
+                        if(board[x + i][y - i].getColor() != ColorFigure.NONE)
+                            break;
+                    }
+                    else
+                        break;
+                }
+                for(int i=x+1; i<8; i++)
+                {
+                    if(Cell.isValidField(i, y))
+                    {
+                        res.add(Cell.generateNameField(i, y));
+                        if(board[i][y].getColor() != ColorFigure.NONE)
+                            break;
+                    }
+                    else
+                        break;
+                }
+                for(int i=x-1; i>=0; i--)
+                {
+                    if(Cell.isValidField(i, y))
+                    {
+                        res.add(Cell.generateNameField(i, y));
+                        if(board[i][y].getColor() != ColorFigure.NONE)
+                            break;
+                    }
+                    else
+                        break;
+                }
+                for(int j=y+1; j < 8; j++)
+                {
+                    if(Cell.isValidField(x, j))
+                    {
+                        res.add(Cell.generateNameField(x, j));
+                        if(board[x][j].getColor() != ColorFigure.NONE)
+                            break;
+                    }
+                    else break;
+                }
+                for(int j=y-1; j>=0; j--)
+                {
+                    if(Cell.isValidField(x, j))
+                    {
+                        res.add(Cell.generateNameField(x, j));
+                        if(board[x][j].getColor() != ColorFigure.NONE)
+                            break;
+                    }
+                    else break;
+                }
+                break;    
+            // </editor-fold>
+            // <editor-fold desc="Kings">
+            case "KING WHITE":
+            case "KING BLACK":
+                if(Cell.isValidField(x + 1, y))
+                    res.add(Cell.generateNameField(x + 1, y));
+                if(Cell.isValidField(x - 1, y))
+                    res.add(Cell.generateNameField(x - 1, y));
+                if(Cell.isValidField(x, y + 1))
+                    res.add(Cell.generateNameField(x, y + 1));
+                if(Cell.isValidField(x, y - 1))
+                    res.add(Cell.generateNameField(x, y - 1));
+                if(Cell.isValidField(x + 1, y + 1))
+                    res.add(Cell.generateNameField(x + 1, y + 1));
+                if(Cell.isValidField(x - 1, y + 1))
+                    res.add(Cell.generateNameField(x - 1, y + 1));
+                if(Cell.isValidField(x + 1, y + 1))
+                    res.add(Cell.generateNameField(x + 1, y - 1));
+                if(Cell.isValidField(x + 1, y - 1))
+                    res.add(Cell.generateNameField(x - 1, y - 1));
+                break;
+            // </editor-fold>
+            default: return res;
+        }
+        return res;
+    }
+    
     
     @Override
     public void tryMove(TryMoveEvent e) {
@@ -464,6 +717,16 @@ public class Game implements ITryMoveListener {
             for(int j = 0; j < 8; j++)
                 System.out.println(this.board[j][i].getName() + ": " + this.board[j][i].getNameFigure());
         System.out.println("-----------------------");
+    }
+    
+    @Deprecated
+    public void showBeatFieldsByThisShape(int x, int y)
+    {
+        Set<String> set = this.getBeatFiels(x, y);
+        System.out.print(board[x][y].getName()+ " ");
+        System.out.println(board[x][y].getNameFigure());
+        for(String s : set)
+            System.out.println(s);
     }
 
 }

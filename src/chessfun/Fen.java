@@ -11,7 +11,7 @@ package chessfun;
  */
 public class Fen {
     
-    public static String getFEN(Cell[][] board) // FIX
+    public static String getFEN(Cell[][] board)
     {
         String res = "";
         for(int i = 0; i < 8; i++)
@@ -31,19 +31,6 @@ public class Fen {
                 return false;
         return true;
     }
-    
-//    public static boolean isEmptyBoard(Cell[][] board)
-//    {
-//        for(int i = 0; i < 8; i++)
-//        {
-//            for(int j = 0; j < 8; j++)
-//            {
-//                if(!board[j][i].isEmpty())
-//                    return false;
-//                return false;
-//            }
-//        }
-//    }
     
     public static String getRowFromFigures(Cell[][] board, int row)
     {
