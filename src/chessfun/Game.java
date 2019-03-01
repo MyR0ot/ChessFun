@@ -341,8 +341,9 @@ public class Game implements ITryMoveListener {
         }        
         Globals.stepQueue = Globals.stepQueue == ColorFigure.WHITE ? ColorFigure.BLACK : ColorFigure.WHITE; // Передача хода   
         
-        if(history.getCountNotes()> 12)
-            history.showHistory();
+        /*if(history.getCountNotes()> 12)
+            history.showHistory();*/
+        this.showBeatFieldsByThisShape(x_to, y_to);
     }
     
     private void move(String from, String to)// Перемещение фигуры из from в to, согласно нотации
@@ -679,22 +680,22 @@ public class Game implements ITryMoveListener {
             // <editor-fold desc="Kings">
             case "KING WHITE":
             case "KING BLACK":
-                if(Cell.isValidField(x + 1, y))
-                    res.add(Cell.generateNameField(x + 1, y));
-                if(Cell.isValidField(x - 1, y))
-                    res.add(Cell.generateNameField(x - 1, y));
-                if(Cell.isValidField(x, y + 1))
-                    res.add(Cell.generateNameField(x, y + 1));
-                if(Cell.isValidField(x, y - 1))
-                    res.add(Cell.generateNameField(x, y - 1));
-                if(Cell.isValidField(x + 1, y + 1))
-                    res.add(Cell.generateNameField(x + 1, y + 1));
                 if(Cell.isValidField(x - 1, y + 1))
                     res.add(Cell.generateNameField(x - 1, y + 1));
+                if(Cell.isValidField(x, y + 1))
+                    res.add(Cell.generateNameField(x, y + 1));
                 if(Cell.isValidField(x + 1, y + 1))
-                    res.add(Cell.generateNameField(x + 1, y - 1));
-                if(Cell.isValidField(x + 1, y - 1))
+                    res.add(Cell.generateNameField(x + 1, y + 1));
+                if(Cell.isValidField(x - 1, y))
+                    res.add(Cell.generateNameField(x - 1, y));
+                if(Cell.isValidField(x + 1, y))
+                    res.add(Cell.generateNameField(x + 1, y));
+                if(Cell.isValidField(x - 1, y - 1))
                     res.add(Cell.generateNameField(x - 1, y - 1));
+                if(Cell.isValidField(x, y - 1))
+                    res.add(Cell.generateNameField(x, y - 1));
+                if(Cell.isValidField(x + 1, y - 1))
+                    res.add(Cell.generateNameField(x + 1, y - 1));
                 break;
             // </editor-fold>
             default: return res;
@@ -724,7 +725,8 @@ public class Game implements ITryMoveListener {
     {
         Set<String> set = this.getBeatFiels(x, y);
         System.out.print(board[x][y].getName()+ " ");
-        System.out.println(board[x][y].getNameFigure());
+        System.out.print(board[x][y].getNameFigure());
+        System.out.println(" " + set.size());
         for(String s : set)
             System.out.println(s);
     }
