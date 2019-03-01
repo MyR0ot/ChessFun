@@ -19,7 +19,11 @@ import chessfun.interfaces.ITryMoveListener;
 import java.awt.Color;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.Timer;
 import javax.swing.JLabel;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 
 public class Game implements ITryMoveListener {
@@ -77,15 +81,28 @@ public class Game implements ITryMoveListener {
         {                           
             JPanelWithBackground chessBoard = new JPanelWithBackground("src/textures/chessboard_640.jpg"); // JPanel с перегруженным методом paintComponent()
             
-            JLabel timerWhite = new JLabel();
-            JLabel timerBlack = new JLabel();
+            final JLabel timerWhite = new JLabel("03:00");
+            final JLabel timerBlack = new JLabel("03:00");
             timerWhite.setOpaque(true); // Делаем прозрачным
             timerBlack.setOpaque(true);
             timerWhite.setBounds(Globals.delta_x + 660, Globals.delta_y, 150, 80); // Выразить через Globals.params полностью
             timerBlack.setBounds(Globals.delta_x + 660, Globals.delta_y + 560, 150, 80);
-            timerWhite.setBackground(new Color(0, 0, 0));
-            timerBlack.setBackground(new Color(255, 255, 255));
-
+            //timerWhite.setBackground(new Color(0, 0, 0));
+            //timerBlack.setBackground(new Color(255, 255, 255));
+            
+            // Написать события переключения хода
+            final javax.swing.Timer t = new javax.swing.Timer(1000, new ActionListener() {
+            int time = 180;
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                time--;
+                timerWhite.setText(Globals.format(time / 60) + ":" + Globals.format(time % 60));
+                if (time == 0) {
+                    final javax.swing.Timer timer = (javax.swing.Timer) e.getSource();
+                    //timer.stop();
+                }
+            }
+        });
             
             chessBoard.setLayout(null);
             
@@ -113,6 +130,15 @@ public class Game implements ITryMoveListener {
             System.err.print("Game.Start() It is trap");
             Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    @Deprecated
+    private static String format(int i) {
+        String result = String.valueOf(i);
+        if (result.length() == 1) {
+            result = "0" + result;
+        }
+        return result;
     }
 
     
@@ -319,6 +345,7 @@ public class Game implements ITryMoveListener {
     
     private void move(int x_from, int y_from, int x_to, int y_to)// Перемещение фигуры из from в to
     {
+
         board[Globals.columnSelected][Globals.rowSelected].setLabelSelect(Globals.iconEmpty); // Снятие выделения в любом случае
         if(!rules.checkMove(this.board, x_from, y_from, x_to, y_to)) // Если не прошли проверку на валидность хода
            return;

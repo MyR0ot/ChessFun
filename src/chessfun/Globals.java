@@ -36,4 +36,12 @@ public class Globals {
             Globals.bigStepPawn[1][i] = false;
         }   
     }
+    
+    public static String format(int i) {
+        String result = String.valueOf(i);
+        if (result.length() == 1) {
+            result = "0" + result;
+        }
+        return result;
+    }
 }
