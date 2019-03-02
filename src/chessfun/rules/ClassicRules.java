@@ -99,7 +99,8 @@ public class ClassicRules implements IRules {
         if(isCastle(x_from, y_from, x_to, y_to))
             return checkCastle(board, x_from, y_from, x_to, y_to);
         
-        return Math.abs(x_to - x_from) == 1 || Math.abs(y_to - y_from) == 1 ;
+        return Math.abs(x_to - x_from) <= 1 && Math.abs(y_to - y_from) <= 1 && (
+                Math.abs(x_to - x_from) !=0 || Math.abs(y_to - y_from) != 0);
     }
     
     public static boolean isBeatField(Cell[][] board, int x, int y)

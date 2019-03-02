@@ -117,8 +117,6 @@ public class Game implements ITryMoveListener {
                     chessBoard.add(board[i][j].getLabelSelect());    
                 }
             
-           
-            
             chessBoard.add(timerWhite);
             chessBoard.add(timerBlack);
  
@@ -144,11 +142,6 @@ public class Game implements ITryMoveListener {
     
     public void Start()
     {
-        move("h2", "h4");
-        move("g8", "f6");
-        move("h1", "h3");
-        move("e7", "e5");
-        move("c2", "c3");
         showBeatFieldsByThisShape(5, 2);
     }
     
