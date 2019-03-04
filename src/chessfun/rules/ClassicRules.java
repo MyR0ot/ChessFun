@@ -96,21 +96,18 @@ public class ClassicRules implements IRules {
     }
     
     @Override
-    public boolean checkKing(Cell[][] board, int x_from, int y_from, int x_to, int y_to) // добавить рокировку
+    public boolean checkKing(Cell[][] board, int x_from, int y_from, int x_to, int y_to)
     {
         String nameTo = Cell.generateNameField(x_to, y_to);
         Set<String> beatsField = new HashSet();
-        for(int i=0;i<8;i++)
-            for(int j=0; j<8;j++)
-            {
-                if(board[i][j].getColor() != ColorFigure.NONE && board[i][j].getColor() != board[x_from][y_from].getColor())
-                {
-                    Set<String> beats = IRules.super.getBeatFiels(board, i, j);
-                    beatsField.addAll(beats);
-                    if(beats.contains(nameTo))
-                        return false; // Нельзя ходить королем по битым полям
-                }
-            }
+        
+        if(board[x_from][y_from].getColor() == ColorFigure.WHITE)
+            beatsField = IRules.super.getBeatFieldsByBlack(board);
+        else
+            beatsField = IRules.super.getBeatFieldsByWhite(board);  
+        
+        if(beatsField.contains(Cell.generateNameField(x_to, y_to)))
+                return false;
 
         if(isCastle(x_from, y_from, x_to, y_to))
             return checkCastle(board, x_from, y_from, x_to, y_to, beatsField);

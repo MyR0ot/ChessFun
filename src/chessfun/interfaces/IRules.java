@@ -133,7 +133,7 @@ public interface IRules {
         return Globals.bigStepPawn[1][x_to] && y_to == 2 && y_from == 3 || Globals.bigStepPawn[0][x_to] && y_to == 5 && y_from == 4;    
     }
     
-    default Set<String> getBeatFiels(Cell[][] board, int x, int y)
+    default Set<String> getBeatFields(Cell[][] board, int x, int y)
     {
         Set<String> res = new HashSet<>();
         switch(board[x][y].getNameFigure())
@@ -386,10 +386,50 @@ public interface IRules {
         return res;
     }
     
+    default Set<String> getBeatFieldsByBlack(Cell[][] board)
+    {
+       Set<String> res = new HashSet<>();
+       for(int i=0;i<8;i++)
+           for(int j=0; j<8;j++)
+           {
+               if(board[i][j].getColor() == ColorFigure.BLACK)
+                   res.addAll(getBeatFields(board, i, j));
+           }
+        return res;
+    }
+    
+    default Set<String> getBeatFieldsByWhite(Cell[][] board)
+    {
+       Set<String> res = new HashSet<>();
+       for(int i = 0; i < 8; i++)
+           for(int j = 0; j < 8; j++)
+           {
+               if(board[i][j].getColor() == ColorFigure.WHITE)
+                   res.addAll(getBeatFields(board, i, j));
+           }
+        return res;
+    }
+    
+    default boolean isRisk(Cell[][] board, int x, int y, ColorFigure colorRisk) // colorRisk - цвет угрожающей стороны
+    {
+        
+        Set<String> riskFields;
+        if(colorRisk == ColorFigure.WHITE)
+        {
+            return getBeatFieldsByWhite(board).contains(Cell.generateNameField(x, y));
+        }
+        else if(colorRisk == ColorFigure.BLACK)
+        {
+            return getBeatFieldsByBlack(board).contains(Cell.generateNameField(x, y));
+        }
+        
+        return false;
+    }
+    
     @Deprecated
     default void showBeatFieldsByThisShape(Cell board[][], int x, int y)
     {
-        Set<String> set = getBeatFiels(board, x, y);
+        Set<String> set = getBeatFields(board, x, y);
         System.out.print(board[x][y].getName()+ " ");
         System.out.print(board[x][y].getNameFigure());
         System.out.println(" " + set.size());

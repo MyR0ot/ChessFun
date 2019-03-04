@@ -16,10 +16,6 @@ import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import chessfun.interfaces.ITryMoveListener;
-import java.awt.Color;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.Timer;
 import javax.swing.JLabel;
 
 import java.awt.event.ActionEvent;
@@ -34,8 +30,10 @@ public class Game implements ITryMoveListener {
     private IRules rules;                   // Модуль правил
     private final History history;          // История игры
     
-    
-    
+    int x_whiteKing;
+    int y_whiteKing;
+    int x_blackKing;
+    int y_blackKing;
     
     
     public Game(ModeChess modeChoice, ModeShape modeShape) // Конструктор
@@ -340,7 +338,7 @@ public class Game implements ITryMoveListener {
     
     private void move(int x_from, int y_from, int x_to, int y_to)// Перемещение фигуры из from в to
     {
-
+        /// Сделать сохранение позиции, обработка ошибочных действий (проверка на шах) -> загрузка позиции
         board[Globals.columnSelected][Globals.rowSelected].setLabelSelect(Globals.iconEmpty); // Снятие выделения в любом случае
         if(!rules.checkMove(this.board, x_from, y_from, x_to, y_to)) // Если не прошли проверку на валидность хода
            return;
@@ -377,7 +375,7 @@ public class Game implements ITryMoveListener {
         
         /*if(history.getCountNotes()> 12)
             history.showHistory();*/
-        rules.getBeatFiels(board, x_to, y_to);
+        rules.getBeatFields(board, x_to, y_to);
     }
     
     private void move(String from, String to)// Перемещение фигуры из from в to, согласно нотации
@@ -408,7 +406,7 @@ public class Game implements ITryMoveListener {
             {
                 Globals.bigStepPawn[0][x_to] = true;
                  res = TypeMove.BIG_STEP_PAWN;
-            }
+            }                
             break;
             case "KNIGHT WHITE": board[x_to][y_to].setIcon(icons[1]);    board[x_to][y_to].setFigure(NameFigure.KNIGHT, ColorFigure.WHITE); break;
             case "BISHOP WHITE": board[x_to][y_to].setIcon(icons[2]);    board[x_to][y_to].setFigure(NameFigure.BISHOP, ColorFigure.WHITE); break;
@@ -479,8 +477,10 @@ public class Game implements ITryMoveListener {
                 board[x_to][y_to].setFigure(NameFigure.KING, ColorFigure.BLACK);
                 break;
         }
+        
         board[x_from][y_from].setIcon(Globals.iconEmpty); // задаем пустой отображение (откуда был сделан ход)
         board[x_from][y_from].setFigure(NameFigure.EMPTY, ColorFigure.NONE); // установка "пустой фигуры"
+        
         return res;
     }
     
