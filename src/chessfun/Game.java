@@ -67,7 +67,9 @@ public class Game implements ITryMoveListener {
         Globals.allowCastleBlack = true;
         
         Globals.bigStepPawn = new boolean[2][8];
-        Globals.clearBigStepPawnArray();       
+        Globals.clearBigStepPawnArray();
+        Globals.allowCastleWhite = true;
+        Globals.allowCastleBlack = true;
     }
     
     
@@ -76,7 +78,7 @@ public class Game implements ITryMoveListener {
         view = new JFrame(); // Путь джедая!
         view.setTitle("Chess Fun");
         view.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Корректное завершение работы, при закрытии окна
-        view.setSize(1400, 768); // Размеры окна
+        view.setSize(1300, 768); // Размеры окна
         try
         {                           
             JPanelWithBackground chessBoard = new JPanelWithBackground("src/textures/chessboard_640.jpg"); // JPanel с перегруженным методом paintComponent()
@@ -142,7 +144,7 @@ public class Game implements ITryMoveListener {
     
     public void Start()
     {
-        showBeatFieldsByThisShape(5, 2);
+        rules.showBeatFieldsByThisShape(board, 1, 1);
     }
     
     
@@ -349,8 +351,20 @@ public class Game implements ITryMoveListener {
         
         switch(typeMove)
         {
-            case OO: history.addNote("0-0"); break;
-            case OOO: history.addNote("0-0-0"); break;
+            case OO:
+                history.addNote("0-0");
+                if(Globals.stepQueue == ColorFigure.WHITE)
+                    Globals.allowCastleWhite = false;
+                else
+                    Globals.allowCastleBlack = false;
+                break;
+            case OOO:
+                history.addNote("0-0-0");
+                if(Globals.stepQueue == ColorFigure.WHITE)
+                    Globals.allowCastleWhite = false;
+                else
+                    Globals.allowCastleBlack = false;
+                break;
             case BIG_STEP_PAWN:
                 if(Globals.stepQueue == ColorFigure.WHITE)
                     Globals.bigStepPawn[0][x_to] = true;
@@ -363,7 +377,7 @@ public class Game implements ITryMoveListener {
         
         /*if(history.getCountNotes()> 12)
             history.showHistory();*/
-        this.showBeatFieldsByThisShape(x_to, y_to);
+        rules.getBeatFiels(board, x_to, y_to);
     }
     
     private void move(String from, String to)// Перемещение фигуры из from в to, согласно нотации
@@ -470,259 +484,6 @@ public class Game implements ITryMoveListener {
         return res;
     }
     
-    public Set<String> getBeatFiels(int x, int y)
-    {
-        Set<String> res = new HashSet<>();
-        switch(board[x][y].getNameFigure())
-        {
-            // <editor-fold desc="Pawns">
-            case "PAWN WHITE":
-                if(Cell.isValidField(x + 1, y - 1))
-                    res.add(Cell.generateNameField(x + 1, y - 1));
-                if(Cell.isValidField(x - 1, y - 1))
-                    res.add(Cell.generateNameField(x - 1, y - 1));
-                break;
-            case "PAWN BLACK":
-                if(Cell.isValidField(x + 1, y + 1))
-                    res.add(Cell.generateNameField(x + 1, y + 1));
-                if(Cell.isValidField(x - 1, y + 1))
-                    res.add(Cell.generateNameField(x - 1, y + 1));
-                break;
-            // </editor-fold>
-            // <editor-fold desc="Knights">
-              case "KNIGHT WHITE":
-            case "KNIGHT BLACK":
-                if(Cell.isValidField(x + 1, y + 2))
-                    res.add(Cell.generateNameField(x + 1, y + 2));
-                if(Cell.isValidField(x + 1, y - 2))
-                    res.add(Cell.generateNameField(x + 1, y - 2));
-                if(Cell.isValidField(x - 1, y + 2))
-                    res.add(Cell.generateNameField(x - 1, y + 2));
-                if(Cell.isValidField(x - 1, y - 2))
-                    res.add(Cell.generateNameField(x - 1, y - 2));
-                if(Cell.isValidField(x + 2, y + 1))
-                    res.add(Cell.generateNameField(x + 2, y + 1));
-                if(Cell.isValidField(x + 2, y - 1))
-                    res.add(Cell.generateNameField(x + 2, y - 1));
-                if(Cell.isValidField(x - 2, y + 1))
-                    res.add(Cell.generateNameField(x - 2, y + 1));
-                if(Cell.isValidField(x - 2, y - 1))
-                    res.add(Cell.generateNameField(x - 2, y - 1));
-                break;
-            // </editor-fold>
-            // <editor-fold desc="Bishops">   
-            case "BISHOP WHITE":
-            case "BISHOP BLACK":
-                for(int i = 1; i < 8; i++)
-                {
-                    if(Cell.isValidField(x + i, y + i))
-                    {
-                        res.add(Cell.generateNameField(x + i, y + i));
-                        if(board[x + i][y + i].getColor() != ColorFigure.NONE)
-                            break;
-                    }
-                    else
-                        break;
-                }
-                for(int i = 1; i < 8; i++)
-                {
-                    if(Cell.isValidField(x - i, y - i))
-                    {
-                        res.add(Cell.generateNameField(x - i, y - i));
-                        if(board[x - i][y - i].getColor() != ColorFigure.NONE)
-                            break;
-                    }
-                    else
-                        break;
-                }
-                for(int i = 1; i < 8; i++)
-                {
-                    if(Cell.isValidField(x - i, y + i))
-                    {
-                        res.add(Cell.generateNameField(x - i, y + i));
-                        if(board[x - i][y + i].getColor() != ColorFigure.NONE)
-                            break;
-                    }
-                    else
-                        break;
-                }
-                for(int i = 1; i < 8; i++)
-                {
-                    if(Cell.isValidField(x + i, y - i))
-                    {
-                        res.add(Cell.generateNameField(x + i, y - i));
-                        if(board[x + i][y - i].getColor() != ColorFigure.NONE)
-                            break;
-                    }
-                    else
-                        break;
-                }
-                break;
-            // </editor-fold>
-            // <editor-fold desc="Rocks">
-            case "ROCK WHITE":
-            case "ROCK BLACK":
-                for(int i=x+1; i<8; i++)
-                {
-                    if(Cell.isValidField(i, y))
-                    {
-                        res.add(Cell.generateNameField(i, y));
-                        if(board[i][y].getColor() != ColorFigure.NONE)
-                            break;
-                    }
-                    else
-                        break;
-                }
-                for(int i=x-1; i>=0; i--)
-                {
-                    if(Cell.isValidField(i, y))
-                    {
-                        res.add(Cell.generateNameField(i, y));
-                        if(board[i][y].getColor() != ColorFigure.NONE)
-                            break;
-                    }
-                    else
-                        break;
-                }
-                for(int j=y+1; j < 8; j++)
-                {
-                    if(Cell.isValidField(x, j))
-                    {
-                        res.add(Cell.generateNameField(x, j));
-                        if(board[x][j].getColor() != ColorFigure.NONE)
-                            break;
-                    }
-                    else break;
-                }
-                for(int j=y-1; j>=0; j--)
-                {
-                    if(Cell.isValidField(x, j))
-                    {
-                        res.add(Cell.generateNameField(x, j));
-                        if(board[x][j].getColor() != ColorFigure.NONE)
-                            break;
-                    }
-                    else break;
-                }
-                break;
-            // </editor-fold>
-            // <editor-fold desc="Queens">     
-            case "QUEEN WHITE":
-            case "QUEEN BLACK":
-                for(int i = 1; i < 8; i++)
-                {
-                    if(Cell.isValidField(x + i, y + i))
-                    {
-                        res.add(Cell.generateNameField(x + i, y + i));
-                        if(board[x + i][y + i].getColor() != ColorFigure.NONE)
-                            break;
-                    }
-                    else
-                        break;
-                }
-                for(int i = 1; i < 8; i++)
-                {
-                    if(Cell.isValidField(x - i, y - i))
-                    {
-                        res.add(Cell.generateNameField(x - i, y - i));
-                        if(board[x - i][y - i].getColor() != ColorFigure.NONE)
-                            break;
-                    }
-                    else
-                        break;
-                }
-                for(int i = 1; i < 8; i++)
-                {
-                    if(Cell.isValidField(x - i, y + i))
-                    {
-                        res.add(Cell.generateNameField(x - i, y + i));
-                        if(board[x - i][y + i].getColor() != ColorFigure.NONE)
-                            break;
-                    }
-                    else
-                        break;
-                }
-                for(int i = 1; i < 8; i++)
-                {
-                    if(Cell.isValidField(x + i, y - i))
-                    {
-                        res.add(Cell.generateNameField(x + i, y - i));
-                        if(board[x + i][y - i].getColor() != ColorFigure.NONE)
-                            break;
-                    }
-                    else
-                        break;
-                }
-                for(int i=x+1; i<8; i++)
-                {
-                    if(Cell.isValidField(i, y))
-                    {
-                        res.add(Cell.generateNameField(i, y));
-                        if(board[i][y].getColor() != ColorFigure.NONE)
-                            break;
-                    }
-                    else
-                        break;
-                }
-                for(int i=x-1; i>=0; i--)
-                {
-                    if(Cell.isValidField(i, y))
-                    {
-                        res.add(Cell.generateNameField(i, y));
-                        if(board[i][y].getColor() != ColorFigure.NONE)
-                            break;
-                    }
-                    else
-                        break;
-                }
-                for(int j=y+1; j < 8; j++)
-                {
-                    if(Cell.isValidField(x, j))
-                    {
-                        res.add(Cell.generateNameField(x, j));
-                        if(board[x][j].getColor() != ColorFigure.NONE)
-                            break;
-                    }
-                    else break;
-                }
-                for(int j=y-1; j>=0; j--)
-                {
-                    if(Cell.isValidField(x, j))
-                    {
-                        res.add(Cell.generateNameField(x, j));
-                        if(board[x][j].getColor() != ColorFigure.NONE)
-                            break;
-                    }
-                    else break;
-                }
-                break;    
-            // </editor-fold>
-            // <editor-fold desc="Kings">
-            case "KING WHITE":
-            case "KING BLACK":
-                if(Cell.isValidField(x - 1, y + 1))
-                    res.add(Cell.generateNameField(x - 1, y + 1));
-                if(Cell.isValidField(x, y + 1))
-                    res.add(Cell.generateNameField(x, y + 1));
-                if(Cell.isValidField(x + 1, y + 1))
-                    res.add(Cell.generateNameField(x + 1, y + 1));
-                if(Cell.isValidField(x - 1, y))
-                    res.add(Cell.generateNameField(x - 1, y));
-                if(Cell.isValidField(x + 1, y))
-                    res.add(Cell.generateNameField(x + 1, y));
-                if(Cell.isValidField(x - 1, y - 1))
-                    res.add(Cell.generateNameField(x - 1, y - 1));
-                if(Cell.isValidField(x, y - 1))
-                    res.add(Cell.generateNameField(x, y - 1));
-                if(Cell.isValidField(x + 1, y - 1))
-                    res.add(Cell.generateNameField(x + 1, y - 1));
-                break;
-            // </editor-fold>
-            default: return res;
-        }
-        return res;
-    }
-    
     
     @Override
     public void tryMove(TryMoveEvent e) {
@@ -740,15 +501,5 @@ public class Game implements ITryMoveListener {
         System.out.println("-----------------------");
     }
     
-    @Deprecated
-    public void showBeatFieldsByThisShape(int x, int y)
-    {
-        Set<String> set = this.getBeatFiels(x, y);
-        System.out.print(board[x][y].getName()+ " ");
-        System.out.print(board[x][y].getNameFigure());
-        System.out.println(" " + set.size());
-        for(String s : set)
-            System.out.println(s);
-    }
 
 }

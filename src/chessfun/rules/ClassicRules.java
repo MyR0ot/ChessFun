@@ -7,8 +7,11 @@ package chessfun.rules;
 
 import chessfun.Cell;
 import chessfun.Enums.ColorFigure;
+import chessfun.Game;
 import chessfun.Globals;
 import chessfun.interfaces.IRules;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  *
@@ -95,9 +98,22 @@ public class ClassicRules implements IRules {
     @Override
     public boolean checkKing(Cell[][] board, int x_from, int y_from, int x_to, int y_to) // добавить рокировку
     {
-        // + проверка на присутствие шаха или битого поля [x_to][y_to]
+        String nameTo = Cell.generateNameField(x_to, y_to);
+        Set<String> beatsField = new HashSet();
+        for(int i=0;i<8;i++)
+            for(int j=0; j<8;j++)
+            {
+                if(board[i][j].getColor() != ColorFigure.NONE && board[i][j].getColor() != board[x_from][y_from].getColor())
+                {
+                    Set<String> beats = IRules.super.getBeatFiels(board, i, j);
+                    beatsField.addAll(beats);
+                    if(beats.contains(nameTo))
+                        return false; // Нельзя ходить королем по битым полям
+                }
+            }
+
         if(isCastle(x_from, y_from, x_to, y_to))
-            return checkCastle(board, x_from, y_from, x_to, y_to);
+            return checkCastle(board, x_from, y_from, x_to, y_to, beatsField);
         
         return Math.abs(x_to - x_from) <= 1 && Math.abs(y_to - y_from) <= 1 && (
                 Math.abs(x_to - x_from) !=0 || Math.abs(y_to - y_from) != 0);
@@ -108,9 +124,10 @@ public class ClassicRules implements IRules {
         return false;
     }
     
-    public static boolean checkCastle(Cell[][] board, int x_from, int y_from, int x_to, int y_to)
+    public static boolean checkCastle(Cell[][] board, int x_from, int y_from, int x_to, int y_to, Set<String> beatFields)
     {
-        // + проверка на присутствие шаха или битого поля [x_to][y_to]
-        return true;
+        if(board[x_from][y_from].getColor() == ColorFigure.WHITE)
+            return Globals.allowCastleWhite && !beatFields.contains(Cell.generateNameField((x_from + x_to) / 2, y_to));            
+        return Globals.allowCastleBlack && !beatFields.contains(Cell.generateNameField((x_from + x_to) / 2, y_to));  
     }
 }

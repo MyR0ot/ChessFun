@@ -21,9 +21,12 @@ public class Globals {
     public static int columnSelected;        // column выбранной фигуры
     public static String selectedCellName;   // имя поля выбранной фигуры
     public static ColorFigure stepQueue;     // Чей ход? (WHITE / BLACK)
-    public static boolean allowСastleWhite;  // разрешена ли рокировка для белых?
+    public static boolean allowCastleWhite;  // разрешена ли рокировка для белых?
     public static boolean allowCastleBlack;  // разрешена ли рокировка для черных?
     public static boolean[][] bigStepPawn;   // Ходили пешке на 2 клетки вперед на последнем ходу
+    public static boolean castleAllowWhite;  // Разрешена рокировка белым?
+    public static boolean castleAllowBlack;  // Разрешена рокировка белым?
+    
     
     public static int delta_x = 50; // Координаты позиционирования доски относительно фрейма
     public static int delta_y = 20; // Координаты позиционирования доски относительно фрейма
