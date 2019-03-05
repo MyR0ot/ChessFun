@@ -7,7 +7,6 @@ package chessfun.rules;
 
 import chessfun.Cell;
 import chessfun.Enums.ColorFigure;
-import chessfun.Game;
 import chessfun.Globals;
 import chessfun.interfaces.IRules;
 import java.util.HashSet;
@@ -123,6 +122,14 @@ public class ClassicRules implements IRules {
     
     public static boolean checkCastle(Cell[][] board, int x_from, int y_from, int x_to, int y_to, Set<String> beatFields)
     {
+        if(x_to == 2 && (board[1][y_to].getColor() != ColorFigure.NONE || board[3][y_to].getColor()!= ColorFigure.NONE))
+        {
+            return false;
+        }
+        if(x_to == 6 && (board[1][y_to].getColor() != ColorFigure.NONE || board[3][y_to].getColor()!= ColorFigure.NONE))
+        {
+            return false;
+        }
         if(board[x_from][y_from].getColor() == ColorFigure.WHITE)
             return Globals.allowCastleWhite && !beatFields.contains(Cell.generateNameField((x_from + x_to) / 2, y_to));            
         return Globals.allowCastleBlack && !beatFields.contains(Cell.generateNameField((x_from + x_to) / 2, y_to));  

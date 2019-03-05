@@ -6,6 +6,7 @@
 package chessfun;
 
 import chessfun.Enums.ColorFigure;
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -28,7 +29,10 @@ public class MyTimer extends JPanel {
         Globals.timeWhite = startTime;
     else
         Globals.timeBlack = startTime;
-    
+    if(colorTimer== ColorFigure.WHITE)
+        this.setBackground(Color.WHITE);
+    else
+        this.setBackground(Color.LIGHT_GRAY);
     this.add(label);
     this.setOpaque(true); // Делаем прозрачным
     this.setBounds(x_delta, y_delta, 150, 80);

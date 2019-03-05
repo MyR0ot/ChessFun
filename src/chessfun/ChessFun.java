@@ -17,6 +17,5 @@ public class ChessFun {
         Game game = new Game(ModeChess.CLASSIC, ModeShape.WIKIPEDIA, 300, 2);
         Globals.game = game;
         game.Start();
-
     }    
 }
