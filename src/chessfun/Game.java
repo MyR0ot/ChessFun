@@ -16,11 +16,6 @@ import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import chessfun.interfaces.ITryMoveListener;
-import javax.swing.JLabel;
-
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import javax.swing.Timer;
 
 
 public class Game implements ITryMoveListener {
@@ -31,8 +26,12 @@ public class Game implements ITryMoveListener {
     private IRules rules;                   // Модуль правил
     private final History history;          // История игры
     
-    private MyTimer timerWhite;
-    private MyTimer timerBlack;
+    private final MyTimer timerWhite;
+    private final MyTimer timerBlack;
+    
+    private int timeInc;
+    private int timeStart;
+    private int timeDelay;
     
     int x_whiteKing;
     int y_whiteKing;
@@ -40,10 +39,12 @@ public class Game implements ITryMoveListener {
     int y_blackKing;
     
     
-    public Game(ModeChess modeChoice, ModeShape modeShape) // Конструктор
+    public Game(ModeChess modeChoice, ModeShape modeShape, int startTime, int incTime) // Конструктор
     {
         this.board = new Cell[8][8];
         this.icons = new ImageIcon[14];
+        this.timeInc = incTime*10;
+        this.timeStart = startTime*10;
         
         loadTextures(modeShape);
         setGlobals();
@@ -55,8 +56,8 @@ public class Game implements ITryMoveListener {
             case KING_HILL: startClassic(); this.rules = new ClassicRules(); break;
         }
         this.history = new History(board);
-        timerWhite = new MyTimer(900, ColorFigure.BLACK, Globals.delta_x + 660, Globals.delta_y);
-        timerBlack = new MyTimer(370, ColorFigure.WHITE, Globals.delta_x + 660, Globals.delta_y + 560);
+        timerWhite = new MyTimer(timeStart, ColorFigure.BLACK, Globals.delta_x + 660, Globals.delta_y);
+        timerBlack = new MyTimer(timeStart, ColorFigure.WHITE, Globals.delta_x + 660, Globals.delta_y + 560);
         
         loadView();
     }
@@ -84,19 +85,10 @@ public class Game implements ITryMoveListener {
         view.setSize(1300, 768); // Размеры окна
         try
         {                           
-            JPanelWithBackground chessBoard = new JPanelWithBackground("src/textures/chessboard_640.jpg"); // JPanel с перегруженным методом paintComponent()
-            
-            //timerWhite.setBackground(new Color(0, 0, 0));
-            //timerBlack.setBackground(new Color(255, 255, 255));
-            
-            // Написать события переключения хода
-            
+            JPanelWithBackground chessBoard = new JPanelWithBackground("src/textures/chessboard_640.jpg"); // JPanel с перегруженным методом paintComponent()            
             chessBoard.setLayout(null);
-            
             chessBoard.setSize(640 + Globals.delta_x, 640 + Globals.delta_y);// Размеры шахматной доски
-            
-            
-                      
+                 
             for(int i=0;i<8;i++)
                 for(int j=0;j<8;j++)
                 {
@@ -357,8 +349,19 @@ public class Game implements ITryMoveListener {
                     Globals.bigStepPawn[1][x_to] = true;
    
             default: history.addNote(board[x_from][y_from].getName(), board[x_to][y_to].getName()); break;
-        }        
-        Globals.stepQueue = Globals.stepQueue == ColorFigure.WHITE ? ColorFigure.BLACK : ColorFigure.WHITE; // Передача хода   
+        }
+        
+        if( Globals.stepQueue == ColorFigure.WHITE)
+        {
+            Globals.stepQueue = ColorFigure.BLACK;
+            Globals.timeWhite += this.timeInc;
+        }
+        else
+        {
+            Globals.stepQueue = ColorFigure.WHITE;
+            Globals.timeBlack += this.timeInc;
+        }
+        //Globals.stepQueue = Globals.stepQueue == ColorFigure.WHITE ? ColorFigure.BLACK : ColorFigure.WHITE; // Передача хода   
         
         /*if(history.getCountNotes()> 12)
             history.showHistory();*/
