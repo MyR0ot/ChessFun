@@ -20,6 +20,7 @@ import javax.swing.JLabel;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.Timer;
 
 
 public class Game implements ITryMoveListener {
@@ -29,6 +30,9 @@ public class Game implements ITryMoveListener {
     private JFrame view;                    // Основной JFrame для отображения
     private IRules rules;                   // Модуль правил
     private final History history;          // История игры
+    
+    private MyTimer timerWhite;
+    private MyTimer timerBlack;
     
     int x_whiteKing;
     int y_whiteKing;
@@ -51,6 +55,8 @@ public class Game implements ITryMoveListener {
             case KING_HILL: startClassic(); this.rules = new ClassicRules(); break;
         }
         this.history = new History(board);
+        timerWhite = new MyTimer(900, ColorFigure.BLACK, Globals.delta_x + 660, Globals.delta_y);
+        timerBlack = new MyTimer(370, ColorFigure.WHITE, Globals.delta_x + 660, Globals.delta_y + 560);
         
         loadView();
     }
@@ -70,7 +76,6 @@ public class Game implements ITryMoveListener {
         Globals.allowCastleBlack = true;
     }
     
-    
     private void loadView()
     {
         view = new JFrame(); // Путь джедая!
@@ -81,28 +86,10 @@ public class Game implements ITryMoveListener {
         {                           
             JPanelWithBackground chessBoard = new JPanelWithBackground("src/textures/chessboard_640.jpg"); // JPanel с перегруженным методом paintComponent()
             
-            final JLabel timerWhite = new JLabel("03:00");
-            final JLabel timerBlack = new JLabel("03:00");
-            timerWhite.setOpaque(true); // Делаем прозрачным
-            timerBlack.setOpaque(true);
-            timerWhite.setBounds(Globals.delta_x + 660, Globals.delta_y, 150, 80); // Выразить через Globals.params полностью
-            timerBlack.setBounds(Globals.delta_x + 660, Globals.delta_y + 560, 150, 80);
             //timerWhite.setBackground(new Color(0, 0, 0));
             //timerBlack.setBackground(new Color(255, 255, 255));
             
             // Написать события переключения хода
-            final javax.swing.Timer t = new javax.swing.Timer(1000, new ActionListener() {
-            int time = 180;
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                time--;
-                timerWhite.setText(Globals.format(time / 60) + ":" + Globals.format(time % 60));
-                if (time == 0) {
-                    final javax.swing.Timer timer = (javax.swing.Timer) e.getSource();
-                    //timer.stop();
-                }
-            }
-        });
             
             chessBoard.setLayout(null);
             
@@ -115,10 +102,10 @@ public class Game implements ITryMoveListener {
                 {
                     chessBoard.add(board[i][j].getLabel());
                     chessBoard.add(board[i][j].getLabelSelect());    
-                }
+                }            
             
-            chessBoard.add(timerWhite);
             chessBoard.add(timerBlack);
+            chessBoard.add(timerWhite);
  
             view.getContentPane().add(chessBoard); // добавление JPanel к JFrame
             view.setVisible(true); // Делаем видимым наш фрейм  

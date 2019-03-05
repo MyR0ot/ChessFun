@@ -27,6 +27,9 @@ public class Globals {
     public static boolean castleAllowWhite;  // Разрешена рокировка белым?
     public static boolean castleAllowBlack;  // Разрешена рокировка белым?
     
+    public static int timeWhite;
+    public static int timeBlack;
+    
     
     public static int delta_x = 50; // Координаты позиционирования доски относительно фрейма
     public static int delta_y = 20; // Координаты позиционирования доски относительно фрейма
