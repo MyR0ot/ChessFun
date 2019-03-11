@@ -66,13 +66,14 @@ public class MyTimer extends JPanel {
       String res = "";
       int minutes = time/600;
       int seconds = (time - minutes*600)/10;
-      
-      if(time > 200)
-          return formateFix(minutes, 2) + ":" + formateFix(seconds, 2);
-
       int ms = time - minutes*600 - seconds*10;
       
-      return formateFix(seconds, 2)+"."+String.valueOf(ms);
+      if(time > 600)
+          return formateFix(minutes, 2) + ":" + formateFix(seconds, 2);
+      else if(time > 200)
+          return formateFix(minutes, 1) + ":" + formateFix(seconds, 2);
+      else
+          return String.valueOf(seconds)+"."+String.valueOf(ms);
   }
   
   private static String formateFix(int number, int size)
