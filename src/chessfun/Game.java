@@ -23,6 +23,7 @@ public class Game implements ITryMoveListener {
     private Cell[][] board;                 // шахматная доска
     private ImageIcon icons[];              // иконки для отображения фигур
     private JFrame view;                    // Основной JFrame для отображения
+    private JFrame settings;                    // Основной JFrame для отображения
     private IRules rules;                   // Модуль правил
     private final History history;          // История игры
     
@@ -69,6 +70,7 @@ public class Game implements ITryMoveListener {
         
         
         loadView();
+        // GetSettings();
     }
     
     private void setGlobals()
@@ -504,5 +506,14 @@ public class Game implements ITryMoveListener {
         System.out.println("-----------------------");
     }
     
+    
+    private void GetSettings()
+    {
+        settings = new JFrame(); // Путь джедая!
+        settings.setTitle("Настройки");
+        settings.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Корректное завершение работы, при закрытии окна
+        settings.setSize(512, 256); // Размеры окна                        
+        settings.setVisible(true); // Делаем видимым наш фрейм  
+    }
 
 }
