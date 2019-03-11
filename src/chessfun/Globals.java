@@ -26,6 +26,7 @@ public class Globals {
     public static boolean[][] bigStepPawn;   // Ходили пешке на 2 клетки вперед на последнем ходу
     public static boolean castleAllowWhite;  // Разрешена рокировка белым?
     public static boolean castleAllowBlack;  // Разрешена рокировка белым?
+    public static boolean startgame;         // Идет игра?
     
     public static int timeWhite;
     public static int timeBlack;

@@ -26,6 +26,9 @@ public class Game implements ITryMoveListener {
     private IRules rules;                   // Модуль правил
     private final History history;          // История игры
     
+    private String nameWhite;
+    private String nameBlack;
+    
     private final MyTimer timerWhite;
     private final MyTimer timerBlack;
     
@@ -39,12 +42,14 @@ public class Game implements ITryMoveListener {
     int y_blackKing;
     
     
-    public Game(ModeChess modeChoice, ModeShape modeShape, int startTime, int incTime) // Конструктор
+    public Game(ModeChess modeChoice, ModeShape modeShape, int startTime, int incTime, String nameWhite, String nameBlack) // Конструктор
     {
         this.board = new Cell[8][8];
         this.icons = new ImageIcon[14];
         this.timeInc = incTime*10;
         this.timeStart = startTime*10;
+        this.nameWhite = nameWhite;
+        this.nameBlack = nameBlack;
         
         loadTextures(modeShape);
         setGlobals();
@@ -56,8 +61,12 @@ public class Game implements ITryMoveListener {
             case KING_HILL: startClassic(); this.rules = new ClassicRules(); break;
         }
         this.history = new History(board);
+        
+        MyTimer.nameWhite = nameWhite;
+        MyTimer.nameBlack = nameBlack;
         timerWhite = new MyTimer(timeStart, ColorFigure.BLACK, Globals.delta_x + 660, Globals.delta_y);
         timerBlack = new MyTimer(timeStart, ColorFigure.WHITE, Globals.delta_x + 660, Globals.delta_y + 560);
+        
         
         loadView();
     }
@@ -70,6 +79,7 @@ public class Game implements ITryMoveListener {
         Globals.stepQueue = ColorFigure.WHITE;
         Globals.allowCastleBlack = true;
         Globals.allowCastleBlack = true;
+        Globals.startgame = false;
         
         Globals.bigStepPawn = new boolean[2][8];
         Globals.clearBigStepPawnArray();
@@ -363,9 +373,12 @@ public class Game implements ITryMoveListener {
         }
         //Globals.stepQueue = Globals.stepQueue == ColorFigure.WHITE ? ColorFigure.BLACK : ColorFigure.WHITE; // Передача хода   
         
-        /*if(history.getCountNotes()> 12)
-            history.showHistory();*/
-        rules.getBeatFields(board, x_to, y_to);
+        if(history.getCountNotes()> 6)
+        {
+            history.showHistory();
+            rules.getBeatFields(board, x_to, y_to);
+        }
+        Globals.startgame = true;
     }
     
     private void move(String from, String to)// Перемещение фигуры из from в to, согласно нотации

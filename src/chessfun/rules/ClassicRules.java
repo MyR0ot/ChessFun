@@ -105,8 +105,12 @@ public class ClassicRules implements IRules {
         else
             beatsField = IRules.super.getBeatFieldsByWhite(board);  
         
+        
+        
         if(beatsField.contains(Cell.generateNameField(x_to, y_to)))
                 return false;
+        
+        
 
         if(isCastle(x_from, y_from, x_to, y_to))
             return checkCastle(board, x_from, y_from, x_to, y_to, beatsField);
@@ -122,14 +126,16 @@ public class ClassicRules implements IRules {
     
     public static boolean checkCastle(Cell[][] board, int x_from, int y_from, int x_to, int y_to, Set<String> beatFields)
     {
+        
         if(x_to == 2 && (board[1][y_to].getColor() != ColorFigure.NONE || board[3][y_to].getColor()!= ColorFigure.NONE))
         {
             return false;
         }
-        if(x_to == 6 && (board[1][y_to].getColor() != ColorFigure.NONE || board[3][y_to].getColor()!= ColorFigure.NONE))
+        if(x_to == 6 && board[5][y_to].getColor() != ColorFigure.NONE)
         {
             return false;
         }
+        
         if(board[x_from][y_from].getColor() == ColorFigure.WHITE)
             return Globals.allowCastleWhite && !beatFields.contains(Cell.generateNameField((x_from + x_to) / 2, y_to));            
         return Globals.allowCastleBlack && !beatFields.contains(Cell.generateNameField((x_from + x_to) / 2, y_to));  

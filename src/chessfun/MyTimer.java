@@ -18,34 +18,43 @@ import javax.swing.Timer;
  */
 public class MyTimer extends JPanel {
     private final JLabel label;
-    private  ColorFigure colorTimer;
+    private  final ColorFigure colorTimer;
+    public static  String nameWhite;
+    public static  String nameBlack;
     
     
 
   public MyTimer(int startTime, ColorFigure colorTimer, int x_delta, int y_delta) {
-    label = new JLabel(formate(startTime), JLabel.CENTER);
+    
     this.colorTimer = colorTimer;
     if(colorTimer == ColorFigure.WHITE)
-        Globals.timeWhite = startTime;
+    {
+         Globals.timeWhite = startTime;
+         this.setBackground(Color.WHITE);
+         label = new JLabel("<html><font size=\"7\">" + String.valueOf(formate(Globals.timeWhite)) + "</font><br /><font size=\"4\">" + nameWhite +"</font></html>", JLabel.CENTER);
+    }
+       
     else
+    {
         Globals.timeBlack = startTime;
-    if(colorTimer== ColorFigure.WHITE)
-        this.setBackground(Color.WHITE);
-    else
         this.setBackground(Color.LIGHT_GRAY);
+        label = new JLabel("<html><font size=\"7\">" + String.valueOf(formate(Globals.timeBlack)) + "</font><br /><font size=\"4\">" + nameBlack +"</font></html>", JLabel.CENTER);
+    }
+        
     this.add(label);
     this.setOpaque(true); // Делаем прозрачным
     this.setBounds(x_delta, y_delta, 150, 80);
     new Timer(100, (ActionEvent e) -> {
-        if(Globals.stepQueue == colorTimer)
+        if(Globals.stepQueue == colorTimer && Globals.startgame)
         {
             if(colorTimer == ColorFigure.WHITE)
             {
-                label.setText(String.valueOf(formate(Globals.timeWhite--)));
+               
+                label.setText("<html><font size=\"7\">" + String.valueOf(formate(Globals.timeWhite--)) + "</font><br /><font size=\"4\">" + nameWhite +"</font></html>");
             }
             else
             {
-                label.setText(String.valueOf(formate(Globals.timeBlack--)));
+                label.setText("<html><font size=\"7\">" + String.valueOf(formate(Globals.timeBlack--)) + "</font><br /><font size=\"4\">" + nameBlack +"</font></html>");
             }
         }
         
@@ -57,8 +66,23 @@ public class MyTimer extends JPanel {
       String res = "";
       int minutes = time/600;
       int seconds = (time - minutes*600)/10;
+      
+      if(time > 200)
+          return formateFix(minutes, 2) + ":" + formateFix(seconds, 2);
+
       int ms = time - minutes*600 - seconds*10;
-       
-      return String.valueOf(minutes) + ":"+String.valueOf(seconds)+"."+String.valueOf(ms);
+      
+      return formateFix(seconds, 2)+"."+String.valueOf(ms);
+  }
+  
+  private static String formateFix(int number, int size)
+  {
+      String res = String.valueOf(number);
+      while(res.length()<size)
+      {
+          res = "0" + res;
+      }
+      
+      return res;
   }
 }
