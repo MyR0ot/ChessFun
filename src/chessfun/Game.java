@@ -16,6 +16,13 @@ import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import chessfun.interfaces.ITryMoveListener;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 
 
 public class Game implements ITryMoveListener {
@@ -23,7 +30,7 @@ public class Game implements ITryMoveListener {
     private Cell[][] board;                 // шахматная доска
     private ImageIcon icons[];              // иконки для отображения фигур
     private JFrame view;                    // Основной JFrame для отображения
-    private JFrame settings;                    // Основной JFrame для отображения
+    private JFrame settings;                // Основной JFrame для отображения
     private IRules rules;                   // Модуль правил
     private final History history;          // История игры
     
@@ -70,6 +77,15 @@ public class Game implements ITryMoveListener {
         
         
         loadView();
+        
+        /*
+        javax.swing.SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                JFrame.setDefaultLookAndFeelDecorated(true);
+                createGUI();
+            }
+        });
+        */
         // GetSettings();
     }
     
@@ -89,11 +105,86 @@ public class Game implements ITryMoveListener {
         Globals.allowCastleBlack = true;
     }
     
+    public void createGUI() {         
+        Font font = new Font("Verdana", Font.PLAIN, 11);
+         
+        JMenuBar menuBar = new JMenuBar();
+        
+        JMenu playMenu = new JMenu("Игра");
+        JMenu analysisMenu = new JMenu("Анализ");
+        JMenu settingsMenu = new JMenu("Настройки");
+        
+        playMenu.setFont(font);
+        analysisMenu.setFont(font);
+        settingsMenu.setFont(font);
+         
+                
+        JMenuItem newGame = new JMenuItem("Новая игра");
+        newGame.setFont(font);
+        
+        JMenuItem exitItem = new JMenuItem("Выход");
+        exitItem.setFont(font);
+        playMenu.add(newGame);
+        playMenu.addSeparator();
+        playMenu.add(exitItem);
+        
+        JMenu typeGame = new JMenu("Тип игры");
+        typeGame.setFont(font);
+        settingsMenu.add(typeGame);
+        
+        JMenuItem type1 = new JMenuItem("Классические шахматы");      
+        JMenuItem type2 = new JMenuItem("Шахматы Фишера");
+        JMenuItem type3 = new JMenuItem("Царь горы");
+
+        type1.setFont(font);
+        type2.setFont(font);
+        type3.setFont(font);
+        
+        typeGame.add(type1);
+        typeGame.add(type2);
+        typeGame.add(type3);
+        
+   
+        JMenu timeGame = new JMenu("Временной контроль");
+        timeGame.setFont(font);
+        settingsMenu.add(timeGame);
+        
+        ArrayList<JMenuItem> times = new ArrayList<>();
+        times.add(new JMenuItem("1+0"));
+        times.add(new JMenuItem("1+1"));
+        times.add(new JMenuItem("3+0"));
+        times.add(new JMenuItem("3+2"));
+        times.add(new JMenuItem("5+0"));
+        times.add(new JMenuItem("5+5"));
+        times.add(new JMenuItem("10+0"));
+        times.add(new JMenuItem("10+10"));
+        for(JMenuItem item: times)
+        {
+            item.setFont(font);
+            timeGame.add(item);
+        }
+         
+        exitItem.addActionListener(new ActionListener() {           
+            public void actionPerformed(ActionEvent e) {
+                System.exit(0);             
+            }           
+        });
+        
+        menuBar.add(playMenu);
+        menuBar.add(analysisMenu);
+        menuBar.add(settingsMenu);
+                 
+        this.view.setJMenuBar(menuBar);
+        this.view.pack();
+        this.view.setLocationRelativeTo(null);
+    }
+    
     private void loadView()
     {
         view = new JFrame(); // Путь джедая!
         view.setTitle("Chess Fun");
         view.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Корректное завершение работы, при закрытии окна
+        createGUI();
         view.setSize(1300, 768); // Размеры окна
         try
         {                           
@@ -130,10 +221,10 @@ public class Game implements ITryMoveListener {
         return result;
     }
 
-    
+    @Deprecated
     public void Start()
     {
-        rules.showBeatFieldsByThisShape(board, 1, 1);
+        // rules.showBeatFieldsByThisShape(board, 1, 1);
     }
     
     
