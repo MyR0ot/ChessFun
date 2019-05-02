@@ -32,13 +32,13 @@ public class Game implements ITryMoveListener {
     private JFrame view;                    // Основной JFrame для отображения
     private JFrame settings;                // Основной JFrame для отображения
     private IRules rules;                   // Модуль правил
-    private final History history;          // История игры
+    private  History history;          // История игры
     
     private String nameWhite;
     private String nameBlack;
     
-    private final MyTimer timerWhite;
-    private final MyTimer timerBlack;
+    private  MyTimer timerWhite;
+    private  MyTimer timerBlack;
     
     private int timeInc;
     private int timeStart;
@@ -49,20 +49,30 @@ public class Game implements ITryMoveListener {
     int x_blackKing;
     int y_blackKing;
     
+    private ModeChess modeGame;
+    private ModeShape modeShape;
+    private JPanelWithBackground chessBoard;
+    
     
     public Game(ModeChess modeChoice, ModeShape modeShape, int startTime, int incTime, String nameWhite, String nameBlack) // Конструктор
     {
         this.board = new Cell[8][8];
+        for(int i = 0; i < 8; i++)
+            for(int j = 0; j < 8; j++)
+                this.board[i][j] = new Cell(i, j); // Инициализация клеток
         this.icons = new ImageIcon[14];
         this.timeInc = incTime*10;
         this.timeStart = startTime*10;
         this.nameWhite = nameWhite;
         this.nameBlack = nameBlack;
         
-        loadTextures(modeShape);
+        this.modeGame = modeChoice;
+        this.modeShape = modeShape;
+        
+        loadTextures(this.modeShape);
         setGlobals();
         
-        switch (modeChoice)
+        switch (this.modeGame)
         {
             case CLASSIC:   startClassic(); this.rules = new ClassicRules(); break;
             case FISHER:    startFisher();  this.rules = new ClassicRules(); break;
@@ -77,6 +87,8 @@ public class Game implements ITryMoveListener {
         
         
         loadView();
+        
+        
         
         /*
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
@@ -103,6 +115,9 @@ public class Game implements ITryMoveListener {
         Globals.clearBigStepPawnArray();
         Globals.allowCastleWhite = true;
         Globals.allowCastleBlack = true;
+        
+        Globals.timeWhite = this.timeStart/10;
+        Globals.timeBlack = this.timeStart/10;
     }
     
     public void createGUI() {         
@@ -170,6 +185,19 @@ public class Game implements ITryMoveListener {
             }           
         });
         
+        type2.addActionListener(new ActionListener() {           
+            public void actionPerformed(ActionEvent e) {        
+                System.err.append("CHOICE: 'шахматы Фишера'\n");
+                try {
+                    restartGame(ModeChess.FISHER, modeShape, timeStart, timeInc, nameWhite, nameBlack);
+                } catch (IOException ex) {
+                    Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }           
+        });
+        
+        
+        
         menuBar.add(playMenu);
         menuBar.add(analysisMenu);
         menuBar.add(settingsMenu);
@@ -188,7 +216,7 @@ public class Game implements ITryMoveListener {
         view.setSize(1300, 768); // Размеры окна
         try
         {                           
-            JPanelWithBackground chessBoard = new JPanelWithBackground("src/textures/chessboard_640.jpg"); // JPanel с перегруженным методом paintComponent()            
+            chessBoard = new JPanelWithBackground("src/textures/chessboard_640.jpg"); // JPanel с перегруженным методом paintComponent()            
             chessBoard.setLayout(null);
             chessBoard.setSize(640 + Globals.delta_x, 640 + Globals.delta_y);// Размеры шахматной доски
                  
@@ -281,11 +309,7 @@ public class Game implements ITryMoveListener {
     
     
     private void startClassic() // Классическая начальная расстановка фигур
-    {
-        for(int i = 0; i < 8; i++)
-            for(int j = 0; j < 8; j++)
-                this.board[i][j] = new Cell(i, j); // Инициализация клеток
-        
+    {   
         for(int i = 0; i < 8; i++)
             for(int j = 2; j < 6; j++)
             {
@@ -342,11 +366,7 @@ public class Game implements ITryMoveListener {
     
     
     private void startFisher()  // Расстановка 1-ого и 8-ого ряда случайным образом
-    {
-        for(int i = 0; i < 8; i++)
-            for(int j = 0; j < 8; j++)
-                this.board[i][j] = new Cell(i, j); // Инициализация клеток
-        
+    {        
         for(int i = 0; i < 8; i++)
             for(int j = 2; j < 6; j++)
             {
@@ -607,4 +627,36 @@ public class Game implements ITryMoveListener {
         settings.setVisible(true); // Делаем видимым наш фрейм  
     }
 
+    
+    private void restartGame(ModeChess modeChoice, ModeShape modeShape, int startTime, int incTime, String nameWhite, String nameBlack) throws IOException
+    {
+        this.timeInc = incTime*10;
+        this.timeStart = startTime*10;
+        this.nameWhite = nameWhite;
+        this.nameBlack = nameBlack;
+        
+        this.modeGame = modeChoice;
+        this.modeShape = modeShape;
+        
+        loadTextures(this.modeShape);
+        
+        
+        switch (this.modeGame)
+        {
+            case CLASSIC:   startClassic(); this.rules = new ClassicRules(); break;
+            case FISHER:    startFisher();  this.rules = new ClassicRules(); break;
+            case KING_HILL: startClassic(); this.rules = new ClassicRules(); break;
+        }
+        
+        
+        this.history = new History(board);
+        
+        MyTimer.nameWhite = nameWhite;
+        MyTimer.nameBlack = nameBlack;
+        
+        setGlobals();
+
+        printCurrentInfoBoard();
+        view.repaint();
+    }
 }
