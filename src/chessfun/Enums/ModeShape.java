@@ -9,7 +9,7 @@ package chessfun.Enums;
  *
  * @author My
  */
-/// различные стили отображения фигур
+/// Cтили отображения фигур
 public enum ModeShape {
     ALPHA,
     CHESS24,

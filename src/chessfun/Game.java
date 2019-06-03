@@ -60,107 +60,146 @@ public class Game implements ITryMoveListener {
         for(int i = 0; i < 8; i++)
             for(int j = 0; j < 8; j++)
                 this.board[i][j] = new Cell(i, j); // Инициализация клеток
+        
         this.icons = new ImageIcon[14];
-        this.timeInc = incTime*10;
-        this.timeStart = startTime*10;
+        this.timeInc = incTime;
+        this.timeStart = startTime;
         this.nameWhite = nameWhite;
         this.nameBlack = nameBlack;
         
         this.modeGame = modeChoice;
         this.modeShape = modeShape;
         
-        loadTextures(this.modeShape);
-        setGlobals();
+        loadTextures(this.modeShape); // загрузка текстур
+        setGlobals();                 // установка глобальных переменных
         
-        switch (this.modeGame)
+        switch (this.modeGame) // выбор типа игры
         {
             case CLASSIC:   startClassic(); this.rules = new ClassicRules(); break;
             case FISHER:    startFisher();  this.rules = new ClassicRules(); break;
             case KING_HILL: startClassic(); this.rules = new ClassicRules(); break;
         }
-        this.history = new History(board);
         
-        MyTimer.nameWhite = nameWhite;
+        this.history = new History(board); // создание модуля истории для текущей партии
+        
+        MyTimer.nameWhite = nameWhite; // установка никнеймов
         MyTimer.nameBlack = nameBlack;
-        timerWhite = new MyTimer(timeStart, ColorFigure.BLACK, Globals.delta_x + 660, Globals.delta_y);
+        
+        timerWhite = new MyTimer(timeStart, ColorFigure.BLACK, Globals.delta_x + 660, Globals.delta_y); // установка временного контроля
         timerBlack = new MyTimer(timeStart, ColorFigure.WHITE, Globals.delta_x + 660, Globals.delta_y + 560);
         
         
         loadView();
-        
-        
-        
-        /*
-        javax.swing.SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                JFrame.setDefaultLookAndFeelDecorated(true);
-                createGUI();
-            }
-        });
-        */
-        // GetSettings();
     }
     
     private void setGlobals()
     {
-        Globals.iconEmpty = icons[12];
-        Globals.iconSelected = icons[13];
+        Globals.iconEmpty = icons[12];      // пустое
+        Globals.iconSelected = icons[13];   // красная каЁмочка
         Globals.isSelectedFigure = false;
         Globals.stepQueue = ColorFigure.WHITE;
         Globals.allowCastleBlack = true;
         Globals.allowCastleBlack = true;
         Globals.startgame = false;
         
-        Globals.bigStepPawn = new boolean[2][8];
+        Globals.bigStepPawn = new boolean[2][8]; 
         Globals.clearBigStepPawnArray();
         Globals.allowCastleWhite = true;
         Globals.allowCastleBlack = true;
         
-        Globals.timeWhite = this.timeStart/10;
-        Globals.timeBlack = this.timeStart/10;
+        Globals.timeWhite = this.timeStart;
+        Globals.timeBlack = this.timeStart;
     }
     
     public void createGUI() {         
         Font font = new Font("Verdana", Font.PLAIN, 11);
-         
-        JMenuBar menuBar = new JMenuBar();
+        
+        JMenuBar menuBar = new JMenuBar(); // главное меню
         
         JMenu playMenu = new JMenu("Игра");
         JMenu analysisMenu = new JMenu("Анализ");
         JMenu settingsMenu = new JMenu("Настройки");
         
+        JMenuItem newGame = new JMenuItem("Новая игра");
+        JMenuItem exitItem = new JMenuItem("Выход");
+        JMenu typeShape = new JMenu("Стиль фигур");
+        JMenu typeGame = new JMenu("Тип игры");
+        JMenu timeGame = new JMenu("Временной контроль");
+        
+        
         playMenu.setFont(font);
         analysisMenu.setFont(font);
-        settingsMenu.setFont(font);
-         
-                
-        JMenuItem newGame = new JMenuItem("Новая игра");
-        newGame.setFont(font);
+        settingsMenu.setFont(font);     
+        newGame.setFont(font);   
+        exitItem.setFont(font);  
+        typeShape.setFont(font);
+        typeGame.setFont(font);
         
-        JMenuItem exitItem = new JMenuItem("Выход");
-        exitItem.setFont(font);
         playMenu.add(newGame);
         playMenu.addSeparator();
         playMenu.add(exitItem);
-        
-        JMenu typeGame = new JMenu("Тип игры");
-        typeGame.setFont(font);
         settingsMenu.add(typeGame);
+        settingsMenu.add(typeShape);
         
-        JMenuItem type1 = new JMenuItem("Классические шахматы");      
-        JMenuItem type2 = new JMenuItem("Шахматы Фишера");
-        JMenuItem type3 = new JMenuItem("Царь горы");
+        menuBar.add(playMenu);
+        menuBar.add(analysisMenu);
+        menuBar.add(settingsMenu);
+        
+        
+        
+        
+        
+// <editor-fold defaultstate="collapsed" desc="Выбор фигур">
 
-        type1.setFont(font);
-        type2.setFont(font);
-        type3.setFont(font);
+        JMenuItem typeShapeAlpha = new JMenuItem("Alpha");
+        JMenuItem typeShapeCheq = new JMenuItem("Cheq");
+        JMenuItem typeShapeChess24 = new JMenuItem("Chess24");
+        JMenuItem typeShapeMerida = new JMenuItem("Merida");
+        JMenuItem typeShapeMetro = new JMenuItem("Metro");
+        JMenuItem typeShapeSymbol = new JMenuItem("Symbol");
+        JMenuItem typeShapeWikipedia = new JMenuItem("Wikipedia");
         
-        typeGame.add(type1);
-        typeGame.add(type2);
-        typeGame.add(type3);
+        typeShape.add(typeShapeAlpha);
+        typeShape.add(typeShapeCheq);
+        typeShape.add(typeShapeChess24);
+        typeShape.add(typeShapeMerida);
+        typeShape.add(typeShapeMetro);
+        typeShape.add(typeShapeSymbol);
+        typeShape.add(typeShapeWikipedia);
         
-   
-        JMenu timeGame = new JMenu("Временной контроль");
+        addActionRestart(typeShapeAlpha, this.modeGame, ModeShape.ALPHA);
+        addActionRestart(typeShapeCheq, this.modeGame, ModeShape.CHEQ);
+        addActionRestart(typeShapeChess24, this.modeGame, ModeShape.CHESS24);
+        addActionRestart(typeShapeMerida,this.modeGame, ModeShape.MERIDA);
+        addActionRestart(typeShapeMetro, this.modeGame,ModeShape.METRO);
+        addActionRestart(typeShapeSymbol, this.modeGame, ModeShape.SYMBOL);
+        addActionRestart(typeShapeWikipedia, this.modeGame,ModeShape.WIKIPEDIA);
+// </editor-fold>
+
+// <editor-fold defaultstate="collapsed" desc="Выбор игры">
+
+        JMenuItem typeClassic = new JMenuItem("Классические шахматы");      
+        JMenuItem typeFisher = new JMenuItem("Шахматы Фишера");
+        JMenuItem typeKingHill = new JMenuItem("Царь горы");
+        
+        typeClassic.setFont(font);
+        typeFisher.setFont(font);
+        typeKingHill.setFont(font);
+        
+        typeGame.add(typeClassic);
+        typeGame.add(typeFisher);
+        typeGame.add(typeKingHill);
+        
+        addActionRestart(typeClassic, ModeChess.CLASSIC, this.modeShape);
+        addActionRestart(typeFisher, ModeChess.FISHER, this.modeShape);
+        addActionRestart(typeKingHill, ModeChess.KING_HILL, this.modeShape);
+        
+        
+// </editor-fold>       
+  
+// <editor-fold defaultstate="collapsed" desc="Временной контроль">
+        
+// TODO: Сделать вызов окна настроек
         timeGame.setFont(font);
         settingsMenu.add(timeGame);
         
@@ -173,38 +212,48 @@ public class Game implements ITryMoveListener {
         times.add(new JMenuItem("5+5"));
         times.add(new JMenuItem("10+0"));
         times.add(new JMenuItem("10+10"));
-        for(JMenuItem item: times)
+        
+        /*
+        ArrayList<Settings> settings = new ArrayList<Settings>();
+        settings.add(new Settings(1,0,0, new JMenuItem("1+0")));
+        */
+        for(JMenuItem time: times)
         {
-            item.setFont(font);
-            timeGame.add(item);
+            time.setFont(font);
+            timeGame.add(time);
+            time.addActionListener(new ActionListener(){ // TODO: сохрнанить инфо в структуру
+                public void actionPerformed(ActionEvent e) {
+                System.exit(0); // set настройки            
+            }
+            });
         }
-         
+ // </editor-fold>      
+ 
         exitItem.addActionListener(new ActionListener() {           
             public void actionPerformed(ActionEvent e) {
                 System.exit(0);             
             }           
         });
         
-        type2.addActionListener(new ActionListener() {           
+        addActionRestart(newGame, this.modeGame, this.modeShape);
+             
+        this.view.setJMenuBar(menuBar);
+        this.view.pack();
+        this.view.setLocationRelativeTo(null);
+    }
+    
+    private void addActionRestart(JMenuItem item, ModeChess modeChess, ModeShape modeShape)
+    {
+        item.addActionListener(new ActionListener() {           
             public void actionPerformed(ActionEvent e) {        
-                System.err.append("CHOICE: 'шахматы Фишера'\n");
+                System.err.append("CHOICE: " + modeChess.toString() + "\n");
                 try {
-                    restartGame(ModeChess.FISHER, modeShape, timeStart, timeInc, nameWhite, nameBlack);
+                    restartGame(modeChess, modeShape, timeStart, timeInc, nameWhite, nameBlack);
                 } catch (IOException ex) {
                     Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }           
         });
-        
-        
-        
-        menuBar.add(playMenu);
-        menuBar.add(analysisMenu);
-        menuBar.add(settingsMenu);
-                 
-        this.view.setJMenuBar(menuBar);
-        this.view.pack();
-        this.view.setLocationRelativeTo(null);
     }
     
     private void loadView()
@@ -231,11 +280,11 @@ public class Game implements ITryMoveListener {
             chessBoard.add(timerWhite);
  
             view.getContentPane().add(chessBoard); // добавление JPanel к JFrame
-            view.setVisible(true); // Делаем видимым наш фрейм  
+            view.setVisible(true); // Делаем видимым фрейм  
         }
         catch (IOException ex)
         {
-            System.err.print("Game.Start() It is trap");
+            System.err.print("Game.loadView() It is trap");
             Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -250,13 +299,14 @@ public class Game implements ITryMoveListener {
     }
 
     @Deprecated
-    public void Start()
+    public void info()
     {
+        
         // rules.showBeatFieldsByThisShape(board, 1, 1);
     }
     
     
-    private ImageIcon GetIcon(NameFigure figure, ColorFigure color)
+    private ImageIcon getIcon(NameFigure figure, ColorFigure color)
     {
         
         switch (figure.toString()+" " + color.toString())
@@ -441,7 +491,7 @@ public class Game implements ITryMoveListener {
     private void move(int x_from, int y_from, int x_to, int y_to)// Перемещение фигуры из from в to
     {
         /// Сделать сохранение позиции, обработка ошибочных действий (проверка на шах) -> загрузка позиции
-        board[Globals.columnSelected][Globals.rowSelected].setLabelSelect(Globals.iconEmpty); // Снятие выделения в любом случае
+        board[Globals.columnSelected][Globals.rowSelected].setLabelSelect(Globals.iconEmpty); // Снятие выделения  (красная каЁмка)в любом случае
         if(!rules.checkMove(this.board, x_from, y_from, x_to, y_to)) // Если не прошли проверку на валидность хода
            return;
         
@@ -449,7 +499,7 @@ public class Game implements ITryMoveListener {
         
         Globals.clearBigStepPawnArray();
         
-        switch(typeMove)
+        switch(typeMove) // break; только в конце!
         {
             case OO:
                 history.addNote("0-0");
@@ -486,11 +536,6 @@ public class Game implements ITryMoveListener {
         }
         //Globals.stepQueue = Globals.stepQueue == ColorFigure.WHITE ? ColorFigure.BLACK : ColorFigure.WHITE; // Передача хода   
         
-        if(history.getCountNotes()> 6)
-        {
-            history.showHistory();
-            rules.getBeatFields(board, x_to, y_to);
-        }
         Globals.startgame = true;
     }
     
@@ -504,7 +549,7 @@ public class Game implements ITryMoveListener {
     }
     
     
-    private TypeMove swapFigure(int x_from, int y_from, int x_to, int y_to) // Упростить!
+    private TypeMove swapFigure(int x_from, int y_from, int x_to, int y_to)
     {
         TypeMove res = TypeMove.DEFAULT;
         switch(board[x_from][y_from].getNameFigure()) // передвижение фигуры
@@ -608,7 +653,7 @@ public class Game implements ITryMoveListener {
     
     
     @Deprecated
-    public void printCurrentInfoBoard()// Вывод состояния шахматной доски в консоль (пока не удалять!)
+    public void printCurrentInfoBoard() // Вывод состояния шахматной доски в консоль
     {
         System.out.println("-----------------------");
         for(int i = 0; i < 8; i++)
@@ -630,8 +675,8 @@ public class Game implements ITryMoveListener {
     
     private void restartGame(ModeChess modeChoice, ModeShape modeShape, int startTime, int incTime, String nameWhite, String nameBlack) throws IOException
     {
-        this.timeInc = incTime*10;
-        this.timeStart = startTime*10;
+        this.timeInc = incTime;
+        this.timeStart = startTime;
         this.nameWhite = nameWhite;
         this.nameBlack = nameBlack;
         
@@ -654,9 +699,12 @@ public class Game implements ITryMoveListener {
         MyTimer.nameWhite = nameWhite;
         MyTimer.nameBlack = nameBlack;
         
+        // timerWhite.repaint();
+        // timerBlack.repaint();
+        
+        
         setGlobals();
 
         printCurrentInfoBoard();
-        view.repaint();
     }
 }

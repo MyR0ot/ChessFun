@@ -10,8 +10,6 @@ import chessfun.events.TryMoveEvent;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.ArrayList;
-import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
@@ -106,16 +104,6 @@ public class Cell {
         this.labelSelected.setIcon(icon);
     }
     
-    public List<Cell> getBeatFieldsByThisFigure() // получение полей, бьющееся фигурой, находящейся на данном поле
-    {
-        List<Cell> res = new ArrayList <Cell>();
-        // TODO:
-        //
-        
-        
-        
-        return res;
-    }
 
 
     public class MyMouseListener implements MouseListener {

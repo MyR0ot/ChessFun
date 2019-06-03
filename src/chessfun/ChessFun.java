@@ -14,9 +14,9 @@ public class ChessFun {
      */
     public static void main(String[] args)
     {  
-        Game game = new Game(ModeChess.CLASSIC, ModeShape.WIKIPEDIA, 60, 2, "Hikaru", "LachesisQ");
+        Game game = new Game(ModeChess.CLASSIC, ModeShape.WIKIPEDIA, 600, 20, "Hikaru", "LachesisQ");
         Globals.game = game;
-        game.Start();
+        game.info();
         
         /*javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {
