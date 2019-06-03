@@ -66,16 +66,6 @@ public class MyTimer extends JPanel {
       }).start();
   }
   
-  private void rePaint()
-  {
-      this.label.setText("Отладочный Вапапа!");
-      /*if(colorTimer == ColorFigure.WHITE)
-        this.label.setText("<html><font size=\"7\">" + String.valueOf(formate(Globals.timeWhite)) + "</font><br /><font size=\"4\">" + nameWhite +"</font></html>");
-      else
-          this.label.setText("<html><font size=\"7\">" + String.valueOf(formate(Globals.timeBlack)) + "</font><br /><font size=\"4\">" + nameBlack +"</font></html>");*/
-          
-  }
-  
   private static String formate(int time)
   {
       String res = "";

@@ -19,19 +19,19 @@ import chessfun.interfaces.ITryMoveListener;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
 public class Game implements ITryMoveListener {
-
+    
+    // <editor-fold defaultstate="collapsed" desc="Поля класса">
     private Cell[][] board;                 // шахматная доска
     private ImageIcon icons[];              // иконки для отображения фигур
     private JFrame view;                    // Основной JFrame для отображения
     private JFrame settings;                // Основной JFrame для отображения
     private IRules rules;                   // Модуль правил
-    private History history;          // История игры
+    private History history;                // История игры
 
     private String nameWhite;
     private String nameBlack;
@@ -43,15 +43,43 @@ public class Game implements ITryMoveListener {
     private int timeStart;
     private int timeDelay;
 
-    int x_whiteKing;
-    int y_whiteKing;
-    int x_blackKing;
-    int y_blackKing;
-
     private ModeChess modeGame;
     private ModeShape modeShape;
     private JPanelWithBackground chessBoard;
 
+    // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="Геттеры">
+    public String getNameWhite() {
+        return nameWhite;
+    }
+
+    public String getNameBlack() {
+        return nameBlack;
+    }
+
+    public int getTimeInc() {
+        return timeInc;
+    }
+
+    public int getTimeStart() {
+        return timeStart;
+    }
+
+    public int getTimeDelay() {
+        return timeDelay;
+    }
+
+    public ModeChess getModeGame() {
+        return modeGame;
+    }
+
+    public ModeShape getModeShape() {
+        return modeShape;
+    }
+    
+    // </editor-fold>
+    
     public Game(ModeChess modeChoice, ModeShape modeShape, int startTime, int incTime, String nameWhite, String nameBlack) // Конструктор
     {
         this.board = new Cell[8][8];
@@ -119,7 +147,7 @@ public class Game implements ITryMoveListener {
     }
 
     // Кнопочки сверху
-    public void createGUI() {
+    private void createGUI() {
         Font font = new Font("Verdana", Font.PLAIN, 11);
 
         JMenuBar menuBar = new JMenuBar(); // главное меню
@@ -222,8 +250,9 @@ public class Game implements ITryMoveListener {
     
     private void openSettings()
     {
-        JFrameSettings settings = new JFrameSettings();
+        JFrameSettings settings = new JFrameSettings(this);
         settings.setVisible(true);
+        
         
     }
 
@@ -682,7 +711,7 @@ public class Game implements ITryMoveListener {
         settings.setVisible(true); // Делаем видимым наш фрейм  
     }
 
-    private void restartGame(ModeChess modeChoice, ModeShape modeShape, int startTime, int incTime, String nameWhite, String nameBlack) throws IOException {
+    protected void restartGame(ModeChess modeChoice, ModeShape modeShape, int startTime, int incTime, String nameWhite, String nameBlack) throws IOException {
         this.timeInc = incTime;
         this.timeStart = startTime;
         this.nameWhite = nameWhite;

@@ -5,26 +5,32 @@
  */
 package chessfun;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author My
  */
 public class JFrameSettings extends javax.swing.JFrame {
+    private static Game parentGame;
+    private String whiteName;
+    private String blackName;
+    private int time;       // = 600;
+    private int delayTime;  // = 0;
+    private int incTime;    // = 20;
 
-    /**
-     * Creates new form JFrameSettings
-     */
-    public JFrameSettings() {
+    public JFrameSettings(Game game) {
         initComponents();
+        JFrameSettings.parentGame = game;
         setDefualtFields();
     }
     
     
-    private void setDefualtFields()
+    private void setDefualtFields() // Установка значений настроек по умолчанию
     {
         this.jTextField1.setText("Pavlov");
         this.jTextField2.setText("Brynza");
-        
         
         this.jTextField3.setSize(5, 1);
         this.jTextField3.setText("3");
@@ -34,6 +40,16 @@ public class JFrameSettings extends javax.swing.JFrame {
         this.jTextField5.setText("0");
         this.jTextField8.setText("0");
         
+    }
+    
+    private void saveMeans()
+    {
+        this.whiteName = jTextField1.getText();
+        this.blackName = jTextField2.getText();
+        
+        this.time = Integer.parseInt(jTextField3.getText())*600 + Integer.parseInt(jTextField6.getText())*10; 
+        this.incTime = Integer.parseInt(jTextField4.getText())*600 + Integer.parseInt(jTextField7.getText())*10; 
+        this.delayTime = Integer.parseInt(jTextField5.getText())*600 + Integer.parseInt(jTextField8.getText())*10; 
     }
 
     /**
@@ -74,6 +90,11 @@ public class JFrameSettings extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jButton1.setText("Отмена");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jButton2.setText("Сохранить");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -117,7 +138,7 @@ public class JFrameSettings extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(165, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -306,9 +327,24 @@ public class JFrameSettings extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
+        
+        saveMeans();    
+         try {
+                 this.parentGame.restartGame(parentGame.getModeGame(),
+                         parentGame.getModeShape(),
+                         time,
+                         incTime,
+                         whiteName,
+                         blackName);
+         } catch (Exception ex) {
+                    Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
+                }
+        this.setVisible(false);
     }//GEN-LAST:event_jButton2ActionPerformed
 
+    
+    
+    
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField1ActionPerformed
@@ -328,6 +364,10 @@ public class JFrameSettings extends javax.swing.JFrame {
     private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField2ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        this.setVisible(false);
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -359,7 +399,7 @@ public class JFrameSettings extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new JFrameSettings().setVisible(true);
+                new JFrameSettings(parentGame).setVisible(true);
             }
         });
     }
