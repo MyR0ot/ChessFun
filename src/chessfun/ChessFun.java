@@ -17,12 +17,5 @@ public class ChessFun {
         Game game = new Game(ModeChess.CLASSIC, ModeShape.WIKIPEDIA, 600, 20, "Hikaru", "LachesisQ");
         Globals.game = game;
         game.info();
-        
-        /*javax.swing.SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                JFrame.setDefaultLookAndFeelDecorated(true);
-                createGUI();
-            }
-        });*/
     }    
 }

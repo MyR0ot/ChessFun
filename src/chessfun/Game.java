@@ -24,76 +24,82 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
-
 public class Game implements ITryMoveListener {
-    
+
     private Cell[][] board;                 // шахматная доска
     private ImageIcon icons[];              // иконки для отображения фигур
     private JFrame view;                    // Основной JFrame для отображения
     private JFrame settings;                // Основной JFrame для отображения
     private IRules rules;                   // Модуль правил
-    private  History history;          // История игры
-    
+    private History history;          // История игры
+
     private String nameWhite;
     private String nameBlack;
-    
-    private  MyTimer timerWhite;
-    private  MyTimer timerBlack;
-    
+
+    private MyTimer timerWhite;
+    private MyTimer timerBlack;
+
     private int timeInc;
     private int timeStart;
     private int timeDelay;
-    
+
     int x_whiteKing;
     int y_whiteKing;
     int x_blackKing;
     int y_blackKing;
-    
+
     private ModeChess modeGame;
     private ModeShape modeShape;
     private JPanelWithBackground chessBoard;
-    
-    
+
     public Game(ModeChess modeChoice, ModeShape modeShape, int startTime, int incTime, String nameWhite, String nameBlack) // Конструктор
     {
         this.board = new Cell[8][8];
-        for(int i = 0; i < 8; i++)
-            for(int j = 0; j < 8; j++)
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
                 this.board[i][j] = new Cell(i, j); // Инициализация клеток
-        
+            }
+        }
         this.icons = new ImageIcon[14];
         this.timeInc = incTime;
         this.timeStart = startTime;
         this.nameWhite = nameWhite;
         this.nameBlack = nameBlack;
-        
+
         this.modeGame = modeChoice;
         this.modeShape = modeShape;
-        
+
         loadTextures(this.modeShape); // загрузка текстур
         setGlobals();                 // установка глобальных переменных
-        
+
         switch (this.modeGame) // выбор типа игры
         {
-            case CLASSIC:   startClassic(); this.rules = new ClassicRules(); break;
-            case FISHER:    startFisher();  this.rules = new ClassicRules(); break;
-            case KING_HILL: startClassic(); this.rules = new ClassicRules(); break;
+            case CLASSIC:
+                startClassic();
+                this.rules = new ClassicRules();
+                break;
+            case FISHER:
+                startFisher();
+                this.rules = new ClassicRules();
+                break;
+            case KING_HILL:
+                startClassic();
+                this.rules = new ClassicRules();
+                break;
         }
-        
+
         this.history = new History(board); // создание модуля истории для текущей партии
-        
+
         MyTimer.nameWhite = nameWhite; // установка никнеймов
         MyTimer.nameBlack = nameBlack;
-        
+
         timerWhite = new MyTimer(timeStart, ColorFigure.BLACK, Globals.delta_x + 660, Globals.delta_y); // установка временного контроля
         timerBlack = new MyTimer(timeStart, ColorFigure.WHITE, Globals.delta_x + 660, Globals.delta_y + 560);
-        
-        
+
         loadView();
     }
-    
-    private void setGlobals()
-    {
+
+    private void setGlobals() {
         Globals.iconEmpty = icons[12];      // пустое
         Globals.iconSelected = icons[13];   // красная каЁмочка
         Globals.isSelectedFigure = false;
@@ -101,57 +107,56 @@ public class Game implements ITryMoveListener {
         Globals.allowCastleBlack = true;
         Globals.allowCastleBlack = true;
         Globals.startgame = false;
-        
-        Globals.bigStepPawn = new boolean[2][8]; 
+
+        Globals.bigStepPawn = new boolean[2][8];
         Globals.clearBigStepPawnArray();
         Globals.allowCastleWhite = true;
         Globals.allowCastleBlack = true;
-        
+
         Globals.timeWhite = this.timeStart;
-        Globals.timeBlack = this.timeStart;  
+        Globals.timeBlack = this.timeStart;
         Globals.timeStart = this.timeStart;
     }
-    
-    public void createGUI() {         
+
+    // Кнопочки сверху
+    public void createGUI() {
         Font font = new Font("Verdana", Font.PLAIN, 11);
-        
+
         JMenuBar menuBar = new JMenuBar(); // главное меню
-        
+
         JMenu playMenu = new JMenu("Игра");
         JMenu analysisMenu = new JMenu("Анализ");
         JMenu settingsMenu = new JMenu("Настройки");
-        
+
         JMenuItem newGame = new JMenuItem("Новая игра");
         JMenuItem exitItem = new JMenuItem("Выход");
         JMenu typeShape = new JMenu("Стиль фигур");
         JMenu typeGame = new JMenu("Тип игры");
-        JMenu timeGame = new JMenu("Временной контроль");
-        
-        
+
         playMenu.setFont(font);
         analysisMenu.setFont(font);
-        settingsMenu.setFont(font);     
-        newGame.setFont(font);   
-        exitItem.setFont(font);  
+        settingsMenu.setFont(font);
+        newGame.setFont(font);
+        exitItem.setFont(font);
         typeShape.setFont(font);
         typeGame.setFont(font);
-        
+
         playMenu.add(newGame);
         playMenu.addSeparator();
         playMenu.add(exitItem);
         settingsMenu.add(typeGame);
         settingsMenu.add(typeShape);
-        
+
         menuBar.add(playMenu);
         menuBar.add(analysisMenu);
         menuBar.add(settingsMenu);
-        
-        
-        
-        
-        
-// <editor-fold defaultstate="collapsed" desc="Выбор фигур">
 
+        JMenuItem timeSettings = new JMenuItem("Временной контроль");
+        timeSettings.setFont(font);
+
+        settingsMenu.add(timeSettings);
+
+// <editor-fold defaultstate="collapsed" desc="Выбор фигур">
         JMenuItem typeShapeAlpha = new JMenuItem("Alpha");
         JMenuItem typeShapeCheq = new JMenuItem("Cheq");
         JMenuItem typeShapeChess24 = new JMenuItem("Chess24");
@@ -159,7 +164,7 @@ public class Game implements ITryMoveListener {
         JMenuItem typeShapeMetro = new JMenuItem("Metro");
         JMenuItem typeShapeSymbol = new JMenuItem("Symbol");
         JMenuItem typeShapeWikipedia = new JMenuItem("Wikipedia");
-        
+
         typeShape.add(typeShapeAlpha);
         typeShape.add(typeShapeCheq);
         typeShape.add(typeShapeChess24);
@@ -167,129 +172,103 @@ public class Game implements ITryMoveListener {
         typeShape.add(typeShapeMetro);
         typeShape.add(typeShapeSymbol);
         typeShape.add(typeShapeWikipedia);
-        
+
         addActionRestart(typeShapeAlpha, this.modeGame, ModeShape.ALPHA);
         addActionRestart(typeShapeCheq, this.modeGame, ModeShape.CHEQ);
         addActionRestart(typeShapeChess24, this.modeGame, ModeShape.CHESS24);
-        addActionRestart(typeShapeMerida,this.modeGame, ModeShape.MERIDA);
-        addActionRestart(typeShapeMetro, this.modeGame,ModeShape.METRO);
+        addActionRestart(typeShapeMerida, this.modeGame, ModeShape.MERIDA);
+        addActionRestart(typeShapeMetro, this.modeGame, ModeShape.METRO);
         addActionRestart(typeShapeSymbol, this.modeGame, ModeShape.SYMBOL);
-        addActionRestart(typeShapeWikipedia, this.modeGame,ModeShape.WIKIPEDIA);
+        addActionRestart(typeShapeWikipedia, this.modeGame, ModeShape.WIKIPEDIA);
 // </editor-fold>
 
 // <editor-fold defaultstate="collapsed" desc="Выбор игры">
-
-        JMenuItem typeClassic = new JMenuItem("Классические шахматы");      
+        JMenuItem typeClassic = new JMenuItem("Классические шахматы");
         JMenuItem typeFisher = new JMenuItem("Шахматы Фишера");
         JMenuItem typeKingHill = new JMenuItem("Царь горы");
-        
+
         typeClassic.setFont(font);
         typeFisher.setFont(font);
         typeKingHill.setFont(font);
-        
+
         typeGame.add(typeClassic);
         typeGame.add(typeFisher);
         typeGame.add(typeKingHill);
-        
+
         addActionRestart(typeClassic, ModeChess.CLASSIC, this.modeShape);
         addActionRestart(typeFisher, ModeChess.FISHER, this.modeShape);
         addActionRestart(typeKingHill, ModeChess.KING_HILL, this.modeShape);
-        
-        
-// </editor-fold>       
-  
-// <editor-fold defaultstate="collapsed" desc="Временной контроль">
-        
-// TODO: Сделать вызов окна настроек
-        timeGame.setFont(font);
-        settingsMenu.add(timeGame);
-        
-        ArrayList<JMenuItem> times = new ArrayList<>();
-        times.add(new JMenuItem("1+0"));
-        times.add(new JMenuItem("1+1"));
-        times.add(new JMenuItem("3+0"));
-        times.add(new JMenuItem("3+2"));
-        times.add(new JMenuItem("5+0"));
-        times.add(new JMenuItem("5+5"));
-        times.add(new JMenuItem("10+0"));
-        times.add(new JMenuItem("10+10"));
-        
-        /*
-        ArrayList<Settings> settings = new ArrayList<Settings>();
-        settings.add(new Settings(1,0,0, new JMenuItem("1+0")));
-        */
-        for(JMenuItem time: times)
-        {
-            time.setFont(font);
-            timeGame.add(time);
-            time.addActionListener(new ActionListener(){ // TODO: сохрнанить инфо в структуру
-                public void actionPerformed(ActionEvent e) {
-                System.exit(0); // set настройки            
-            }
-            });
-        }
- // </editor-fold>      
- 
-        exitItem.addActionListener(new ActionListener() {           
+
+// </editor-fold>   
+
+        timeSettings.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                System.exit(0);             
-            }           
+                openSettings();           
+            }
         });
-        
+
+        exitItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                System.exit(0);
+            }
+        });
+
         addActionRestart(newGame, this.modeGame, this.modeShape);
-             
+
         this.view.setJMenuBar(menuBar);
         this.view.pack();
         this.view.setLocationRelativeTo(null);
     }
     
-    private void addActionRestart(JMenuItem item, ModeChess modeChess, ModeShape modeShape)
+    private void openSettings()
     {
-        item.addActionListener(new ActionListener() {           
-            public void actionPerformed(ActionEvent e) {        
+        JFrameSettings settings = new JFrameSettings();
+        settings.setVisible(true);
+        
+    }
+
+    private void addActionRestart(JMenuItem item, ModeChess modeChess, ModeShape modeShape) {
+        item.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
                 System.err.append("CHOICE: " + modeChess.toString() + "\n");
                 try {
                     restartGame(modeChess, modeShape, timeStart, timeInc, nameWhite, nameBlack);
                 } catch (IOException ex) {
                     Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
                 }
-            }           
+            }
         });
     }
-    
-    private void loadView()
-    {
+
+    private void loadView() {
         view = new JFrame(); // Путь джедая!
         view.setTitle("Chess Fun");
         view.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Корректное завершение работы, при закрытии окна
         createGUI();
         view.setSize(1300, 768); // Размеры окна
-        try
-        {                           
+        try {
             chessBoard = new JPanelWithBackground("src/textures/chessboard_640.jpg"); // JPanel с перегруженным методом paintComponent()            
             chessBoard.setLayout(null);
             chessBoard.setSize(640 + Globals.delta_x, 640 + Globals.delta_y);// Размеры шахматной доски
-                 
-            for(int i=0;i<8;i++)
-                for(int j=0;j<8;j++)
-                {
+
+            for (int i = 0; i < 8; i++) {
+                for (int j = 0; j < 8; j++) {
                     chessBoard.add(board[i][j].getLabel());
-                    chessBoard.add(board[i][j].getLabelSelect());    
-                }            
-            
+                    chessBoard.add(board[i][j].getLabelSelect());
+                }
+            }
+
             chessBoard.add(timerBlack);
             chessBoard.add(timerWhite);
- 
+
             view.getContentPane().add(chessBoard); // добавление JPanel к JFrame
             view.setVisible(true); // Делаем видимым фрейм  
-        }
-        catch (IOException ex)
-        {
+        } catch (IOException ex) {
             System.err.print("Game.loadView() It is trap");
             Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     @Deprecated
     private static String format(int i) {
         String result = String.valueOf(i);
@@ -300,47 +279,67 @@ public class Game implements ITryMoveListener {
     }
 
     @Deprecated
-    public void info()
-    {
-        
+    public void info() {
+
         // rules.showBeatFieldsByThisShape(board, 1, 1);
     }
-    
-    
-    private ImageIcon getIcon(NameFigure figure, ColorFigure color)
-    {
-        
-        switch (figure.toString()+" " + color.toString())
-        {
-            case "PAWN WHITE": return icons[0];
-            case "KNIGHT WHITE": return icons[1];
-            case "BISHOP WHITE": return icons[2];
-            case "ROCK WHITE": return icons[3];
-            case "QUEEN WHITE": return icons[4];
-            case "KING WHITE": return icons[5];
-            case "PAWN BLACK": return icons[6];
-            case "KNIGHT BLACK": return icons[7];
-            case "BISHOP BLACK": return icons[8];
-            case "ROCK BLACK": return icons[9];
-            case "QUEEN BLACK": return icons[10];
-            case "KING BLACK": return icons[11];
-            default: return icons[12];
+
+    private ImageIcon getIcon(NameFigure figure, ColorFigure color) {
+
+        switch (figure.toString() + " " + color.toString()) {
+            case "PAWN WHITE":
+                return icons[0];
+            case "KNIGHT WHITE":
+                return icons[1];
+            case "BISHOP WHITE":
+                return icons[2];
+            case "ROCK WHITE":
+                return icons[3];
+            case "QUEEN WHITE":
+                return icons[4];
+            case "KING WHITE":
+                return icons[5];
+            case "PAWN BLACK":
+                return icons[6];
+            case "KNIGHT BLACK":
+                return icons[7];
+            case "BISHOP BLACK":
+                return icons[8];
+            case "ROCK BLACK":
+                return icons[9];
+            case "QUEEN BLACK":
+                return icons[10];
+            case "KING BLACK":
+                return icons[11];
+            default:
+                return icons[12];
         }
     }
-    
-    
-    private void loadTextures(ModeShape modeShape)
-    {
+
+    private void loadTextures(ModeShape modeShape) {
         String folder = "../textures/";
-        switch(modeShape)
-        {
-            case ALPHA: folder += "alpha/"; break;
-            case CHESS24: folder += "chess24/"; break;
-            case MERIDA: folder += "merida/"; break;
-            case SYMBOL: folder += "symbol/"; break;
-            case WIKIPEDIA: folder += "wikipedia/"; break;
-            case CHEQ: folder += "cheq/"; break;
-            case METRO: folder += "metro/"; break;
+        switch (modeShape) {
+            case ALPHA:
+                folder += "alpha/";
+                break;
+            case CHESS24:
+                folder += "chess24/";
+                break;
+            case MERIDA:
+                folder += "merida/";
+                break;
+            case SYMBOL:
+                folder += "symbol/";
+                break;
+            case WIKIPEDIA:
+                folder += "wikipedia/";
+                break;
+            case CHEQ:
+                folder += "cheq/";
+                break;
+            case METRO:
+                folder += "metro/";
+                break;
         }
         icons[0] = new ImageIcon(getClass().getResource(folder + "wP.png"));
         icons[1] = new ImageIcon(getClass().getResource(folder + "wN.png"));
@@ -357,26 +356,24 @@ public class Game implements ITryMoveListener {
         icons[12] = new ImageIcon(getClass().getResource("../textures/empty.png"));
         icons[13] = new ImageIcon(getClass().getResource("../textures/is.png"));
     }
-    
-    
+
     private void startClassic() // Классическая начальная расстановка фигур
-    {   
-        for(int i = 0; i < 8; i++)
-            for(int j = 2; j < 6; j++)
-            {
+    {
+        for (int i = 0; i < 8; i++) {
+            for (int j = 2; j < 6; j++) {
                 this.board[i][j].setFigure(NameFigure.EMPTY, ColorFigure.NONE); // пустые клетки в стартовой позиции
                 this.board[i][j].setIcon(icons[12]);
             }
-        
-        for(int i = 0; i < 8; i++)
-        { 
+        }
+
+        for (int i = 0; i < 8; i++) {
             this.board[i][1].setFigure(NameFigure.PAWN, ColorFigure.BLACK); // Выставляем белые пешки
             this.board[i][1].setIcon(icons[6]);
             this.board[i][6].setFigure(NameFigure.PAWN, ColorFigure.WHITE); // Выставляем черные пешки
             this.board[i][6].setIcon(icons[0]);
         }
-                /*Классическая расстановка 8-ого ряда черных фигур*/
-                
+        /*Классическая расстановка 8-ого ряда черных фигур*/
+
         this.board[0][0].setFigure(NameFigure.ROCK, ColorFigure.BLACK);
         this.board[1][0].setFigure(NameFigure.KNIGHT, ColorFigure.BLACK);
         this.board[2][0].setFigure(NameFigure.BISHOP, ColorFigure.BLACK);
@@ -385,17 +382,17 @@ public class Game implements ITryMoveListener {
         this.board[5][0].setFigure(NameFigure.BISHOP, ColorFigure.BLACK);
         this.board[6][0].setFigure(NameFigure.KNIGHT, ColorFigure.BLACK);
         this.board[7][0].setFigure(NameFigure.ROCK, ColorFigure.BLACK);
-            
-        this.board[0][0].setIcon(icons[9]);      
-        this.board[1][0].setIcon(icons[7]);     
-        this.board[2][0].setIcon(icons[8]); 
-        this.board[3][0].setIcon(icons[10]);      
-        this.board[4][0].setIcon(icons[11]);     
+
+        this.board[0][0].setIcon(icons[9]);
+        this.board[1][0].setIcon(icons[7]);
+        this.board[2][0].setIcon(icons[8]);
+        this.board[3][0].setIcon(icons[10]);
+        this.board[4][0].setIcon(icons[11]);
         this.board[5][0].setIcon(icons[8]);
-        this.board[6][0].setIcon(icons[7]);       
+        this.board[6][0].setIcon(icons[7]);
         this.board[7][0].setIcon(icons[9]);
-        
-            /*Классическая расстановка 1-ого ряда белых фигур*/
+
+        /*Классическая расстановка 1-ого ряда белых фигур*/
         this.board[0][7].setFigure(NameFigure.ROCK, ColorFigure.WHITE);
         this.board[1][7].setFigure(NameFigure.KNIGHT, ColorFigure.WHITE);
         this.board[2][7].setFigure(NameFigure.BISHOP, ColorFigure.WHITE);
@@ -404,7 +401,7 @@ public class Game implements ITryMoveListener {
         this.board[5][7].setFigure(NameFigure.BISHOP, ColorFigure.WHITE);
         this.board[6][7].setFigure(NameFigure.KNIGHT, ColorFigure.WHITE);
         this.board[7][7].setFigure(NameFigure.ROCK, ColorFigure.WHITE);
-        
+
         this.board[0][7].setIcon(icons[3]);
         this.board[1][7].setIcon(icons[1]);
         this.board[2][7].setIcon(icons[2]);
@@ -414,41 +411,38 @@ public class Game implements ITryMoveListener {
         this.board[6][7].setIcon(icons[1]);
         this.board[7][7].setIcon(icons[3]);
     }
-    
-    
-    private void startFisher()  // Расстановка 1-ого и 8-ого ряда случайным образом
-    {        
-        for(int i = 0; i < 8; i++)
-            for(int j = 2; j < 6; j++)
-            {
+
+    private void startFisher() // Расстановка 1-ого и 8-ого ряда случайным образом
+    {
+        for (int i = 0; i < 8; i++) {
+            for (int j = 2; j < 6; j++) {
                 this.board[i][j].setFigure(NameFigure.EMPTY, ColorFigure.NONE); // пустые клетки в стартовой позиции
                 this.board[i][j].setIcon(icons[12]);
             }
-        
-        for(int i = 0; i < 8; i++)
-        {
+        }
+
+        for (int i = 0; i < 8; i++) {
             this.board[i][1].setFigure(NameFigure.PAWN, ColorFigure.BLACK); // Выставляем белые пешки
             this.board[i][1].setIcon(icons[6]);
             this.board[i][6].setFigure(NameFigure.PAWN, ColorFigure.WHITE); // Выставляем черные пешки
             this.board[i][6].setIcon(icons[0]);
         }
-        
-        int[] arr = {4,3,1,6,7,5,2,0};
+
+        int[] arr = {4, 3, 1, 6, 7, 5, 2, 0};
         int index1;
         int index2;
         int tmp;
         Random r = new Random();
-        for(int i = 0; i < 50; i++)
-        {
-            index1 = Math.abs(r.nextInt()%8);
-            index2 = Math.abs(r.nextInt()%8);
-            
+        for (int i = 0; i < 50; i++) {
+            index1 = Math.abs(r.nextInt() % 8);
+            index2 = Math.abs(r.nextInt() % 8);
+
             tmp = arr[index1];
             arr[index1] = arr[index2];
             arr[index2] = tmp;
         }
-        
-            /*Случайная расстановка 8-ого ряда черных фигур*/
+
+        /*Случайная расстановка 8-ого ряда черных фигур*/
         this.board[arr[0]][0].setFigure(NameFigure.ROCK, ColorFigure.BLACK);
         this.board[arr[1]][0].setFigure(NameFigure.KNIGHT, ColorFigure.BLACK);
         this.board[arr[2]][0].setFigure(NameFigure.BISHOP, ColorFigure.BLACK);
@@ -457,17 +451,17 @@ public class Game implements ITryMoveListener {
         this.board[arr[5]][0].setFigure(NameFigure.BISHOP, ColorFigure.BLACK);
         this.board[arr[6]][0].setFigure(NameFigure.KNIGHT, ColorFigure.BLACK);
         this.board[arr[7]][0].setFigure(NameFigure.ROCK, ColorFigure.BLACK);
-            
-        this.board[arr[0]][0].setIcon(icons[9]);      
-        this.board[arr[1]][0].setIcon(icons[7]);     
-        this.board[arr[2]][0].setIcon(icons[8]); 
-        this.board[arr[3]][0].setIcon(icons[10]);      
-        this.board[arr[4]][0].setIcon(icons[11]);     
+
+        this.board[arr[0]][0].setIcon(icons[9]);
+        this.board[arr[1]][0].setIcon(icons[7]);
+        this.board[arr[2]][0].setIcon(icons[8]);
+        this.board[arr[3]][0].setIcon(icons[10]);
+        this.board[arr[4]][0].setIcon(icons[11]);
         this.board[arr[5]][0].setIcon(icons[8]);
-        this.board[arr[6]][0].setIcon(icons[7]);       
+        this.board[arr[6]][0].setIcon(icons[7]);
         this.board[arr[7]][0].setIcon(icons[9]);
-        
-            /*Случайная расстановка 1-ого ряда белых фигур*/
+
+        /*Случайная расстановка 1-ого ряда белых фигур*/
         this.board[arr[0]][7].setFigure(NameFigure.ROCK, ColorFigure.WHITE);
         this.board[arr[1]][7].setFigure(NameFigure.KNIGHT, ColorFigure.WHITE);
         this.board[arr[2]][7].setFigure(NameFigure.BISHOP, ColorFigure.WHITE);
@@ -476,7 +470,7 @@ public class Game implements ITryMoveListener {
         this.board[arr[5]][7].setFigure(NameFigure.BISHOP, ColorFigure.WHITE);
         this.board[arr[6]][7].setFigure(NameFigure.KNIGHT, ColorFigure.WHITE);
         this.board[arr[7]][7].setFigure(NameFigure.ROCK, ColorFigure.WHITE);
-        
+
         this.board[arr[0]][7].setIcon(icons[3]);
         this.board[arr[1]][7].setIcon(icons[1]);
         this.board[arr[2]][7].setIcon(icons[2]);
@@ -485,110 +479,118 @@ public class Game implements ITryMoveListener {
         this.board[arr[5]][7].setIcon(icons[2]);
         this.board[arr[6]][7].setIcon(icons[1]);
         this.board[arr[7]][7].setIcon(icons[3]);
-        
+
     }
-    
-    
+
     private void move(int x_from, int y_from, int x_to, int y_to)// Перемещение фигуры из from в to
     {
         /// Сделать сохранение позиции, обработка ошибочных действий (проверка на шах) -> загрузка позиции
         board[Globals.columnSelected][Globals.rowSelected].setLabelSelect(Globals.iconEmpty); // Снятие выделения  (красная каЁмка)в любом случае
-        if(!rules.checkMove(this.board, x_from, y_from, x_to, y_to)) // Если не прошли проверку на валидность хода
-           return;
-        
+        if (!rules.checkMove(this.board, x_from, y_from, x_to, y_to)) // Если не прошли проверку на валидность хода
+        {
+            return;
+        }
+
         TypeMove typeMove = swapFigure(x_from, y_from, x_to, y_to); // Получение типа хода + действия с логической моделью и view
-        
+
         Globals.clearBigStepPawnArray();
-        
-        switch(typeMove) // break; только в конце!
+
+        switch (typeMove) // break; только в конце!
         {
             case OO:
                 history.addNote("0-0");
-                if(Globals.stepQueue == ColorFigure.WHITE)
+                if (Globals.stepQueue == ColorFigure.WHITE) {
                     Globals.allowCastleWhite = false;
-                else
+                } else {
                     Globals.allowCastleBlack = false;
+                }
                 break;
             case OOO:
                 history.addNote("0-0-0");
-                if(Globals.stepQueue == ColorFigure.WHITE)
+                if (Globals.stepQueue == ColorFigure.WHITE) {
                     Globals.allowCastleWhite = false;
-                else
+                } else {
                     Globals.allowCastleBlack = false;
+                }
                 break;
             case BIG_STEP_PAWN:
-                if(Globals.stepQueue == ColorFigure.WHITE)
+                if (Globals.stepQueue == ColorFigure.WHITE) {
                     Globals.bigStepPawn[0][x_to] = true;
-                else
+                } else {
                     Globals.bigStepPawn[1][x_to] = true;
-   
-            default: history.addNote(board[x_from][y_from].getName(), board[x_to][y_to].getName()); break;
+                }
+
+            default:
+                history.addNote(board[x_from][y_from].getName(), board[x_to][y_to].getName());
+                break;
         }
-        
-        if( Globals.stepQueue == ColorFigure.WHITE)
-        {
+
+        if (Globals.stepQueue == ColorFigure.WHITE) {
             Globals.stepQueue = ColorFigure.BLACK;
             Globals.timeWhite += this.timeInc;
-        }
-        else
-        {
+        } else {
             Globals.stepQueue = ColorFigure.WHITE;
             Globals.timeBlack += this.timeInc;
         }
         //Globals.stepQueue = Globals.stepQueue == ColorFigure.WHITE ? ColorFigure.BLACK : ColorFigure.WHITE; // Передача хода   
-        
+
         Globals.startgame = true;
     }
-    
+
     private void move(String from, String to)// Перемещение фигуры из from в to, согласно нотации
     {
-        int x_from = 7  + from.charAt(0) - 'h';
+        int x_from = 7 + from.charAt(0) - 'h';
         int y_from = '8' - from.charAt(1);
-        int x_to = 7  + to.charAt(0) - 'h';
+        int x_to = 7 + to.charAt(0) - 'h';
         int y_to = '8' - to.charAt(1);
         move(x_from, y_from, x_to, y_to);
     }
-    
-    
-    private TypeMove swapFigure(int x_from, int y_from, int x_to, int y_to)
-    {
+
+    private TypeMove swapFigure(int x_from, int y_from, int x_to, int y_to) {
         TypeMove res = TypeMove.DEFAULT;
-        switch(board[x_from][y_from].getNameFigure()) // передвижение фигуры
+        switch (board[x_from][y_from].getNameFigure()) // передвижение фигуры
         {
             case "PAWN WHITE":
-                if(rules.isTakeOnPass(x_from, y_from, x_to, y_to))
-                {
+                if (rules.isTakeOnPass(x_from, y_from, x_to, y_to)) {
                     board[x_to][y_to + 1].setIcon(Globals.iconEmpty);
                     board[x_to][y_to + 1].setFigure(NameFigure.EMPTY, ColorFigure.NONE);
                     res = TypeMove.TAKE_ON_PASS;
                 }
                 board[x_to][y_to].setIcon(icons[0]);
                 board[x_to][y_to].setFigure(NameFigure.PAWN, ColorFigure.WHITE);
-            if(y_to == y_from - 2)
-            {
-                Globals.bigStepPawn[0][x_to] = true;
-                 res = TypeMove.BIG_STEP_PAWN;
-            }                
-            break;
-            case "KNIGHT WHITE": board[x_to][y_to].setIcon(icons[1]);    board[x_to][y_to].setFigure(NameFigure.KNIGHT, ColorFigure.WHITE); break;
-            case "BISHOP WHITE": board[x_to][y_to].setIcon(icons[2]);    board[x_to][y_to].setFigure(NameFigure.BISHOP, ColorFigure.WHITE); break;
-            case "ROCK WHITE":   board[x_to][y_to].setIcon(icons[3]);    board[x_to][y_to].setFigure(NameFigure.ROCK, ColorFigure.WHITE); break;
-            case "QUEEN WHITE":  board[x_to][y_to].setIcon(icons[4]);    board[x_to][y_to].setFigure(NameFigure.QUEEN, ColorFigure.WHITE); break;
+                if (y_to == y_from - 2) {
+                    Globals.bigStepPawn[0][x_to] = true;
+                    res = TypeMove.BIG_STEP_PAWN;
+                }
+                break;
+            case "KNIGHT WHITE":
+                board[x_to][y_to].setIcon(icons[1]);
+                board[x_to][y_to].setFigure(NameFigure.KNIGHT, ColorFigure.WHITE);
+                break;
+            case "BISHOP WHITE":
+                board[x_to][y_to].setIcon(icons[2]);
+                board[x_to][y_to].setFigure(NameFigure.BISHOP, ColorFigure.WHITE);
+                break;
+            case "ROCK WHITE":
+                board[x_to][y_to].setIcon(icons[3]);
+                board[x_to][y_to].setFigure(NameFigure.ROCK, ColorFigure.WHITE);
+                break;
+            case "QUEEN WHITE":
+                board[x_to][y_to].setIcon(icons[4]);
+                board[x_to][y_to].setFigure(NameFigure.QUEEN, ColorFigure.WHITE);
+                break;
             case "KING WHITE":
-                if(rules.isCastle(x_from, y_from, x_to, y_to))
-                {
-                    if(x_to == 6)
-                    {
-                        board[x_to-1][y_to].setIcon(icons[3]);
-                        board[x_to-1][y_to].setFigure(NameFigure.ROCK, ColorFigure.WHITE);
+                if (rules.isCastle(x_from, y_from, x_to, y_to)) {
+                    if (x_to == 6) {
+                        board[x_to - 1][y_to].setIcon(icons[3]);
+                        board[x_to - 1][y_to].setFigure(NameFigure.ROCK, ColorFigure.WHITE);
                         board[7][y_to].setIcon(Globals.iconEmpty);
                         board[7][y_to].setFigure(NameFigure.EMPTY, ColorFigure.NONE);
                         res = TypeMove.OO;
-                    }
-                    else // x_to == 2
+                    } else // x_to == 2
                     {
-                        board[x_to+1][y_to].setIcon(icons[3]);
-                        board[x_to+1][y_to].setFigure(NameFigure.ROCK, ColorFigure.WHITE);
+                        board[x_to + 1][y_to].setIcon(icons[3]);
+                        board[x_to + 1][y_to].setFigure(NameFigure.ROCK, ColorFigure.WHITE);
                         board[0][y_to].setIcon(Globals.iconEmpty);
                         board[0][y_to].setFigure(NameFigure.EMPTY, ColorFigure.NONE);
                         res = TypeMove.OOO;
@@ -598,74 +600,81 @@ public class Game implements ITryMoveListener {
                 board[x_to][y_to].setFigure(NameFigure.KING, ColorFigure.WHITE);
                 break;
             case "PAWN BLACK":
-                if(rules.isTakeOnPass(x_from, y_from, x_to, y_to))
-                {
+                if (rules.isTakeOnPass(x_from, y_from, x_to, y_to)) {
                     board[x_to][y_to - 1].setIcon(Globals.iconEmpty);
                     board[x_to][y_to - 1].setFigure(NameFigure.EMPTY, ColorFigure.NONE);
                     res = TypeMove.TAKE_ON_PASS;
                 }
                 board[x_to][y_to].setIcon(icons[6]);
                 board[x_to][y_to].setFigure(NameFigure.PAWN, ColorFigure.BLACK);
-            if(y_to == y_from + 2){
-                Globals.bigStepPawn[1][x_to] = true;
-                res = TypeMove.BIG_STEP_PAWN;
-            } break;
-            case "KNIGHT BLACK": board[x_to][y_to].setIcon(icons[7]);    board[x_to][y_to].setFigure(NameFigure.KNIGHT, ColorFigure.BLACK); break;
-            case "BISHOP BLACK": board[x_to][y_to].setIcon(icons[8]);    board[x_to][y_to].setFigure(NameFigure.BISHOP, ColorFigure.BLACK); break;
-            case "ROCK BLACK":   board[x_to][y_to].setIcon(icons[9]);    board[x_to][y_to].setFigure(NameFigure.ROCK, ColorFigure.BLACK); break;
-            case "QUEEN BLACK":  board[x_to][y_to].setIcon(icons[10]);   board[x_to][y_to].setFigure(NameFigure.QUEEN, ColorFigure.BLACK); break;
+                if (y_to == y_from + 2) {
+                    Globals.bigStepPawn[1][x_to] = true;
+                    res = TypeMove.BIG_STEP_PAWN;
+                }
+                break;
+            case "KNIGHT BLACK":
+                board[x_to][y_to].setIcon(icons[7]);
+                board[x_to][y_to].setFigure(NameFigure.KNIGHT, ColorFigure.BLACK);
+                break;
+            case "BISHOP BLACK":
+                board[x_to][y_to].setIcon(icons[8]);
+                board[x_to][y_to].setFigure(NameFigure.BISHOP, ColorFigure.BLACK);
+                break;
+            case "ROCK BLACK":
+                board[x_to][y_to].setIcon(icons[9]);
+                board[x_to][y_to].setFigure(NameFigure.ROCK, ColorFigure.BLACK);
+                break;
+            case "QUEEN BLACK":
+                board[x_to][y_to].setIcon(icons[10]);
+                board[x_to][y_to].setFigure(NameFigure.QUEEN, ColorFigure.BLACK);
+                break;
             case "KING BLACK":
-                if(rules.isCastle(x_from, y_from, x_to, y_to))
-                {
-                    if(x_to == 6)
-                    {
-                        board[x_to-1][y_to].setIcon(icons[9]);
-                        board[x_to-1][y_to].setFigure(NameFigure.ROCK, ColorFigure.BLACK);
+                if (rules.isCastle(x_from, y_from, x_to, y_to)) {
+                    if (x_to == 6) {
+                        board[x_to - 1][y_to].setIcon(icons[9]);
+                        board[x_to - 1][y_to].setFigure(NameFigure.ROCK, ColorFigure.BLACK);
                         board[7][y_to].setIcon(Globals.iconEmpty);
                         board[7][y_to].setFigure(NameFigure.EMPTY, ColorFigure.NONE);
                         res = TypeMove.OO;
-                    }
-                    else // x_to == 2
+                    } else // x_to == 2
                     {
-                        board[x_to+1][y_to].setIcon(icons[9]);
-                        board[x_to+1][y_to].setFigure(NameFigure.ROCK, ColorFigure.BLACK);
+                        board[x_to + 1][y_to].setIcon(icons[9]);
+                        board[x_to + 1][y_to].setFigure(NameFigure.ROCK, ColorFigure.BLACK);
                         board[0][y_to].setIcon(Globals.iconEmpty);
                         board[0][y_to].setFigure(NameFigure.EMPTY, ColorFigure.NONE);
                         res = TypeMove.OOO;
                     }
                 }
-                
+
                 board[x_to][y_to].setIcon(icons[11]);
                 board[x_to][y_to].setFigure(NameFigure.KING, ColorFigure.BLACK);
                 break;
         }
-        
+
         board[x_from][y_from].setIcon(Globals.iconEmpty); // задаем пустой отображение (откуда был сделан ход)
         board[x_from][y_from].setFigure(NameFigure.EMPTY, ColorFigure.NONE); // установка "пустой фигуры"
-        
+
         return res;
     }
-    
-    
+
     @Override
     public void tryMove(TryMoveEvent e) {
         move(e.getFrom(), e.getTo());
     }
-    
-    
+
     @Deprecated
     public void printCurrentInfoBoard() // Вывод состояния шахматной доски в консоль
     {
         System.out.println("-----------------------");
-        for(int i = 0; i < 8; i++)
-            for(int j = 0; j < 8; j++)
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
                 System.out.println(this.board[j][i].getName() + ": " + this.board[j][i].getNameFigure());
+            }
+        }
         System.out.println("-----------------------");
     }
-    
-    
-    private void GetSettings()
-    {
+
+    private void GetSettings() {
         settings = new JFrame(); // Путь джедая!
         settings.setTitle("Настройки");
         settings.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Корректное завершение работы, при закрытии окна
@@ -673,37 +682,40 @@ public class Game implements ITryMoveListener {
         settings.setVisible(true); // Делаем видимым наш фрейм  
     }
 
-    
-    private void restartGame(ModeChess modeChoice, ModeShape modeShape, int startTime, int incTime, String nameWhite, String nameBlack) throws IOException
-    {
+    private void restartGame(ModeChess modeChoice, ModeShape modeShape, int startTime, int incTime, String nameWhite, String nameBlack) throws IOException {
         this.timeInc = incTime;
         this.timeStart = startTime;
         this.nameWhite = nameWhite;
         this.nameBlack = nameBlack;
-        
+
         this.modeGame = modeChoice;
         this.modeShape = modeShape;
-        
+
         loadTextures(this.modeShape);
-        
-        
-        switch (this.modeGame)
-        {
-            case CLASSIC:   startClassic(); this.rules = new ClassicRules(); break;
-            case FISHER:    startFisher();  this.rules = new ClassicRules(); break;
-            case KING_HILL: startClassic(); this.rules = new ClassicRules(); break;
+
+        switch (this.modeGame) {
+            case CLASSIC:
+                startClassic();
+                this.rules = new ClassicRules();
+                break;
+            case FISHER:
+                startFisher();
+                this.rules = new ClassicRules();
+                break;
+            case KING_HILL:
+                startClassic();
+                this.rules = new ClassicRules();
+                break;
         }
-        
-        
+
         this.history = new History(board);
-        
+
         MyTimer.nameWhite = nameWhite;
         MyTimer.nameBlack = nameBlack;
-        
+
         this.timerWhite = new MyTimer(timeStart, ColorFigure.BLACK, Globals.delta_x + 660, Globals.delta_y); // установка временного контроля
         this.timerBlack = new MyTimer(timeStart, ColorFigure.WHITE, Globals.delta_x + 660, Globals.delta_y + 560);
-        
-        
+
         setGlobals();
 
         printCurrentInfoBoard();
