@@ -108,7 +108,8 @@ public class Game implements ITryMoveListener {
         Globals.allowCastleBlack = true;
         
         Globals.timeWhite = this.timeStart;
-        Globals.timeBlack = this.timeStart;
+        Globals.timeBlack = this.timeStart;  
+        Globals.timeStart = this.timeStart;
     }
     
     public void createGUI() {         
@@ -699,8 +700,8 @@ public class Game implements ITryMoveListener {
         MyTimer.nameWhite = nameWhite;
         MyTimer.nameBlack = nameBlack;
         
-        // timerWhite.repaint();
-        // timerBlack.repaint();
+        this.timerWhite = new MyTimer(timeStart, ColorFigure.BLACK, Globals.delta_x + 660, Globals.delta_y); // установка временного контроля
+        this.timerBlack = new MyTimer(timeStart, ColorFigure.WHITE, Globals.delta_x + 660, Globals.delta_y + 560);
         
         
         setGlobals();

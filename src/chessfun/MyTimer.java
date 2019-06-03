@@ -45,19 +45,24 @@ public class MyTimer extends JPanel {
     this.setOpaque(true); // Делаем прозрачным
     this.setBounds(x_delta, y_delta, 150, 80);
     new Timer(100, (ActionEvent e) -> {
-        if(Globals.stepQueue == colorTimer && Globals.startgame)
+        if(Globals.stepQueue == colorTimer)
         {
-            if(colorTimer == ColorFigure.WHITE)
+            if(Globals.startgame)
             {
-               
-                label.setText("<html><font size=\"7\">" + String.valueOf(formate(Globals.timeWhite--)) + "</font><br /><font size=\"4\">" + nameWhite +"</font></html>");
+                if(colorTimer == ColorFigure.WHITE)
+                    label.setText("<html><font size=\"7\">" + String.valueOf(formate(Globals.timeWhite--)) + "</font><br /><font size=\"4\">" + nameWhite +"</font></html>");
+                else
+                    label.setText("<html><font size=\"7\">" + String.valueOf(formate(Globals.timeBlack--)) + "</font><br /><font size=\"4\">" + nameBlack +"</font></html>");
             }
             else
             {
-                label.setText("<html><font size=\"7\">" + String.valueOf(formate(Globals.timeBlack--)) + "</font><br /><font size=\"4\">" + nameBlack +"</font></html>");
+                if(colorTimer == ColorFigure.WHITE)
+                    label.setText("<html><font size=\"7\">" + String.valueOf(formate(Globals.timeStart)) + "</font><br /><font size=\"4\">" + nameWhite +"</font></html>");
+                else
+                    label.setText("<html><font size=\"7\">" + String.valueOf(formate(Globals.timeStart)) + "</font><br /><font size=\"4\">" + nameBlack +"</font></html>");
             }
+            
         }
-        
       }).start();
   }
   

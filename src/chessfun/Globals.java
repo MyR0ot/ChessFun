@@ -27,6 +27,7 @@ public class Globals {
     public static boolean castleAllowWhite;  // Разрешена рокировка белым?
     public static boolean castleAllowBlack;  // Разрешена рокировка белым?
     public static boolean startgame;         // Идет игра?
+    public static int timeStart;             // Начальные показания часов
     
     public static int timeWhite;
     public static int timeBlack;
