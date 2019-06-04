@@ -43,7 +43,6 @@ public class JFrameSettings extends javax.swing.JFrame {
         this.jTextField8.setText("0");
         
         this.jRadioButton1.setSelected(true);
-        
     }
     
     private void saveMeans()
@@ -471,10 +470,8 @@ public class JFrameSettings extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new JFrameSettings(parentGame).setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new JFrameSettings(parentGame).setVisible(true);
         });
     }
 

@@ -146,8 +146,10 @@ public class Game implements ITryMoveListener {
         Globals.timeStart = timeStart;
     }
 
-    // Кнопочки сверху
-    private void createGUI() {
+    
+    
+    private void createGUI()  // Кнопочки сверху
+    {
         Font font = new Font("Verdana", Font.PLAIN, 11);
 
         JMenuBar menuBar = new JMenuBar(); // главное меню
@@ -156,10 +158,13 @@ public class Game implements ITryMoveListener {
         JMenu analysisMenu = new JMenu("Анализ");
         JMenu settingsMenu = new JMenu("Настройки");
 
+        
         JMenuItem newGame = new JMenuItem("Новая игра");
         JMenuItem exitItem = new JMenuItem("Выход");
+        JMenuItem settings = new JMenuItem("Выбор игры");
         JMenu typeShape = new JMenu("Стиль фигур");
-
+        
+        settings.setFont(font);
         playMenu.setFont(font);
         analysisMenu.setFont(font);
         settingsMenu.setFont(font);
@@ -176,8 +181,7 @@ public class Game implements ITryMoveListener {
         menuBar.add(analysisMenu);
         menuBar.add(settingsMenu);
 
-        JMenuItem settings = new JMenuItem("Выбор игры");
-        settings.setFont(font);
+        
 
         settingsMenu.add(settings);
 
@@ -230,6 +234,7 @@ public class Game implements ITryMoveListener {
         jSettings.setVisible(true); 
     }
 
+    
     private void addActionRestart(JMenuItem item, ModeChess modeChess) {
         item.addActionListener((ActionEvent e) -> {
             try {
@@ -239,6 +244,7 @@ public class Game implements ITryMoveListener {
             }
         });
     }
+    
     
     private void addActionReShape(JMenuItem item, ModeShape modeFigure) {
         item.addActionListener((ActionEvent e) -> {
@@ -259,6 +265,7 @@ public class Game implements ITryMoveListener {
                 board[i][j].setIcon(getImageByField(board[i][j]));
     }
 
+    
     private void loadView() {
         view = new JFrame(); // Путь джедая!
         view.setTitle("Chess Fun");
@@ -291,21 +298,7 @@ public class Game implements ITryMoveListener {
         }
     }
 
-    @Deprecated
-    private static String format(int i) {
-        String result = String.valueOf(i);
-        if (result.length() == 1) {
-            result = "0" + result;
-        }
-        return result;
-    }
-
-    @Deprecated
-    public void info() {
-
-        // rules.showBeatFieldsByThisShape(board, 1, 1);
-    }
-
+    
     private ImageIcon getIcon(NameFigure figure, ColorFigure color) {
 
         switch (figure.toString() + " " + color.toString()) {
@@ -338,6 +331,7 @@ public class Game implements ITryMoveListener {
         }
     }
 
+    
     private void loadTextures(ModeShape modeShape) {
         String folder = "../textures/";
         switch (modeShape) {
@@ -381,7 +375,7 @@ public class Game implements ITryMoveListener {
         this.modeShape = modeShape;
     }
 
-    // hey ----------------------------------------------------------------
+    
     private void startClassic() // Классическая начальная расстановка фигур
     {
         for (int i = 0; i < 8; i++) {
@@ -401,6 +395,7 @@ public class Game implements ITryMoveListener {
         this.board[2][0].setFigure(NameFigure.BISHOP, ColorFigure.BLACK);
         this.board[3][0].setFigure(NameFigure.QUEEN, ColorFigure.BLACK);
         this.board[4][0].setFigure(NameFigure.KING, ColorFigure.BLACK);
+        Globals.fieldWhiteKing = Cell.generateNameField(4, 0);
         this.board[5][0].setFigure(NameFigure.BISHOP, ColorFigure.BLACK);
         this.board[6][0].setFigure(NameFigure.KNIGHT, ColorFigure.BLACK);
         this.board[7][0].setFigure(NameFigure.ROCK, ColorFigure.BLACK);
@@ -411,6 +406,7 @@ public class Game implements ITryMoveListener {
         this.board[2][7].setFigure(NameFigure.BISHOP, ColorFigure.WHITE);
         this.board[3][7].setFigure(NameFigure.QUEEN, ColorFigure.WHITE);
         this.board[4][7].setFigure(NameFigure.KING, ColorFigure.WHITE);
+        Globals.fieldWhiteKing = Cell.generateNameField(4, 7);
         this.board[5][7].setFigure(NameFigure.BISHOP, ColorFigure.WHITE);
         this.board[6][7].setFigure(NameFigure.KNIGHT, ColorFigure.WHITE);
         this.board[7][7].setFigure(NameFigure.ROCK, ColorFigure.WHITE);
@@ -419,27 +415,6 @@ public class Game implements ITryMoveListener {
     }
     
     
-    private ImageIcon getImageByField(Cell cell)
-    {
-        switch(cell.getNameFigure())
-        {
-            case ("PAWN WHITE"): return icons[0];
-            case ("KNIGHT WHITE"): return icons[1];
-            case ("BISHOP WHITE"): return icons[2];
-            case ("ROCK WHITE"): return icons[3];
-            case ("QUEEN WHITE"): return icons[4];
-            case ("KING WHITE"): return icons[5];
-            case ("PAWN BLACK"): return icons[6];
-            case ("KNIGHT BLACK"): return icons[7];
-            case ("BISHOP BLACK"): return icons[8];
-            case ("ROCK BLACK"): return icons[9];
-            case ("QUEEN BLACK"): return icons[10];
-            case ("KING BLACK"): return icons[11];
-            default: return icons[12]; // пустая клетка   
-        }
-    }
-    
-
     private void startFisher() // Расстановка 1-ого и 8-ого ряда случайным образом
     {
         for (int i = 0; i < 8; i++) {
@@ -473,6 +448,7 @@ public class Game implements ITryMoveListener {
         this.board[arr[2]][0].setFigure(NameFigure.BISHOP, ColorFigure.BLACK);
         this.board[arr[3]][0].setFigure(NameFigure.QUEEN, ColorFigure.BLACK);
         this.board[arr[4]][0].setFigure(NameFigure.KING, ColorFigure.BLACK);
+        Globals.fieldWhiteKing = Cell.generateNameField(arr[4], 0);
         this.board[arr[5]][0].setFigure(NameFigure.BISHOP, ColorFigure.BLACK);
         this.board[arr[6]][0].setFigure(NameFigure.KNIGHT, ColorFigure.BLACK);
         this.board[arr[7]][0].setFigure(NameFigure.ROCK, ColorFigure.BLACK);
@@ -483,6 +459,7 @@ public class Game implements ITryMoveListener {
         this.board[arr[2]][7].setFigure(NameFigure.BISHOP, ColorFigure.WHITE);
         this.board[arr[3]][7].setFigure(NameFigure.QUEEN, ColorFigure.WHITE);
         this.board[arr[4]][7].setFigure(NameFigure.KING, ColorFigure.WHITE);
+        Globals.fieldWhiteKing = Cell.generateNameField(arr[4], 7);
         this.board[arr[5]][7].setFigure(NameFigure.BISHOP, ColorFigure.WHITE);
         this.board[arr[6]][7].setFigure(NameFigure.KNIGHT, ColorFigure.WHITE);
         this.board[arr[7]][7].setFigure(NameFigure.ROCK, ColorFigure.WHITE);
@@ -490,20 +467,52 @@ public class Game implements ITryMoveListener {
         reDraw();
 
     }
+    
+    
+    private ImageIcon getImageByField(Cell cell)
+    {
+        switch(cell.getNameFigure())
+        {
+            case ("PAWN WHITE"): return icons[0];
+            case ("KNIGHT WHITE"): return icons[1];
+            case ("BISHOP WHITE"): return icons[2];
+            case ("ROCK WHITE"): return icons[3];
+            case ("QUEEN WHITE"): return icons[4];
+            case ("KING WHITE"): return icons[5];
+            case ("PAWN BLACK"): return icons[6];
+            case ("KNIGHT BLACK"): return icons[7];
+            case ("BISHOP BLACK"): return icons[8];
+            case ("ROCK BLACK"): return icons[9];
+            case ("QUEEN BLACK"): return icons[10];
+            case ("KING BLACK"): return icons[11];
+            default: return icons[12]; // пустая клетка   
+        }
+    }
 
+    private void move(String from, String to)// Перемещение фигуры из from в to, согласно нотации
+    {
+        int x_from = 7 + from.charAt(0) - 'h';
+        int y_from = '8' - from.charAt(1);
+        int x_to = 7 + to.charAt(0) - 'h';
+        int y_to = '8' - to.charAt(1);
+        move(x_from, y_from, x_to, y_to);
+    }
+    
+    
+    
     private void move(int x_from, int y_from, int x_to, int y_to)// Перемещение фигуры из from в to
     {
         /// Сделать сохранение позиции, обработка ошибочных действий (проверка на шах) -> загрузка позиции
         board[Globals.columnSelected][Globals.rowSelected].setLabelSelect(Globals.iconEmpty); // Снятие выделения  (красная каЁмка)в любом случае
-        if (!rules.checkMove(this.board, x_from, y_from, x_to, y_to)) // Если не прошли проверку на валидность хода
-        {
-            return;
-        }
+        if (!rules.checkMove(this.board, x_from, y_from, x_to, y_to)) return;// Если не прошли проверку на валидность хода
+
 
         TypeMove typeMove = swapFigure(x_from, y_from, x_to, y_to); // Получение типа хода + действия с логической моделью и view
 
+        
         Globals.clearBigStepPawnArray();
 
+        
         switch (typeMove) // break; только в конце!
         {
             case OO:
@@ -541,20 +550,12 @@ public class Game implements ITryMoveListener {
             Globals.stepQueue = ColorFigure.WHITE;
             Globals.timeBlack += this.timeInc;
         }
-        //Globals.stepQueue = Globals.stepQueue == ColorFigure.WHITE ? ColorFigure.BLACK : ColorFigure.WHITE; // Передача хода   
-
+        
         Globals.startgame = true;
     }
 
-    private void move(String from, String to)// Перемещение фигуры из from в to, согласно нотации
-    {
-        int x_from = 7 + from.charAt(0) - 'h';
-        int y_from = '8' - from.charAt(1);
-        int x_to = 7 + to.charAt(0) - 'h';
-        int y_to = '8' - to.charAt(1);
-        move(x_from, y_from, x_to, y_to);
-    }
-
+    
+    
     private TypeMove swapFigure(int x_from, int y_from, int x_to, int y_to) {
         TypeMove res = TypeMove.DEFAULT;
         switch (board[x_from][y_from].getNameFigure()) // передвижение фигуры
@@ -607,6 +608,7 @@ public class Game implements ITryMoveListener {
                 }
                 board[x_to][y_to].setIcon(icons[5]);
                 board[x_to][y_to].setFigure(NameFigure.KING, ColorFigure.WHITE);
+                Globals.fieldWhiteKing = Cell.generateNameField(x_to, y_to);
                 break;
             case "PAWN BLACK":
                 if (rules.isTakeOnPass(x_from, y_from, x_to, y_to)) {
@@ -657,6 +659,7 @@ public class Game implements ITryMoveListener {
 
                 board[x_to][y_to].setIcon(icons[11]);
                 board[x_to][y_to].setFigure(NameFigure.KING, ColorFigure.BLACK);
+                Globals.fieldBlackKing = Cell.generateNameField(x_to, y_to);
                 break;
         }
 
@@ -666,23 +669,13 @@ public class Game implements ITryMoveListener {
         return res;
     }
 
+    
     @Override
     public void tryMove(TryMoveEvent e) {
         move(e.getFrom(), e.getTo());
     }
 
-    @Deprecated
-    public void printCurrentInfoBoard() // Вывод состояния шахматной доски в консоль
-    {
-        System.out.println("-----------------------");
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                System.out.println(this.board[j][i].getName() + ": " + this.board[j][i].getNameFigure());
-            }
-        }
-        System.out.println("-----------------------");
-    }
-
+    
     private void GetSettings() {
         settings = new JFrame(); // Путь джедая!
         settings.setTitle("Настройки");
@@ -691,6 +684,7 @@ public class Game implements ITryMoveListener {
         settings.setVisible(true); // Делаем видимым наш фрейм  
     }
 
+    
     protected void restartGame(ModeChess modeChoice, ModeShape modeShape, int startTime, int incTime, String nameWhite, String nameBlack) throws IOException {
         
         this.timeInc = incTime;
@@ -733,5 +727,36 @@ public class Game implements ITryMoveListener {
         
 
         //printCurrentInfoBoard();
+    }
+    
+    
+    @Deprecated
+    public void printCurrentInfoBoard() // Вывод состояния шахматной доски в консоль
+    {
+        System.out.println("-----------------------");
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                System.out.println(this.board[j][i].getName() + ": " + this.board[j][i].getNameFigure());
+            }
+        }
+        System.out.println("-----------------------");
+    }
+    
+    
+    @Deprecated
+    private static String format(int i) {
+        String result = String.valueOf(i);
+        if (result.length() == 1) {
+            result = "0" + result;
+        }
+        return result;
+    }
+    
+    
+    @Deprecated
+    public void info() {
+        for(int i = 0; i < 8; i++)
+            for(int j = 0; j < 8;j++)
+                System.out.println(this.board[i][j].getNameFigure());     
     }
 }

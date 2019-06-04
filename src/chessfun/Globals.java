@@ -36,6 +36,9 @@ public class Globals {
     public static int delta_x = 50; // Координаты позиционирования доски относительно фрейма
     public static int delta_y = 20; // Координаты позиционирования доски относительно фрейма
     
+    public static String fieldWhiteKing; // Поле белого короля
+    public static String fieldBlackKing; // Поля черного короля
+    
     public static void clearBigStepPawnArray() // очистка массива 
     {
         for(int i=0;i<8;i++)

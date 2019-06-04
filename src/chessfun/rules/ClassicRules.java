@@ -21,9 +21,9 @@ public class ClassicRules implements IRules {
     @Override
     public boolean checkMove(Cell[][] board, int x_from, int y_from, int x_to, int y_to)
     {
-        if(isSameField(x_from, y_from, x_to, y_to) || isSameColor(board, x_from, y_from,  x_to, y_to))
+        if(isSameField(x_from, y_from, x_to, y_to) || isSameColor(board, x_from, y_from,  x_to, y_to) /*|| !isKingSafety(board, x_from, y_from,  x_to, y_to)*/)
             return false;
-        
+       
         switch (board[x_from][y_from].getNameFigure().split(" ")[0])
         {
             case "PAWN":    return checkPawn(board, x_from, y_from, x_to, y_to);
@@ -111,7 +111,6 @@ public class ClassicRules implements IRules {
                 return false;
         
         
-
         if(isCastle(x_from, y_from, x_to, y_to))
             return checkCastle(board, x_from, y_from, x_to, y_to, beatsField);
         
@@ -119,10 +118,6 @@ public class ClassicRules implements IRules {
                 Math.abs(x_to - x_from) !=0 || Math.abs(y_to - y_from) != 0);
     }
     
-    public static boolean isBeatField(Cell[][] board, int x, int y)
-    {
-        return false;
-    }
     
     public static boolean checkCastle(Cell[][] board, int x_from, int y_from, int x_to, int y_to, Set<String> beatFields)
     {
@@ -140,4 +135,5 @@ public class ClassicRules implements IRules {
             return Globals.allowCastleWhite && !beatFields.contains(Cell.generateNameField((x_from + x_to) / 2, y_to));            
         return Globals.allowCastleBlack && !beatFields.contains(Cell.generateNameField((x_from + x_to) / 2, y_to));  
     }
+    
 }

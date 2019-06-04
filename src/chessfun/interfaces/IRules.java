@@ -426,6 +426,19 @@ public interface IRules {
         return false;
     }
     
+    
+    default boolean isKingSafety(Cell[][] board, int x_from, int y_from, int x_to, int y_to)
+    {
+        ColorFigure colorKing = board[x_from][y_from].getColor();
+        
+        if(colorKing == ColorFigure.WHITE && getBeatFieldsByBlack(board).contains(Cell.generateNameField(x_to, y_to))) return false;
+        
+        if(colorKing == ColorFigure.BLACK && getBeatFieldsByWhite(board).contains(Cell.generateNameField(x_to, y_to))) return false;
+        
+        return true;
+    }
+    
+    
     @Deprecated
     default void showBeatFieldsByThisShape(Cell board[][], int x, int y)
     {
