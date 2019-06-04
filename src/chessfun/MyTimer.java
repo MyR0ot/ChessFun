@@ -23,6 +23,7 @@ public class MyTimer extends JPanel {
     public static  String nameWhite;
     public static  String nameBlack;
     
+    private Timer timer;
     
 
   public MyTimer(int startTime, ColorFigure colorTimer, int x_delta, int y_delta) {
@@ -48,7 +49,7 @@ public class MyTimer extends JPanel {
     this.setOpaque(true); // Делаем прозрачным
     this.setBounds(x_delta, y_delta, 150, 80);
     
-    new Timer(100, (ActionEvent e) -> {
+    this.timer = new Timer(100, (ActionEvent e) -> {
         if(Globals.stepQueue == colorTimer)
         {
             if(Globals.startgame)
@@ -67,9 +68,11 @@ public class MyTimer extends JPanel {
             }
             
         }
-      }).start();
+      });
+    
+    
+    timer.start();
   }
-  
   
   
   private static String formate(int time)
