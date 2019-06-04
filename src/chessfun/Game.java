@@ -159,7 +159,6 @@ public class Game implements ITryMoveListener {
         JMenuItem newGame = new JMenuItem("Новая игра");
         JMenuItem exitItem = new JMenuItem("Выход");
         JMenu typeShape = new JMenu("Стиль фигур");
-        JMenu typeGame = new JMenu("Тип игры");
 
         playMenu.setFont(font);
         analysisMenu.setFont(font);
@@ -167,22 +166,20 @@ public class Game implements ITryMoveListener {
         newGame.setFont(font);
         exitItem.setFont(font);
         typeShape.setFont(font);
-        typeGame.setFont(font);
 
         playMenu.add(newGame);
         playMenu.addSeparator();
         playMenu.add(exitItem);
-        settingsMenu.add(typeGame);
         settingsMenu.add(typeShape);
 
         menuBar.add(playMenu);
         menuBar.add(analysisMenu);
         menuBar.add(settingsMenu);
 
-        JMenuItem timeSettings = new JMenuItem("Временной контроль");
-        timeSettings.setFont(font);
+        JMenuItem settings = new JMenuItem("Выбор игры");
+        settings.setFont(font);
 
-        settingsMenu.add(timeSettings);
+        settingsMenu.add(settings);
 
 // <editor-fold defaultstate="collapsed" desc="Выбор фигур">
         JMenuItem typeShapeAlpha = new JMenuItem("Alpha");
@@ -210,27 +207,8 @@ public class Game implements ITryMoveListener {
         addActionReShape(typeShapeWikipedia,  ModeShape.WIKIPEDIA);
 // </editor-fold>
 
-// <editor-fold defaultstate="collapsed" desc="Выбор игры">
-        JMenuItem typeClassic = new JMenuItem("Классические шахматы");
-        JMenuItem typeFisher = new JMenuItem("Шахматы Фишера");
-        JMenuItem typeKingHill = new JMenuItem("Царь горы");
 
-        typeClassic.setFont(font);
-        typeFisher.setFont(font);
-        typeKingHill.setFont(font);
-
-        typeGame.add(typeClassic);
-        typeGame.add(typeFisher);
-        typeGame.add(typeKingHill);
-
-        addActionRestart(typeClassic, ModeChess.CLASSIC);
-        addActionRestart(typeFisher, ModeChess.FISHER);
-        addActionRestart(typeKingHill, ModeChess.KING_HILL);
-
-// </editor-fold>   
-
-
-        timeSettings.addActionListener((ActionEvent e) -> {
+        settings.addActionListener((ActionEvent e) -> {
             openSettings();
         });
 

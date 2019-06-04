@@ -14,7 +14,7 @@ public class ChessFun {
      */
     public static void main(String[] args)
     {  
-        Game game = new Game(ModeChess.CLASSIC, ModeShape.WIKIPEDIA, 600, 20, "Hikaru", "LachesisQ");
+        Game game = new Game(ModeChess.CLASSIC, ModeShape.WIKIPEDIA, 1800, 20, "Hikaru", "LachesisQ");
         
         game.info();
     }    
