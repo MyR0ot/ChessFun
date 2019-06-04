@@ -66,12 +66,36 @@ public class MyTimer extends JPanel {
                 else
                     label.setText("<html><font size=\"7\">" + String.valueOf(formate(Globals.timeStart)) + "</font><br /><font size=\"4\">" + nameBlack +"</font></html>");
             }
-            
         }
       });
     
     
     timer.start();
+  }
+  
+  public void start()
+  {
+      this.timer.start();
+  }
+  
+  public void stop()
+  {
+      this.timer.stop();
+  }
+  
+  public void resetTime()
+  {
+      Globals.timeWhite = Globals.timeStart;
+      Globals.timeBlack = Globals.timeStart;  
+      
+      if(colorTimer == ColorFigure.WHITE)
+          label.setText("<html><font size=\"7\">" +
+                  String.valueOf(formate(Globals.timeWhite)) +
+                  "</font><br /><font size=\"4\">" + nameWhite +"</font></html>");
+      else
+          label.setText("<html><font size=\"7\">" +
+                  String.valueOf(formate(Globals.timeBlack)) +
+                  "</font><br /><font size=\"4\">" + nameBlack +"</font></html>");
   }
   
   

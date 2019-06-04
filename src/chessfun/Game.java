@@ -715,15 +715,14 @@ public class Game implements ITryMoveListener {
 
     protected void restartGame(ModeChess modeChoice, ModeShape modeShape, int startTime, int incTime, String nameWhite, String nameBlack) throws IOException {
         
-        System.err.append("restartGame: " + modeShape.toString());
-        
         this.timeInc = incTime;
         this.timeStart = startTime;
         this.nameWhite = nameWhite;
         this.nameBlack = nameBlack;
-
+        
         this.modeGame = modeChoice;
         this.modeShape = modeShape;
+        
 
         loadTextures(modeShape);
 
@@ -746,8 +745,14 @@ public class Game implements ITryMoveListener {
 
         MyTimer.nameWhite = nameWhite;
         MyTimer.nameBlack = nameBlack;
-
+        
         setGlobals(startTime);
+        
+        timerBlack.resetTime();
+        timerWhite.resetTime();
+        
+
+        
 
         //printCurrentInfoBoard();
     }

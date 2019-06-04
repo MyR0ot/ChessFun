@@ -48,15 +48,15 @@ public class ClassicRules implements IRules {
             {
                 if(y_from == 6)
                 {
-                    return y_to == 5 || y_to == 4;
+                    return y_to == 5 ||  board[x_to][5].isEmpty() && y_to == 4;
                 }
-                return y_to == y_from-1;
+                return y_to == y_from - 1;
             }
             else
             {
                 if(y_from == 1)
                 {
-                    return y_to == 2 || y_to == 3;
+                    return y_to == 2 || board[x_to][2].isEmpty() && y_to == 3;
                 }
                 return y_to == y_from + 1;
             }
