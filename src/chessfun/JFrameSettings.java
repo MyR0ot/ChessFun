@@ -16,9 +16,9 @@ public class JFrameSettings extends javax.swing.JFrame {
     private static Game parentGame;
     private String whiteName;
     private String blackName;
-    private int time;       // = 600;
-    private int delayTime;  // = 0;
-    private int incTime;    // = 20;
+    private int time;
+    private int delayTime;
+    private int incTime;
 
     public JFrameSettings(Game game) {
         initComponents();
@@ -330,7 +330,7 @@ public class JFrameSettings extends javax.swing.JFrame {
         
         saveMeans();    
          try {
-                 this.parentGame.restartGame(parentGame.getModeGame(),
+                 JFrameSettings.parentGame.restartGame(parentGame.getModeGame(),
                          parentGame.getModeShape(),
                          time,
                          incTime,

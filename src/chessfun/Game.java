@@ -97,10 +97,10 @@ public class Game implements ITryMoveListener {
         this.modeGame = modeChoice;
         this.modeShape = modeShape;
 
-        loadTextures(this.modeShape); // загрузка текстур
-        setGlobals();                 // установка глобальных переменных
+        loadTextures(modeShape); // загрузка текстур
+        setGlobals(startTime);   // установка глобальных переменных
 
-        switch (this.modeGame) // выбор типа игры
+        switch (modeChoice) // выбор типа игры
         {
             case CLASSIC:
                 startClassic();
@@ -127,7 +127,7 @@ public class Game implements ITryMoveListener {
         loadView();
     }
 
-    private void setGlobals() {
+    private void setGlobals(int timeStart) {
         Globals.iconEmpty = icons[12];      // пустое
         Globals.iconSelected = icons[13];   // красная каЁмочка
         Globals.isSelectedFigure = false;
@@ -141,9 +141,9 @@ public class Game implements ITryMoveListener {
         Globals.allowCastleWhite = true;
         Globals.allowCastleBlack = true;
 
-        Globals.timeWhite = this.timeStart;
-        Globals.timeBlack = this.timeStart;
-        Globals.timeStart = this.timeStart;
+        Globals.timeWhite = timeStart;
+        Globals.timeBlack = timeStart;
+        Globals.timeStart = timeStart;
     }
 
     // Кнопочки сверху
@@ -229,13 +229,16 @@ public class Game implements ITryMoveListener {
 
 // </editor-fold>   
 
+
         timeSettings.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 openSettings();           
             }
         });
 
+
         exitItem.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 System.exit(0);
             }
@@ -248,16 +251,16 @@ public class Game implements ITryMoveListener {
         this.view.setLocationRelativeTo(null);
     }
     
+    
     private void openSettings()
     {
-        JFrameSettings settings = new JFrameSettings(this);
-        settings.setVisible(true);
-        
-        
+        JFrameSettings jSettings = new JFrameSettings(this);
+        jSettings.setVisible(true); 
     }
 
     private void addActionRestart(JMenuItem item, ModeChess modeChess, ModeShape modeShape) {
         item.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 System.err.append("CHOICE: " + modeChess.toString() + "\n");
                 try {
@@ -276,10 +279,11 @@ public class Game implements ITryMoveListener {
         createGUI();
         view.setSize(1300, 768); // Размеры окна
         try {
-            chessBoard = new JPanelWithBackground("src/textures/chessboard_640.jpg"); // JPanel с перегруженным методом paintComponent()            
+            chessBoard = new JPanelWithBackground("src/textures/chessboard_border_640.jpg"); // JPanel с перегруженным методом paintComponent()            
             chessBoard.setLayout(null);
-            chessBoard.setSize(640 + Globals.delta_x, 640 + Globals.delta_y);// Размеры шахматной доски
+            chessBoard.setSize(644 + Globals.delta_x, 644 + Globals.delta_y);// Размеры шахматной доски
 
+            
             for (int i = 0; i < 8; i++) {
                 for (int j = 0; j < 8; j++) {
                     chessBoard.add(board[i][j].getLabel());
@@ -290,11 +294,13 @@ public class Game implements ITryMoveListener {
             chessBoard.add(timerBlack);
             chessBoard.add(timerWhite);
 
+            
             view.getContentPane().add(chessBoard); // добавление JPanel к JFrame
             view.setVisible(true); // Делаем видимым фрейм  
         } catch (IOException ex) {
             System.err.print("Game.loadView() It is trap");
             Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
+            System.exit(1);
         }
     }
 
@@ -720,9 +726,9 @@ public class Game implements ITryMoveListener {
         this.modeGame = modeChoice;
         this.modeShape = modeShape;
 
-        loadTextures(this.modeShape);
+        loadTextures(modeShape);
 
-        switch (this.modeGame) {
+        switch (modeChoice) {
             case CLASSIC:
                 startClassic();
                 this.rules = new ClassicRules();
@@ -742,10 +748,13 @@ public class Game implements ITryMoveListener {
         MyTimer.nameWhite = nameWhite;
         MyTimer.nameBlack = nameBlack;
 
-        this.timerWhite = new MyTimer(timeStart, ColorFigure.BLACK, Globals.delta_x + 660, Globals.delta_y); // установка временного контроля
-        this.timerBlack = new MyTimer(timeStart, ColorFigure.WHITE, Globals.delta_x + 660, Globals.delta_y + 560);
+        
+        this.timerWhite = new MyTimer(startTime, ColorFigure.BLACK, Globals.delta_x + 660, Globals.delta_y); // установка временного контроля
+        this.timerBlack = new MyTimer(startTime, ColorFigure.WHITE, Globals.delta_x + 660, Globals.delta_y + 560);
+        
 
-        setGlobals();
+
+        setGlobals(startTime);
 
         printCurrentInfoBoard();
     }

@@ -30,8 +30,8 @@ public class Cell {
         this.column = column;
         this.label = new JLabel();
         this.labelSelected = new JLabel();
-        this.label.setBounds(Globals.delta_x + 80 * column,Globals.delta_y+ 80 * row, 80, 80);
-        this.labelSelected.setBounds(Globals.delta_x+ 80 * column,Globals.delta_y+ 80 * row, 80, 80);
+        this.label.setBounds(2 + Globals.delta_x + 80 * column,Globals.delta_y + 2 + 80 * row, 80, 80);
+        this.labelSelected.setBounds(2 + Globals.delta_x + 80 * column,Globals.delta_y + 2 + 80 * row, 80, 80);
         this.label.addMouseListener(new MyMouseListener());
         this.nameField = generateNameField(column, row);
     }

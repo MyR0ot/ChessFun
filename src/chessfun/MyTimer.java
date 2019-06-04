@@ -8,6 +8,7 @@ package chessfun;
 import chessfun.Enums.ColorFigure;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
+import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.Timer;
@@ -27,6 +28,7 @@ public class MyTimer extends JPanel {
   public MyTimer(int startTime, ColorFigure colorTimer, int x_delta, int y_delta) {
     
     this.colorTimer = colorTimer;
+    
     if(colorTimer == ColorFigure.WHITE)
     {
          Globals.timeWhite = startTime;
@@ -40,10 +42,12 @@ public class MyTimer extends JPanel {
         this.setBackground(Color.LIGHT_GRAY);
         label = new JLabel("<html><font size=\"7\">" + String.valueOf(formate(Globals.timeBlack)) + "</font><br /><font size=\"4\">" + nameBlack +"</font></html>", JLabel.CENTER);
     }
-        
+    
+    this.setBorder(BorderFactory.createLineBorder(Color.BLACK));
     this.add(label);
     this.setOpaque(true); // Делаем прозрачным
     this.setBounds(x_delta, y_delta, 150, 80);
+    
     new Timer(100, (ActionEvent e) -> {
         if(Globals.stepQueue == colorTimer)
         {
@@ -65,6 +69,8 @@ public class MyTimer extends JPanel {
         }
       }).start();
   }
+  
+  
   
   private static String formate(int time)
   {
