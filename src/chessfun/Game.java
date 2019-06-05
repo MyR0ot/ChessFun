@@ -16,7 +16,10 @@ import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import chessfun.interfaces.ITryMoveListener;
+import java.awt.Dimension;
 import java.awt.Font;
+import static java.awt.Frame.MAXIMIZED_BOTH;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -219,6 +222,8 @@ public class Game implements ITryMoveListener {
         exitItem.addActionListener((ActionEvent e) -> {
             System.exit(0);
         });
+              
+        
 
         addActionRestart(newGame, this.modeGame);
 
@@ -270,8 +275,16 @@ public class Game implements ITryMoveListener {
         view = new JFrame(); // Путь джедая!
         view.setTitle("Chess Fun");
         view.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Корректное завершение работы, при закрытии окна
+        
+
+        
         createGUI();
-        view.setSize(1300, 768); // Размеры окна
+        
+        Dimension sSize = Toolkit.getDefaultToolkit().getScreenSize(); // Полный экран
+        view.setSize (sSize);
+        view.setExtendedState(MAXIMIZED_BOTH);
+
+        //view.setSize(1300, 768); // Размеры окна
         try {
             chessBoard = new JPanelWithBackground("src/textures/chessboard_border_640.jpg"); // JPanel с перегруженным методом paintComponent()            
             chessBoard.setLayout(null);
