@@ -30,7 +30,7 @@ public class Game implements ITryMoveListener {
     // <editor-fold defaultstate="collapsed" desc="Поля класса">
     private Cell[][] board;                 // шахматная доска
     private ImageIcon icons[];              // иконки для отображения фигур
-    private JFrame view;                    // Основной JFrame для отображения
+    JFrame view;                    // Основной JFrame для отображения
     private JFrame settings;                // Основной JFrame для отображения
     private IRules rules;                   // Модуль правил
     private History history;                // История игры
@@ -38,12 +38,16 @@ public class Game implements ITryMoveListener {
     private String nameWhite;
     private String nameBlack;
 
-    private MyTimer timerWhite;
-    private MyTimer timerBlack;
+    private TimerPanel timerWhite;
+    private TimerPanel timerBlack;
+    
+    private ResignPanel resignWhite;
+    private ResignPanel resignBlack;
+    
 
-    private int timeInc;
-    private int timeStart;
-    private int timeDelay;
+    public static int timeInc;
+    private static int timeStart;
+    private static int timeDelay;
 
     private ModeChess modeGame;
     private ModeShape modeShape;
@@ -90,7 +94,7 @@ public class Game implements ITryMoveListener {
                 this.board[i][j] = new Cell(i, j); // Инициализация клеток
             }
         }
-        this.icons = new ImageIcon[14];
+        this.icons = new ImageIcon[15];
         this.timeInc = incTime;
         this.timeStart = startTime;
         this.nameWhite = nameWhite;
@@ -120,11 +124,15 @@ public class Game implements ITryMoveListener {
 
         this.history = new History(board); // создание модуля истории для текущей партии
 
-        MyTimer.nameWhite = nameWhite; // установка никнеймов
-        MyTimer.nameBlack = nameBlack;
+        TimerPanel.nameWhite = nameWhite; // установка никнеймов
+        TimerPanel.nameBlack = nameBlack;
 
-        timerWhite = new MyTimer(timeStart, ColorFigure.BLACK, Globals.delta_x + 660, Globals.delta_y); // установка временного контроля
-        timerBlack = new MyTimer(timeStart, ColorFigure.WHITE, Globals.delta_x + 660, Globals.delta_y + 560);
+        timerWhite = new TimerPanel(timeStart, ColorFigure.BLACK, Globals.delta_x + 660, Globals.delta_y); // установка временного контроля
+        timerBlack = new TimerPanel(timeStart, ColorFigure.WHITE, Globals.delta_x + 660, Globals.delta_y + 560);
+        
+        resignBlack = new ResignPanel(ColorFigure.BLACK, Globals.delta_x + 660, Globals.delta_y, icons[14]);
+        resignWhite = new ResignPanel(ColorFigure.WHITE, Globals.delta_x + 660, Globals.delta_y + 560, icons[14]);
+        
 
         loadView();
     }
@@ -147,6 +155,8 @@ public class Game implements ITryMoveListener {
         Globals.timeWhite = timeStart;
         Globals.timeBlack = timeStart;
         Globals.timeStart = timeStart;
+        
+        Globals.isAllowWriteHistory = true;
     }
 
     
@@ -223,8 +233,6 @@ public class Game implements ITryMoveListener {
             System.exit(0);
         });
               
-        
-
         addActionRestart(newGame, this.modeGame);
 
         this.view.setJMenuBar(menuBar);
@@ -236,12 +244,14 @@ public class Game implements ITryMoveListener {
     public void openSettings()
     {
         JFrameSettings jSettings = new JFrameSettings(this);
+        jSettings.setLocationRelativeTo(null);
         jSettings.setVisible(true); 
     }
     
-    private void openEndOfGame(ColorFigure clrWinner)
+    public void openEndOfGame(ColorFigure clrWinner)
     {
         JFrameEndOfGame endFrame = new JFrameEndOfGame(nameWhite, nameBlack, clrWinner, this);
+        endFrame.setLocationRelativeTo(null);
         endFrame.setVisible(true);
     }
 
@@ -282,8 +292,6 @@ public class Game implements ITryMoveListener {
         view.setTitle("Chess Fun");
         view.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Корректное завершение работы, при закрытии окна
         
-
-        
         createGUI();
         
         Dimension sSize = Toolkit.getDefaultToolkit().getScreenSize(); // Полный экран
@@ -304,8 +312,11 @@ public class Game implements ITryMoveListener {
                 }
             }
 
-            chessBoard.add(timerBlack);
             chessBoard.add(timerWhite);
+            chessBoard.add(timerBlack);
+            
+            chessBoard.add(resignWhite);
+            chessBoard.add(resignBlack);
 
             
             view.getContentPane().add(chessBoard); // добавление JPanel к JFrame
@@ -390,6 +401,7 @@ public class Game implements ITryMoveListener {
         icons[11] = new ImageIcon(getClass().getResource(folder + "bK.png"));
         icons[12] = new ImageIcon(getClass().getResource("../textures/empty.png"));
         icons[13] = new ImageIcon(getClass().getResource("../textures/is.png"));
+        icons[14] = new ImageIcon(getClass().getResource("../textures/resign.jpg"));
         
         this.modeShape = modeShape;
     }
@@ -521,18 +533,13 @@ public class Game implements ITryMoveListener {
     
     private void move(int x_from, int y_from, int x_to, int y_to)// Перемещение фигуры из from в to
     {
-        /// Сделать сохранение позиции, обработка ошибочных действий (проверка на шах) -> загрузка позиции
         board[Globals.columnSelected][Globals.rowSelected].setLabelSelect(Globals.iconEmpty); // Снятие выделения  (красная каЁмка)в любом случае
         if (!rules.checkMove(this.board, x_from, y_from, x_to, y_to)) return;// Если не прошли проверку на валидность хода
 
-
         TypeMove typeMove = swapFigure(x_from, y_from, x_to, y_to); // Получение типа хода + действия с логической моделью и view
-
-        
         Globals.clearBigStepPawnArray();
 
-        
-        switch (typeMove) // break; только в конце!
+        switch (typeMove)
         {
             case OO:
                 history.addNote("0-0");
@@ -562,26 +569,22 @@ public class Game implements ITryMoveListener {
                 break;
         }
         
-        // openEndOfGame(ColorFigure.BLACK);
-        /*if(rules.checkEndOfGame(board))
+        
+        
+        if(rules.checkEndOfGame(board))
         {
+            this.timerWhite.stop();
+            this.timerBlack.stop();
             Globals.startgame = false;
             openEndOfGame(Globals.stepQueue);
-        }*/
+        }
         
 
-        if (Globals.stepQueue == ColorFigure.WHITE) {
-            Globals.stepQueue = ColorFigure.BLACK;
-            Globals.timeWhite += this.timeInc;
-        } else {
-            Globals.stepQueue = ColorFigure.WHITE;
-            Globals.timeBlack += this.timeInc;
-        }
+        Globals.changeQueue();
         Globals.startgame = true;
-        
-        
-        
     }
+    
+    
 
     
     
@@ -744,8 +747,8 @@ public class Game implements ITryMoveListener {
 
         this.history = new History(board);
 
-        MyTimer.nameWhite = nameWhite;
-        MyTimer.nameBlack = nameBlack;
+        TimerPanel.nameWhite = nameWhite;
+        TimerPanel.nameBlack = nameBlack;
         
         setGlobals(startTime);
         

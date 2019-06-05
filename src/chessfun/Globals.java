@@ -32,6 +32,8 @@ public class Globals {
     public static int timeWhite;
     public static int timeBlack;
     
+    public static boolean isAllowWriteHistory; // Сохранять историю или нет
+    
     
     public static int delta_x = 50; // Координаты позиционирования доски относительно фрейма
     public static int delta_y = 20; // Координаты позиционирования доски относительно фрейма
@@ -55,4 +57,27 @@ public class Globals {
         }
         return result;
     }
+    
+    
+    public static void changeQueue()
+    {
+        if (Globals.stepQueue == ColorFigure.WHITE) {
+            Globals.stepQueue = ColorFigure.BLACK;
+            Globals.timeWhite += game.timeInc;
+        } else {
+            Globals.stepQueue = ColorFigure.WHITE;
+            Globals.timeBlack += game.timeInc;
+        }
+    }
+    
+    public static ColorFigure getInvertColorFigure(ColorFigure clr)
+    {
+        switch(clr)
+        {
+            case WHITE: return ColorFigure.BLACK;
+            case BLACK: return ColorFigure.WHITE;
+            default: return ColorFigure.NONE;
+        }
+    }
+    
 }

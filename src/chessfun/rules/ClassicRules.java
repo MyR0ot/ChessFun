@@ -143,6 +143,7 @@ public class ClassicRules implements IRules {
         if(Globals.stepQueue == ColorFigure.NONE)
             return false;
         
+        
         Set<String> criticalFields;
         
         if(Globals.stepQueue == ColorFigure.WHITE)

@@ -17,16 +17,16 @@ import javax.swing.Timer;
  *
  * @author My
  */
-public class MyTimer extends JPanel {
+public class TimerPanel extends JPanel {
     private final JLabel label;
     private  final ColorFigure colorTimer;
     public static  String nameWhite;
     public static  String nameBlack;
     
-    private Timer timer;
+    private final Timer timer;
     
 
-  public MyTimer(int startTime, ColorFigure colorTimer, int x_delta, int y_delta) {
+  public TimerPanel(int startTime, ColorFigure colorTimer, int x_delta, int y_delta) {
     
     this.colorTimer = colorTimer;
     
@@ -58,6 +58,12 @@ public class MyTimer extends JPanel {
                     label.setText("<html><font size=\"7\">" + String.valueOf(formate(Globals.timeWhite--)) + "</font><br /><font size=\"4\">" + nameWhite +"</font></html>");
                 else
                     label.setText("<html><font size=\"7\">" + String.valueOf(formate(Globals.timeBlack--)) + "</font><br /><font size=\"4\">" + nameBlack +"</font></html>");
+                if(Globals.timeWhite <= 0 || Globals.timeBlack <= 0)
+                {
+                    Globals.changeQueue();
+                    Globals.game.openEndOfGame(Globals.stepQueue);
+                    Globals.startgame = false;
+                }
             }
             else
             {
@@ -68,7 +74,6 @@ public class MyTimer extends JPanel {
             }
         }
       });
-    
     
     timer.start();
   }
