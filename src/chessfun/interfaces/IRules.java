@@ -23,6 +23,7 @@ public interface IRules {
     public boolean checkRock(Cell[][] board, int x_from, int y_from, int x_to, int y_to);
     public boolean checkQueen(Cell[][] board, int x_from, int y_from, int x_to, int y_to);
     public boolean checkKing(Cell[][] board, int x_from, int y_from, int x_to, int y_to);
+    public boolean checkEndOfGame(Cell[][] board);
     
     default boolean isSameColor(Cell[][] board, int x_from, int y_from, int x_to, int y_to)
     {

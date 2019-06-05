@@ -136,4 +136,34 @@ public class ClassicRules implements IRules {
         return Globals.allowCastleBlack && !beatFields.contains(Cell.generateNameField((x_from + x_to) / 2, y_to));  
     }
     
+    
+    @Override
+    public  boolean checkEndOfGame(Cell[][] board)
+    {
+        if(Globals.stepQueue == ColorFigure.NONE)
+            return false;
+        
+        Set<String> criticalFields;
+        
+        if(Globals.stepQueue == ColorFigure.WHITE)
+        {
+            criticalFields = this.getBeatFieldsByBlack(board);
+            for(int i=0;i<8;i++)
+                for(int j = 0; j<8; j++)  
+                    if(board[i][j].getNameFigure() == "KING WHITE")
+                        return criticalFields.contains(Cell.generateNameField(i, j));
+        }
+        else
+        {
+            criticalFields = this.getBeatFieldsByWhite(board);
+            for(int i=0;i<8;i++)
+                for(int j = 0; j<8; j++)  
+                    if(board[i][j].getNameFigure() == "KING BLACK")
+                        return criticalFields.contains(Cell.generateNameField(i, j));
+        }
+        
+        return false;
+    }
+    
+
 }

@@ -233,10 +233,16 @@ public class Game implements ITryMoveListener {
     }
     
     
-    private void openSettings()
+    public void openSettings()
     {
         JFrameSettings jSettings = new JFrameSettings(this);
         jSettings.setVisible(true); 
+    }
+    
+    private void openEndOfGame(ColorFigure clrWinner)
+    {
+        JFrameEndOfGame endFrame = new JFrameEndOfGame(nameWhite, nameBlack, clrWinner, this);
+        endFrame.setVisible(true);
     }
 
     
@@ -555,6 +561,14 @@ public class Game implements ITryMoveListener {
                 history.addNote(board[x_from][y_from].getName(), board[x_to][y_to].getName());
                 break;
         }
+        
+        // openEndOfGame(ColorFigure.BLACK);
+        /*if(rules.checkEndOfGame(board))
+        {
+            Globals.startgame = false;
+            openEndOfGame(Globals.stepQueue);
+        }*/
+        
 
         if (Globals.stepQueue == ColorFigure.WHITE) {
             Globals.stepQueue = ColorFigure.BLACK;
@@ -563,8 +577,10 @@ public class Game implements ITryMoveListener {
             Globals.stepQueue = ColorFigure.WHITE;
             Globals.timeBlack += this.timeInc;
         }
-        
         Globals.startgame = true;
+        
+        
+        
     }
 
     

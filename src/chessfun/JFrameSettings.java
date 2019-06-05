@@ -43,6 +43,7 @@ public class JFrameSettings extends javax.swing.JFrame {
         this.jTextField8.setText("0");
         
         this.jRadioButton1.setSelected(true);
+        modeGame = ModeChess.CLASSIC;
     }
     
     private void saveMeans()
