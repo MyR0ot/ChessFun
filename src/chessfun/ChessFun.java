@@ -14,8 +14,7 @@ public class ChessFun {
      */
     public static void main(String[] args)
     {  
-        Game game = new Game(ModeChess.CLASSIC, ModeShape.WIKIPEDIA, 1800, 20, "Java", "C#");
-        
+        Game game = new Game(ModeChess.CLASSIC, ModeShape.WIKIPEDIA, 1800, 20, "Java", "C#");        
         game.info();
     }    
 }

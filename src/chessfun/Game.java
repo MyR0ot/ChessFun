@@ -31,8 +31,8 @@ public class Game implements ITryMoveListener {
     // <editor-fold defaultstate="collapsed" desc="Поля класса">
     private Cell[][] board;                 // шахматная доска
     private ImageIcon icons[];              // иконки для отображения фигур
-    JFrame view;                            // Основной JFrame для отображения
-    private JFrame settings;                // Основной JFrame для отображения
+    JFrame view;                    // Основной JFrame для отображения
+    private JFrame settings;                // настройки
     private IRules rules;                   // Модуль правил
     private History history;                // История игры
 
@@ -58,6 +58,11 @@ public class Game implements ITryMoveListener {
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Геттеры">
+    
+    public ImageIcon[] getIcons() {
+        return icons;
+    }
+    
     public String getNameWhite() {
         return nameWhite;
     }
@@ -170,6 +175,7 @@ public class Game implements ITryMoveListener {
         JMenuItem helpForClassic = new JMenuItem("Классический режим");
         JMenuItem helpForFisher = new JMenuItem("Шахматы Фишера");
         JMenuItem helpForKing_Hill = new JMenuItem("Царь горы");
+        JMenuItem analysisItem = new JMenuItem("Анализ сохраненной партии");
         
         settings.setFont(font);
         playMenu.setFont(font);
@@ -179,22 +185,28 @@ public class Game implements ITryMoveListener {
         exitItem.setFont(font);
         typeShape.setFont(font);
         helpMenu.setFont(font);
+        analysisItem.setFont(font);
+        helpForClassic.setFont(font);
+        helpForFisher.setFont(font);
+        helpForKing_Hill.setFont(font);
 
         playMenu.add(newGame);
         playMenu.addSeparator();
         playMenu.add(exitItem);
         settingsMenu.add(typeShape);
         
+        analysisMenu.add(analysisItem);
         helpMenu.add(helpForClassic);
         helpMenu.add(helpForFisher);
         helpMenu.add(helpForKing_Hill);
-
-        menuBar.add(playMenu);
-        menuBar.add(analysisMenu);
-        menuBar.add(settingsMenu);
-        menuBar.add(helpMenu);
-
+        
         settingsMenu.add(settings);
+        
+        menuBar.add(playMenu);     
+        menuBar.add(settingsMenu);
+        menuBar.add(analysisMenu);
+        menuBar.add(helpMenu);
+        
 
 // <editor-fold defaultstate="collapsed" desc="Выбор фигур">
         JMenuItem typeShapeAlpha = new JMenuItem("Alpha");
@@ -222,10 +234,14 @@ public class Game implements ITryMoveListener {
         addActionReShape(typeShapeWikipedia,  ModeShape.WIKIPEDIA);
 // </editor-fold>
 
+        analysisItem.addActionListener((ActionEvent e) -> {
+            openAnalysis();
+        });
 
         settings.addActionListener((ActionEvent e) -> {
             openSettings();
         });
+        
 
         exitItem.addActionListener((ActionEvent e) -> {
             System.exit(0);
@@ -258,6 +274,12 @@ public class Game implements ITryMoveListener {
         this.view.setJMenuBar(menuBar);
         this.view.pack();
         this.view.setLocationRelativeTo(null);
+    }
+    
+    
+    private void openAnalysis()
+    {
+        Analysis analysis = new Analysis(Globals.game.getModeGame(), Globals.game.getModeShape(), Globals.game.getIcons());
     }
     
     private void openHelp(ModeChess modeGame) throws Exception{

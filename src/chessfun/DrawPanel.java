@@ -6,6 +6,7 @@
 package chessfun;
 
 import chessfun.Enums.ColorFigure;
+import chessfun.Enums.ModeShape;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import javax.swing.ImageIcon;

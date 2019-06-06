@@ -38,7 +38,7 @@ public class History {
         this.history.add(from + " " + to);
     }
     
-    public void addNote(String str)
+    public void addNote(String str) // 0-0 или 0-0-0
     {
         this.history.add(str);
     }
