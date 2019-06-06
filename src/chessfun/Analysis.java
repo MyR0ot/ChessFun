@@ -5,7 +5,11 @@
  */
 package chessfun;
 
+import chessfun.MyPanels.JPanelWithBackground;
+import chessfun.MyPanels.ExitPanel;
+import chessfun.MyPanels.DirectionPanel;
 import chessfun.Enums.ColorFigure;
+import chessfun.Enums.DirectionStep;
 import chessfun.Enums.ModeChess;
 import chessfun.Enums.ModeShape;
 import chessfun.Enums.NameFigure;
@@ -27,16 +31,22 @@ public class Analysis {
     // <editor-fold defaultstate="collapsed" desc="Поля класса">
     private Cell[][] board;                 // шахматная доска
     private ImageIcon icons[];              // иконки для отображения фигур
-    private JFrame view;                            // Основной JFrame для отображения
+    private JFrame view;                    // Основной JFrame для отображения
     private JFrame settings;                // настройки
     private ModeChess modeGame;             // тип игры
     private ModeShape modeShape;            // стиль фигур
     private JPanelWithBackground chessBoard;// логическая сущность доски
     
+    private DirectionPanel backPanel;
+    private DirectionPanel forwardPanel;
+    private ExitPanel exitPanel;
+    
     // </editor-fold>
     
     public Analysis(ModeChess modeChoice, ModeShape modeShape, ImageIcon[] icons) // Конструктор
     {
+        Globals.game.view.setVisible(false);
+        Globals.isAnalysis = true;
         this.icons = icons;
         this.board = new Cell[8][8];
         for (int i = 0; i < 8; i++) {
@@ -44,11 +54,10 @@ public class Analysis {
                 this.board[i][j] = new Cell(i, j); // Инициализация клеток
             }
         }
-        this.icons = new ImageIcon[16]; // загрузим 16 картинок
 
         this.modeGame = modeChoice;
         this.modeShape = modeShape;
-
+        startClassic();
         loadView();
     }
     
@@ -74,6 +83,21 @@ public class Analysis {
                 }
             }
             startClassic();
+            
+            backPanel = new DirectionPanel(Globals.delta_x + 500, Globals.delta_y,DirectionStep.BACK, icons[16]);
+            forwardPanel = new DirectionPanel(Globals.delta_x + 600, Globals.delta_y,DirectionStep.FORWARD, icons[17]);
+            exitPanel = new ExitPanel(Globals.delta_x + 740, Globals.delta_y, icons[18], view);
+            
+            view.add(backPanel);
+            view.add(forwardPanel);
+            view.add(exitPanel);
+            
+            /*
+            public DirectionPanel(int x_delta, int y_delta, DirectionStep dir, ImageIcon image)
+            resignBlack = new ResignPanel(ColorFigure.BLACK, Globals.delta_x + 660, Globals.delta_y, icons[14]);
+            resignWhite = new ResignPanel(ColorFigure.WHITE, Globals.delta_x + 660, Globals.delta_y + 560, icons[14]);
+            */
+            
             
             view.getContentPane().add(chessBoard); // добавление JPanel к JFrame
             view.setVisible(true); // Делаем видимым фрейм  
@@ -129,7 +153,6 @@ public class Analysis {
         this.board[2][0].setFigure(NameFigure.BISHOP, ColorFigure.BLACK);
         this.board[3][0].setFigure(NameFigure.QUEEN, ColorFigure.BLACK);
         this.board[4][0].setFigure(NameFigure.KING, ColorFigure.BLACK);
-        Globals.fieldWhiteKing = Cell.generateNameField(4, 0);
         this.board[5][0].setFigure(NameFigure.BISHOP, ColorFigure.BLACK);
         this.board[6][0].setFigure(NameFigure.KNIGHT, ColorFigure.BLACK);
         this.board[7][0].setFigure(NameFigure.ROCK, ColorFigure.BLACK);
@@ -140,7 +163,6 @@ public class Analysis {
         this.board[2][7].setFigure(NameFigure.BISHOP, ColorFigure.WHITE);
         this.board[3][7].setFigure(NameFigure.QUEEN, ColorFigure.WHITE);
         this.board[4][7].setFigure(NameFigure.KING, ColorFigure.WHITE);
-        Globals.fieldWhiteKing = Cell.generateNameField(4, 7);
         this.board[5][7].setFigure(NameFigure.BISHOP, ColorFigure.WHITE);
         this.board[6][7].setFigure(NameFigure.KNIGHT, ColorFigure.WHITE);
         this.board[7][7].setFigure(NameFigure.ROCK, ColorFigure.WHITE);

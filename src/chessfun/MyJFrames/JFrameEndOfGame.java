@@ -3,9 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package chessfun;
+package chessfun.MyJFrames;
 
 import chessfun.Enums.ColorFigure;
+import chessfun.Game;
 import java.awt.Color;
 
 /**

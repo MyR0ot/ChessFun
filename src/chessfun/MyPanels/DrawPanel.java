@@ -3,9 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package chessfun;
+package chessfun.MyPanels;
 
 import chessfun.Enums.ColorFigure;
+import chessfun.Enums.ModeShape;
+import chessfun.Globals;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import javax.swing.ImageIcon;
@@ -16,31 +18,25 @@ import javax.swing.JPanel;
  *
  * @author My
  */
-public class ResignPanel extends JPanel{
+public class DrawPanel extends JPanel{
+    private final JLabel label;
     
-    private final JLabel label; 
-    private final ColorFigure color;
+    public DrawPanel(int x_delta, int y_delta, ImageIcon icon)
+    {
+        this.label = new JLabel(icon);
+        this.add(label);
+        this.setBounds(x_delta + 160, y_delta - 4, 88, 88);
+        label.addMouseListener(new MyMouseListener());
+    }
 
-  public ResignPanel(ColorFigure clr, int x_delta, int y_delta, ImageIcon imageIcon) {
-    this.label = new JLabel(imageIcon);
-    this.color = clr;
-    this.add(label);
-    this.setBounds(x_delta + 160, y_delta - 4, 88, 88);
-
-    label.addMouseListener(new MyMouseListener());
-  }
-  
-  private void FireEvent()
-  {     
-      if(Globals.stepQueue == this.color)
-      {
-          Globals.changeQueue();
-          Globals.game.openEndOfGame(Globals.stepQueue);
-      }
-  }
-  
-
-  class MyMouseListener implements MouseListener {
+    
+    private void FireEvent()
+    {
+        Globals.game.openEndOfGame(ColorFigure.NONE);
+    }
+    
+    
+    class MyMouseListener implements MouseListener {
         @Override
         public void mouseClicked(MouseEvent e) {
             FireEvent();
@@ -67,6 +63,5 @@ public class ResignPanel extends JPanel{
         }
  
     }
+    
 }
-  
-

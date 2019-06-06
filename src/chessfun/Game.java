@@ -5,6 +5,13 @@
  */
 package chessfun;
 
+import chessfun.MyPanels.TimerPanel;
+import chessfun.MyJFrames.JFrameSettings;
+import chessfun.MyJFrames.JFrameEndOfGame;
+import chessfun.MyJFrames.HelpJFrame;
+import chessfun.MyPanels.ResignPanel;
+import chessfun.MyPanels.JPanelWithBackground;
+import chessfun.MyPanels.DrawPanel;
 import chessfun.rules.ClassicRules;
 import chessfun.Enums.*;
 import chessfun.events.TryMoveEvent;
@@ -30,8 +37,8 @@ public class Game implements ITryMoveListener {
     
     // <editor-fold defaultstate="collapsed" desc="Поля класса">
     private Cell[][] board;                 // шахматная доска
-    private ImageIcon icons[];              // иконки для отображения фигур
-    JFrame view;                    // Основной JFrame для отображения
+    public ImageIcon icons[];               // иконки для отображения фигур
+    public  JFrame view;                    // Основной JFrame для отображения
     private JFrame settings;                // настройки
     private IRules rules;                   // Модуль правил
     private History history;                // История игры
@@ -101,7 +108,7 @@ public class Game implements ITryMoveListener {
                 this.board[i][j] = new Cell(i, j); // Инициализация клеток
             }
         }
-        this.icons = new ImageIcon[16]; // загрузим 16 картинок
+        this.icons = new ImageIcon[19]; // загрузим 16 картинок
         this.timeInc = incTime;
         this.timeStart = startTime;
         this.nameWhite = nameWhite;
@@ -151,6 +158,7 @@ public class Game implements ITryMoveListener {
         Globals.timeStart = timeStart;
         
         Globals.isAllowWriteHistory = true;
+        Globals.isAnalysis = false;
     }
 
     
@@ -450,6 +458,9 @@ public class Game implements ITryMoveListener {
         icons[13] = new ImageIcon(getClass().getResource("../textures/is.png"));
         icons[14] = new ImageIcon(getClass().getResource("../textures/resign.jpg"));
         icons[15] = new ImageIcon(getClass().getResource("../textures/draw.png"));
+        icons[16] = new ImageIcon(getClass().getResource("../textures/left.jpg"));
+        icons[17] = new ImageIcon(getClass().getResource("../textures/right.jpg"));
+        icons[18] = new ImageIcon(getClass().getResource("../textures/exit.jpg"));
         
         this.modeShape = modeShape;
     }
@@ -764,7 +775,7 @@ public class Game implements ITryMoveListener {
     }
 
     
-    protected void restartGame(ModeChess modeChoice, ModeShape modeShape, int startTime, int incTime, String nameWhite, String nameBlack) throws IOException {
+    public void restartGame(ModeChess modeChoice, ModeShape modeShape, int startTime, int incTime, String nameWhite, String nameBlack) throws IOException {
         
         this.timeInc = incTime;
         this.timeStart = startTime;

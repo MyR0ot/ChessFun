@@ -3,13 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package chessfun;
+package chessfun.MyPanels;
 
-import chessfun.Enums.ColorFigure;
-import chessfun.Enums.ModeShape;
+import chessfun.Globals;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import javax.swing.ImageIcon;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -17,28 +17,28 @@ import javax.swing.JPanel;
  *
  * @author My
  */
-public class DrawPanel extends JPanel{
+public class ExitPanel extends JPanel {
     private final JLabel label;
+    private JFrame anlParent;
     
-    public DrawPanel(int x_delta, int y_delta, ImageIcon icon)
-    {
-        this.label = new JLabel(icon);
-        this.add(label);
-        this.setBounds(x_delta + 160, y_delta - 4, 88, 88);
-        label.addMouseListener(new MyMouseListener());
-    }
 
+  public ExitPanel(int x_delta, int y_delta, ImageIcon image, JFrame parent) {
+    this.label = new JLabel(image);
+    this.anlParent = parent;
+    this.add(label);
+    this.setBounds(x_delta + 160, y_delta - 4, 88, 88);// FIX
     
-    private void FireEvent()
-    {
-        Globals.game.openEndOfGame(ColorFigure.NONE);
-    }
-    
-    
-    class MyMouseListener implements MouseListener {
+    this.label.addMouseListener(new MyMouseListener());
+  }
+  
+
+  class MyMouseListener implements MouseListener {
+        
         @Override
         public void mouseClicked(MouseEvent e) {
-            FireEvent();
+            anlParent.setVisible(false);
+            Globals.game.view.setVisible(true);
+            Globals.isAnalysis = false;
         }
  
         @Override

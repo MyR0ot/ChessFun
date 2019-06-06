@@ -114,6 +114,8 @@ public class Cell {
 
         @Override
         public void mousePressed(MouseEvent e) {
+            if(Globals.isAnalysis)
+                return;
             if(Globals.isSelectedFigure)
             {   
                 fireEvent(Globals.selectedCellName, nameField);
