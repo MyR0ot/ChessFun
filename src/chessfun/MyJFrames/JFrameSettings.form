@@ -486,6 +486,9 @@
               <Properties>
                 <Property name="text" type="java.lang.String" value="&#x412;&#x43a;&#x43b;&#x44e;&#x447;&#x438;&#x442;&#x44c; &#x441;&#x43e;&#x445;&#x440;&#x430;&#x43d;&#x435;&#x43d;&#x438;&#x435; &#x438;&#x433;&#x440;&#x44b;"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jRadioButton4ActionPerformed"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>

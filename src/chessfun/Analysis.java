@@ -13,7 +13,6 @@ import chessfun.Enums.DirectionStep;
 import chessfun.Enums.ModeChess;
 import chessfun.Enums.ModeShape;
 import chessfun.Enums.NameFigure;
-import chessfun.interfaces.IRules;
 import java.awt.Dimension;
 import static java.awt.Frame.MAXIMIZED_BOTH;
 import java.awt.Toolkit;
@@ -29,6 +28,7 @@ import javax.swing.JFrame;
 public class Analysis {
     
     // <editor-fold defaultstate="collapsed" desc="Поля класса">
+    public History history;                // история
     private Cell[][] board;                 // шахматная доска
     private ImageIcon icons[];              // иконки для отображения фигур
     private JFrame view;                    // Основной JFrame для отображения
@@ -41,9 +41,11 @@ public class Analysis {
     private DirectionPanel forwardPanel;
     private ExitPanel exitPanel;
     
+    
+    
     // </editor-fold>
     
-    public Analysis(ModeChess modeChoice, ModeShape modeShape, ImageIcon[] icons) // Конструктор
+    public Analysis(History history, ModeChess modeChoice, ModeShape modeShape, ImageIcon[] icons) // Конструктор
     {
         Globals.game.view.setVisible(false);
         Globals.isAnalysis = true;
@@ -57,7 +59,8 @@ public class Analysis {
 
         this.modeGame = modeChoice;
         this.modeShape = modeShape;
-        startClassic();
+        this.history = history;
+        startPosition();
         loadView();
     }
     
@@ -82,22 +85,14 @@ public class Analysis {
                     chessBoard.add(board[i][j].getLabelSelect());
                 }
             }
-            startClassic();
-            
-            backPanel = new DirectionPanel(Globals.delta_x + 500, Globals.delta_y,DirectionStep.BACK, icons[16]);
-            forwardPanel = new DirectionPanel(Globals.delta_x + 600, Globals.delta_y,DirectionStep.FORWARD, icons[17]);
+            startPosition();
+            backPanel = new DirectionPanel(Globals.delta_x + 500, Globals.delta_y,DirectionStep.BACK, icons[16], this);
+            forwardPanel = new DirectionPanel(Globals.delta_x + 600, Globals.delta_y,DirectionStep.FORWARD, icons[17], this);
             exitPanel = new ExitPanel(Globals.delta_x + 740, Globals.delta_y, icons[18], view);
             
             view.add(backPanel);
             view.add(forwardPanel);
             view.add(exitPanel);
-            
-            /*
-            public DirectionPanel(int x_delta, int y_delta, DirectionStep dir, ImageIcon image)
-            resignBlack = new ResignPanel(ColorFigure.BLACK, Globals.delta_x + 660, Globals.delta_y, icons[14]);
-            resignWhite = new ResignPanel(ColorFigure.WHITE, Globals.delta_x + 660, Globals.delta_y + 560, icons[14]);
-            */
-            
             
             view.getContentPane().add(chessBoard); // добавление JPanel к JFrame
             view.setVisible(true); // Делаем видимым фрейм  
@@ -134,7 +129,7 @@ public class Analysis {
         }
     }
     
-    private void startClassic() // Классическая начальная расстановка фигур
+    private void startPosition() // начальная расстановка фигур
     {
         for (int i = 0; i < 8; i++) {
             for (int j = 2; j < 6; j++) {
@@ -168,5 +163,21 @@ public class Analysis {
         this.board[7][7].setFigure(NameFigure.ROCK, ColorFigure.WHITE);
         
         reDraw();
+    }
+    
+    
+    public void move(String from, String to)// Перемещение фигуры из from в to, согласно нотации
+    {
+        int x_from = 7 + from.charAt(0) - 'h';
+        int y_from = '8' - from.charAt(1);
+        int x_to = 7 + to.charAt(0) - 'h';
+        int y_to = '8' - to.charAt(1);
+        move(x_from, y_from, x_to, y_to);
+    }
+    
+    private void move(int x_from, int y_from, int x_to, int y_to)
+    {
+        board[x_to][y_to].setIcon(board[x_from][y_from].getIcon());
+        board[x_from][y_from].setIcon(icons[12]);
     }
 }

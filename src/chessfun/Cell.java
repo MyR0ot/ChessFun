@@ -22,6 +22,7 @@ public class Cell {
     private JLabel labelSelected;   // Лабел, отвечающий за выделение фигуры
     private ColorFigure colorFigure;// Цвет фигуры, находящейся на данном поле
     private NameFigure nameFigure;  // иконки для отображения фигур
+    private ImageIcon icon;
     
 
     Cell(int column, int row) {
@@ -35,6 +36,7 @@ public class Cell {
         this.label.addMouseListener(new MyMouseListener());
         this.nameField = generateNameField(column, row);
     }
+    
     
     public static String generateNameField(int row, int column)
     {
@@ -76,7 +78,12 @@ public class Cell {
     }
 
     public void setIcon(ImageIcon icon) {
+        this.icon = icon;
         this.label.setIcon(icon);
+    }
+    
+    public ImageIcon getIcon() {
+        return this.icon;
     }
 
     public ColorFigure getColor() {

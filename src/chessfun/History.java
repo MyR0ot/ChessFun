@@ -14,38 +14,39 @@ import java.util.List;
  */
 public class History {
     private final String startFen;        // стартовая позиция
-    private final List<String> history;   // список записей
+    private final List<String> notes;   // список записей
     
     public History(Cell[][] board)
     {
         startFen = Fen.getFEN(board);
-        history = new ArrayList<>();
+        notes = new ArrayList<>();
     }
     
     public History()
     {
         startFen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"; // смотреть https://ru.wikipedia.org/wiki/Нотация_Форсайта_—_Эдвардса
-        history = new ArrayList<>();
+        notes = new ArrayList<>();
     }
     
     public int getCountNotes()
     {
-        return this.history.size();
+        return this.notes.size();
     }
     
     public void addNote(String from, String to)
     {
-        this.history.add(from + " " + to);
+        this.notes.add(from + " " + to);
     }
     
     public void addNote(String str) // 0-0 или 0-0-0
     {
-        this.history.add(str);
+        this.notes.add(str);
     }
     
     public List<String> getNotes()
     {
-        return this.history;
+        showHistory();
+        return this.notes;
     }
     
     public String getPGN()
@@ -59,7 +60,7 @@ public class History {
     
     public void showHistory()
     {
-        for(String note : history)
+        for(String note : notes)
                 System.out.println(note);
     }
 }

@@ -102,6 +102,7 @@ public class Game implements ITryMoveListener {
     
     public Game(ModeChess modeChoice, ModeShape modeShape, int startTime, int incTime, String nameWhite, String nameBlack) // Конструктор
     {
+        Globals.isAllowWriteHistory = true; // default: ведем историю
         this.board = new Cell[8][8];
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
@@ -287,7 +288,7 @@ public class Game implements ITryMoveListener {
     
     private void openAnalysis()
     {
-        Analysis analysis = new Analysis(Globals.game.getModeGame(), Globals.game.getModeShape(), Globals.game.getIcons());
+        Analysis analysis = new Analysis(history, Globals.game.getModeGame(), Globals.game.getModeShape(), Globals.game.getIcons());
     }
     
     private void openHelp(ModeChess modeGame) throws Exception{
