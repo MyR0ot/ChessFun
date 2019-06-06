@@ -24,7 +24,7 @@ public class DirectionPanel extends JPanel {
     private final Analysis analysis;
     private List<String> notes;
     private static int curNote;
-    private ColorFigure clrQueue;
+    private static ColorFigure clrQueue;
     
 
   public DirectionPanel(int x_delta, int y_delta, DirectionStep direction, ImageIcon image, Analysis anlParent) {
@@ -49,12 +49,32 @@ public class DirectionPanel extends JPanel {
       
       if(notes.get(curNote).equals("0-0"))
       {
+          if(clrQueue == ColorFigure.WHITE)
+          {
+              analysis.move("g8", "e8");
+              analysis.move("f8", "h8");
+          }   
+          else
+          {
+              analysis.move("g1", "e1");
+              analysis.move("f1", "h1");
+          }
           changeQueue();
           return;
       }
       
       if(notes.get(curNote).equals("0-0-0"))
       {
+          if(clrQueue == ColorFigure.WHITE)
+          {
+              analysis.move("c8", "e8");
+              analysis.move("d8", "a8");
+          }   
+          else
+          {
+              analysis.move("c1", "e1");
+              analysis.move("d1", "a1");
+          }
           changeQueue();
           return;
       }
@@ -66,10 +86,20 @@ public class DirectionPanel extends JPanel {
   
   private void moveForward()
   {
-      if(curNote == notes.size() - 1)
+      if(curNote == notes.size())
           return;
       if(notes.get(curNote).equals("0-0"))
       {
+          if(clrQueue == ColorFigure.WHITE)
+          {
+              analysis.move("e1", "g1");
+              analysis.move("h1", "f1");
+          }   
+          else
+          {
+              analysis.move("e8", "g8");
+              analysis.move("h8", "f8");
+          }
           curNote++;
           changeQueue();
           return;
@@ -77,7 +107,16 @@ public class DirectionPanel extends JPanel {
       
       if(notes.get(curNote).equals("0-0-0"))
       {
-          
+          if(clrQueue == ColorFigure.WHITE)
+          {
+              analysis.move("e1", "c1");
+              analysis.move("a1", "d1");
+          }   
+          else
+          {
+              analysis.move("e8", "c8");
+              analysis.move("a8", "d8");
+          }
           curNote++;
           changeQueue();
           return;
@@ -91,7 +130,7 @@ public class DirectionPanel extends JPanel {
       System.err.append("move forward!\n");
   }
   
-  private void changeQueue()
+  private static void changeQueue()
   {
       if(clrQueue == ColorFigure.BLACK)
           clrQueue = ColorFigure.WHITE;
