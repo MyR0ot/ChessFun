@@ -16,6 +16,7 @@ import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import chessfun.interfaces.ITryMoveListener;
+import chessfun.rules.KingHillRules;
 import java.awt.Dimension;
 import java.awt.Font;
 import static java.awt.Frame.MAXIMIZED_BOTH;
@@ -38,8 +39,8 @@ public class Game implements ITryMoveListener {
     private String nameWhite;
     private String nameBlack;
 
-    private TimerPanel timerWhite;
-    private TimerPanel timerBlack;
+    public TimerPanel timerWhite;
+    public TimerPanel timerBlack;
     
     private ResignPanel resignWhite;
     private ResignPanel resignBlack;
@@ -105,22 +106,7 @@ public class Game implements ITryMoveListener {
 
         loadTextures(modeShape); // загрузка текстур
         setGlobals(startTime);   // установка глобальных переменных
-
-        switch (modeChoice) // выбор типа игры
-        {
-            case CLASSIC:
-                startClassic();
-                this.rules = new ClassicRules();
-                break;
-            case FISHER:
-                startFisher();
-                this.rules = new ClassicRules();
-                break;
-            case KING_HILL:
-                startClassic();
-                this.rules = new ClassicRules();
-                break;
-        }
+        loadRules(modeGame);
 
         this.history = new History(board); // создание модуля истории для текущей партии
 
@@ -170,12 +156,17 @@ public class Game implements ITryMoveListener {
         JMenu playMenu = new JMenu("Игра");
         JMenu analysisMenu = new JMenu("Анализ");
         JMenu settingsMenu = new JMenu("Настройки");
+        JMenu helpMenu = new JMenu("Помощь"); 
 
         
         JMenuItem newGame = new JMenuItem("Новая игра");
         JMenuItem exitItem = new JMenuItem("Выход");
         JMenuItem settings = new JMenuItem("Выбор игры");
         JMenu typeShape = new JMenu("Стиль фигур");
+        
+        JMenuItem helpForClassic = new JMenuItem("Классический режим");
+        JMenuItem helpForFisher = new JMenuItem("Шахматы Фишера");
+        JMenuItem helpForKing_Hill = new JMenuItem("Царь горы");
         
         settings.setFont(font);
         playMenu.setFont(font);
@@ -184,17 +175,21 @@ public class Game implements ITryMoveListener {
         newGame.setFont(font);
         exitItem.setFont(font);
         typeShape.setFont(font);
+        helpMenu.setFont(font);
 
         playMenu.add(newGame);
         playMenu.addSeparator();
         playMenu.add(exitItem);
         settingsMenu.add(typeShape);
+        
+        helpMenu.add(helpForClassic);
+        helpMenu.add(helpForFisher);
+        helpMenu.add(helpForKing_Hill);
 
         menuBar.add(playMenu);
         menuBar.add(analysisMenu);
         menuBar.add(settingsMenu);
-
-        
+        menuBar.add(helpMenu);
 
         settingsMenu.add(settings);
 
@@ -234,12 +229,38 @@ public class Game implements ITryMoveListener {
         });
               
         addActionRestart(newGame, this.modeGame);
+        
+        helpForClassic.addActionListener((ActionEvent e) -> {
+            try {
+                openHelp(ModeChess.CLASSIC);
+            } catch (Exception ex) {
+                Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
+        helpForFisher.addActionListener((ActionEvent e) -> {
+            try {
+                openHelp(ModeChess.FISHER);
+            } catch (Exception ex) {
+                Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
+        helpForKing_Hill.addActionListener((ActionEvent e) -> {
+            try {
+                openHelp(ModeChess.KING_HILL);
+            } catch (Exception ex) {
+                Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
 
         this.view.setJMenuBar(menuBar);
         this.view.pack();
         this.view.setLocationRelativeTo(null);
     }
     
+    private void openHelp(ModeChess modeGame) throws Exception{
+        HelpJFrame jHelp = new HelpJFrame(modeGame);
+        jHelp.setVisible(true);
+    }
     
     public void openSettings()
     {
@@ -570,7 +591,6 @@ public class Game implements ITryMoveListener {
         }
         
         
-        
         if(rules.checkEndOfGame(board))
         {
             this.timerWhite.stop();
@@ -729,21 +749,7 @@ public class Game implements ITryMoveListener {
         
 
         loadTextures(modeShape);
-
-        switch (modeChoice) {
-            case CLASSIC:
-                startClassic();
-                this.rules = new ClassicRules();
-                break;
-            case FISHER:
-                startFisher();
-                this.rules = new ClassicRules();
-                break;
-            case KING_HILL:
-                startClassic();
-                this.rules = new ClassicRules();
-                break;
-        }
+        loadRules(modeGame);
 
         this.history = new History(board);
 
@@ -759,6 +765,24 @@ public class Game implements ITryMoveListener {
         
 
         //printCurrentInfoBoard();
+    }
+    
+    private void loadRules(ModeChess modeChoice)
+    {
+        switch (modeChoice) {
+            case CLASSIC:
+                startClassic();
+                this.rules = new ClassicRules();
+                break;
+            case FISHER:
+                startFisher();
+                this.rules = new ClassicRules();
+                break;
+            case KING_HILL:
+                startClassic();
+                this.rules = new KingHillRules();
+                break;
+        }
     }
     
     

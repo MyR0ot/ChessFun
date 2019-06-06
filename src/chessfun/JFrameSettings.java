@@ -8,7 +8,6 @@ package chessfun;
 import chessfun.Enums.ModeChess;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JFrame;
 
 /**
  *

@@ -22,7 +22,8 @@ public class JFrameEndOfGame extends javax.swing.JFrame {
      * Creates new form JFramEndOfGame
      */
     public JFrameEndOfGame(String whiteName, String blackName, ColorFigure winnerColor, Game game) {
-        
+        game.timerWhite.stop();
+        game.timerBlack.stop();
         game.view.setEnabled(false);
         initComponents();
         this.wName = whiteName;
