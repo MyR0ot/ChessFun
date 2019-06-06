@@ -31,29 +31,30 @@ public class Game implements ITryMoveListener {
     // <editor-fold defaultstate="collapsed" desc="Поля класса">
     private Cell[][] board;                 // шахматная доска
     private ImageIcon icons[];              // иконки для отображения фигур
-    JFrame view;                    // Основной JFrame для отображения
+    JFrame view;                            // Основной JFrame для отображения
     private JFrame settings;                // Основной JFrame для отображения
     private IRules rules;                   // Модуль правил
     private History history;                // История игры
 
-    private String nameWhite;
-    private String nameBlack;
+    private String nameWhite;               // никнейм белых
+    private String nameBlack;               // никнейм черных
 
-    public TimerPanel timerWhite;
-    public TimerPanel timerBlack;
+    public TimerPanel timerWhite;           // таймер белых
+    public TimerPanel timerBlack;           // таймер черных
     
-    private ResignPanel resignWhite;
-    private ResignPanel resignBlack;
+    private ResignPanel resignWhite;        // иконка сдачи для белых
+    private ResignPanel resignBlack;        // иконка сдачи для черных
+    private DrawPanel drawPanel;            // иконка ничьи
     
 
-    public static int timeInc;
-    private static int timeStart;
-    private static int timeDelay;
+    private static int timeStart;           // стартовое время на таймерах
+    public static int timeInc;              // добавочное время
+    private static int timeDelay;           // время задержки
 
-    private ModeChess modeGame;
-    private ModeShape modeShape;
-    private JPanelWithBackground chessBoard;
-
+    private ModeChess modeGame;             // тип игры
+    private ModeShape modeShape;            // стиль фигур
+    private JPanelWithBackground chessBoard;// логическая сущность доски
+    
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Геттеры">
@@ -95,7 +96,7 @@ public class Game implements ITryMoveListener {
                 this.board[i][j] = new Cell(i, j); // Инициализация клеток
             }
         }
-        this.icons = new ImageIcon[15];
+        this.icons = new ImageIcon[16]; // загрузим 16 картинок
         this.timeInc = incTime;
         this.timeStart = startTime;
         this.nameWhite = nameWhite;
@@ -118,6 +119,8 @@ public class Game implements ITryMoveListener {
         
         resignBlack = new ResignPanel(ColorFigure.BLACK, Globals.delta_x + 660, Globals.delta_y, icons[14]);
         resignWhite = new ResignPanel(ColorFigure.WHITE, Globals.delta_x + 660, Globals.delta_y + 560, icons[14]);
+        
+        drawPanel = new DrawPanel(Globals.delta_x + 540, Globals.delta_y + 280, icons[15]);
         
 
         loadView();
@@ -146,9 +149,9 @@ public class Game implements ITryMoveListener {
     }
 
     
-    
     private void createGUI()  // Кнопочки сверху
     {
+        
         Font font = new Font("Verdana", Font.PLAIN, 11);
 
         JMenuBar menuBar = new JMenuBar(); // главное меню
@@ -338,6 +341,7 @@ public class Game implements ITryMoveListener {
             
             chessBoard.add(resignWhite);
             chessBoard.add(resignBlack);
+            chessBoard.add(drawPanel);
 
             
             view.getContentPane().add(chessBoard); // добавление JPanel к JFrame
@@ -423,6 +427,7 @@ public class Game implements ITryMoveListener {
         icons[12] = new ImageIcon(getClass().getResource("../textures/empty.png"));
         icons[13] = new ImageIcon(getClass().getResource("../textures/is.png"));
         icons[14] = new ImageIcon(getClass().getResource("../textures/resign.jpg"));
+        icons[15] = new ImageIcon(getClass().getResource("../textures/draw.png"));
         
         this.modeShape = modeShape;
     }
