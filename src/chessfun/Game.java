@@ -799,6 +799,10 @@ public class Game implements ITryMoveListener {
         timerBlack.resetTime();
         timerWhite.resetTime();
         
+        timerWhite.start();
+        timerBlack.start();
+        
+        
 
         
 

@@ -7,6 +7,8 @@ package chessfun.MyJFrames;
 
 import chessfun.Enums.ModeChess;
 import chessfun.Game;
+import chessfun.Game;
+import chessfun.Globals;
 import chessfun.Globals;
 import java.util.logging.Level;
 import java.util.logging.Logger;
