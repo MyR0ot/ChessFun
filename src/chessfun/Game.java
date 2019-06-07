@@ -355,7 +355,7 @@ public class Game implements ITryMoveListener {
 
         //view.setSize(1300, 768); // Размеры окна
         try {
-            chessBoard = new JPanelWithBackground("src/textures/chessboard_border_640.jpg"); // JPanel с перегруженным методом paintComponent()            
+            chessBoard = new JPanelWithBackground("src/chessfun/textures/chessboard_border_640.jpg"); // JPanel с перегруженным методом paintComponent()            
             chessBoard.setLayout(null);
             chessBoard.setSize(644 + Globals.delta_x, 644 + Globals.delta_y);// Размеры шахматной доски
 
@@ -419,7 +419,7 @@ public class Game implements ITryMoveListener {
 
     
     private void loadTextures(ModeShape modeShape) {
-        String folder = "../textures/";
+        String folder = "textures/";
         switch (modeShape) {
             case ALPHA:
                 folder += "alpha/";
@@ -455,13 +455,13 @@ public class Game implements ITryMoveListener {
         icons[9] = new ImageIcon(getClass().getResource(folder + "bR.png"));
         icons[10] = new ImageIcon(getClass().getResource(folder + "bQ.png"));
         icons[11] = new ImageIcon(getClass().getResource(folder + "bK.png"));
-        icons[12] = new ImageIcon(getClass().getResource("../textures/empty.png"));
-        icons[13] = new ImageIcon(getClass().getResource("../textures/is.png"));
-        icons[14] = new ImageIcon(getClass().getResource("../textures/resign.jpg"));
-        icons[15] = new ImageIcon(getClass().getResource("../textures/draw.png"));
-        icons[16] = new ImageIcon(getClass().getResource("../textures/left.jpg"));
-        icons[17] = new ImageIcon(getClass().getResource("../textures/right.jpg"));
-        icons[18] = new ImageIcon(getClass().getResource("../textures/exit.jpg"));
+        icons[12] = new ImageIcon(getClass().getResource("textures/empty.png"));
+        icons[13] = new ImageIcon(getClass().getResource("textures/is.png"));
+        icons[14] = new ImageIcon(getClass().getResource("textures/resign.jpg"));
+        icons[15] = new ImageIcon(getClass().getResource("textures/draw.png"));
+        icons[16] = new ImageIcon(getClass().getResource("textures/left.jpg"));
+        icons[17] = new ImageIcon(getClass().getResource("textures/right.jpg"));
+        icons[18] = new ImageIcon(getClass().getResource("textures/exit.jpg"));
         
         this.modeShape = modeShape;
     }
